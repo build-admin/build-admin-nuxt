@@ -1,4 +1,6 @@
 {
+    "name": "build-admin-nuxt",
+    "version": "1.0.0",
     "private": true,
     "scripts": {
         "build": "nuxt build",
@@ -11,12 +13,16 @@
         "format": "npx prettier --write ."
     },
     "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^5.51.0",
+        "@typescript-eslint/parser": "^5.51.0",
         "eslint": "^8.33.0",
         "eslint-config-prettier": "^8.6.0",
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-vue": "^9.9.0",
         "nuxt": "^3.1.2",
         "prettier": "^2.8.4",
-        "sass": "^1.58.0"
+        "sass": "^1.58.0",
+        "typescript": "^4.9.5",
+        "vue-eslint-parser": "^9.1.0"
     }
 }
