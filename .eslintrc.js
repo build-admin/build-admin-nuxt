@@ -16,7 +16,7 @@ module.exports = {
     rules: {
         // http://eslint.cn/docs/rules/
         // https://eslint.vuejs.org/rules/
-        'prettier/prettier': 'warn',
+        'prettier/prettier': 'off',
         '@typescript-eslint/no-empty-function': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
