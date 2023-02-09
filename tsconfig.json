@@ -1,0 +1,22 @@
+{
+    // https://nuxt.com/docs/guide/concepts/typescript
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "lib": ["esnext", "dom"],
+        "sourceMap": false,
+        "baseUrl": "./",
+        "jsx": "preserve",
+        "importHelpers": true,
+        "useDefineForClassFields": true,
+        "removeComments": false,
+        "strict": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "types": []
+    },
+    "extends": "./.nuxt/tsconfig.json",
+    "exclude": ["node_modules"]
+}
