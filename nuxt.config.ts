@@ -1,20 +1,28 @@
-import pkg from './package.json'
+import { loadEnv } from 'vite'
+
+let envScript = 'development'
+if (['build', 'generate'].includes(process.env.npm_lifecycle_event ?? '')) {
+    envScript = 'production'
+}
+const envData = loadEnv(envScript, '')
+if (!envData.VITE_API_BASE_URL) {
+    throw new Error('请先于 .env.production 文件内,配置生产环境的 VITE_API_BASE_URL')
+}
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    app: {
-        head: {
-            title: pkg.name,
-            meta: [{ charset: 'utf-8' }, { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
+    runtimeConfig: {
+        public: {
+            env: envData.VITE_ENV,
+            apiBaseUrl: envData.VITE_API_BASE_URL,
         },
     },
     typescript: {
         shim: false,
     },
+    modules: ['@vueuse/nuxt', '@unocss/nuxt', '@pinia/nuxt', '@element-plus/nuxt'],
     // 直接加载el的css以供随时使用 --el 开头的css类
     css: ['element-plus/dist/index.css', 'element-plus/theme-chalk/display.css', '~/assets/scss/index.scss'],
-    // build modules
-    modules: ['@vueuse/nuxt', '@unocss/nuxt', '@pinia/nuxt', '@element-plus/nuxt'],
     vueuse: {
         ssrHandlers: true,
     },
