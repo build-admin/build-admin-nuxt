@@ -40,14 +40,13 @@ export default defineNuxtConfig({
         icon: 'ElIcon',
     },
     i18n: {
-        locales: ['zh-cn', 'en'],
-        defaultLocale: 'zh-cn',
         vueI18n: {
             legacy: false,
             locale: 'zh-cn',
             globalInjection: true,
             messages: {},
         },
+        detectBrowserLanguage: false,
     },
     pinia: {
         autoImports: ['defineStore', 'acceptHMRUpdate'],
