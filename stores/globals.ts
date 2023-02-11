@@ -1,6 +1,10 @@
+/**
+ * 一些全局公用的状态
+ */
 export const useGlobalsStore = defineStore('globals', {
     state: () => {
         return {
+            unique: 0,
             loadLangHandle: {},
         }
     },
