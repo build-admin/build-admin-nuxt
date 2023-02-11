@@ -1,11 +1,9 @@
-import { getLangFileMessage } from '~/lang'
+import { getLangFileMessage, getLanguage } from '~/lang'
 import elementEnLocale from 'element-plus/lib/locale/lang/en'
 import elementZhcnLocale from 'element-plus/lib/locale/lang/zh-cn'
-import { LANG } from '~/stores/constant/keys'
 
 export default defineNuxtPlugin(async (nuxtApp) => {
-    const lang = useCookie(LANG)
-    const locale = lang.value || 'zh-cn'
+    const locale = getLanguage()
 
     if (nuxtApp.$i18n.locale != locale) {
         nuxtApp.$i18n.setLocale(locale)

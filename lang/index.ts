@@ -1,7 +1,12 @@
 import { isEmpty } from 'lodash-es'
 import { LANG } from '~/stores/constant/keys'
 
-export function languageSwitch(locale: string) {
+export function getLanguage() {
+    const lang = useCookie(LANG)
+    return lang.value || 'zh-cn'
+}
+
+export function setLanguage(locale: string) {
     const { $i18n } = useNuxtApp()
     $i18n.setLocale(locale)
 
