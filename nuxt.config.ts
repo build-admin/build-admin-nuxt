@@ -21,6 +21,9 @@ export default defineNuxtConfig({
         shim: false,
     },
     modules: ['@vueuse/nuxt', '@unocss/nuxt', '@element-plus/nuxt', '@nuxtjs/i18n', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt'],
+    imports: {
+        dirs: ['stores'],
+    },
     // 直接加载el的css以供随时使用 --el 开头的css类
     css: ['element-plus/dist/index.css', 'element-plus/theme-chalk/display.css', '~/assets/scss/index.scss'],
     vueuse: {
@@ -45,6 +48,10 @@ export default defineNuxtConfig({
             globalInjection: true,
             messages: {},
         },
+    },
+    pinia: {
+        autoImports: ['defineStore', 'acceptHMRUpdate'],
+        disableVuex: true,
     },
     // https://github.com/unocss/unocss/issues/2113
     sourcemap: {
