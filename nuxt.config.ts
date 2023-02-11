@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     typescript: {
         shim: false,
     },
-    modules: ['@vueuse/nuxt', '@unocss/nuxt', '@pinia/nuxt', '@element-plus/nuxt'],
+    modules: ['@vueuse/nuxt', '@unocss/nuxt', '@pinia/nuxt', '@element-plus/nuxt', '@nuxtjs/i18n'],
     // 直接加载el的css以供随时使用 --el 开头的css类
     css: ['element-plus/dist/index.css', 'element-plus/theme-chalk/display.css', '~/assets/scss/index.scss'],
     vueuse: {
@@ -35,6 +35,16 @@ export default defineNuxtConfig({
     },
     elementPlus: {
         icon: 'ElIcon',
+    },
+    i18n: {
+        locales: ['zh-cn', 'en'],
+        defaultLocale: 'zh-cn',
+        vueI18n: {
+            legacy: false,
+            locale: 'zh-cn',
+            globalInjection: true,
+            messages: {},
+        },
     },
     // https://github.com/unocss/unocss/issues/2113
     sourcemap: {
