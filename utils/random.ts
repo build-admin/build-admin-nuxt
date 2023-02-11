@@ -49,9 +49,8 @@ export function uuid(): string {
  * @returns 唯一标识
  */
 export function shortUuid(prefix = ''): string {
-    const globals = useGlobalsStore()
     const time = Date.now()
     const random = Math.floor(Math.random() * 1000000000)
-    globals.unique++
-    return (prefix ? prefix + '_' : '') + random + globals.unique + String(time)
+    globals.unique.value++
+    return (prefix ? prefix + '_' : '') + random + globals.unique.value + String(time)
 }
