@@ -12,28 +12,32 @@
         "lint-fix": "eslint --ext .js,.jsx,.ts,.vue src --fix",
         "format": "npx prettier --write ."
     },
-    "devDependencies": {
+    "dependencies": {
         "@element-plus/icons-vue": "^2.0.10",
         "@element-plus/nuxt": "^1.0.2",
         "@nuxtjs/i18n": "8.0.0-beta.9",
         "@pinia-plugin-persistedstate/nuxt": "^1.0.0",
         "@pinia/nuxt": "^0.4.6",
-        "@types/node": "^18.13.0",
-        "@typescript-eslint/eslint-plugin": "^5.51.0",
-        "@typescript-eslint/parser": "^5.51.0",
         "@unocss/nuxt": "^0.48.0",
         "@vueuse/nuxt": "^9.9.0",
         "element-plus": "^2.2.27",
+        "lodash-es": "^4.17.21",
+        "nprogress": "^0.2.0",
+        "nuxt": "^3.1.2"
+    },
+    "devDependencies": {
+        "@types/node": "^18.13.0",
+        "@types/nprogress": "^0.2.0",
+        "@typescript-eslint/eslint-plugin": "^5.51.0",
+        "@typescript-eslint/parser": "^5.51.0",
         "eslint": "^8.33.0",
         "eslint-config-prettier": "^8.6.0",
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-vue": "^9.9.0",
-        "nuxt": "^3.1.2",
         "prettier": "^2.8.4",
         "sass": "^1.58.0",
         "typescript": "^4.9.5",
-        "vue-eslint-parser": "^9.1.0",
-        "vue-router": "^4.1.6"
+        "vue-eslint-parser": "^9.1.0"
     },
     "pnpm": {
         "peerDependencyRules": {
