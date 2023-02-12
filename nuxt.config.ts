@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     typescript: {
         shim: false,
     },
-    modules: ['@vueuse/nuxt', '@unocss/nuxt', '@element-plus/nuxt', '@nuxtjs/i18n', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt'],
+    modules: ['@vueuse/nuxt', '@unocss/nuxt', '@element-plus/nuxt', '@nuxtjs/i18n', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', 'nuxt-icons'],
     imports: {
         dirs: ['stores'],
     },

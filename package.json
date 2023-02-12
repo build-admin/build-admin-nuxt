@@ -23,7 +23,8 @@
         "element-plus": "^2.2.27",
         "lodash-es": "^4.17.21",
         "nprogress": "^0.2.0",
-        "nuxt": "^3.1.2"
+        "nuxt": "^3.1.2",
+        "nuxt-icons": "^3.1.0"
     },
     "devDependencies": {
         "@types/node": "^18.13.0",
