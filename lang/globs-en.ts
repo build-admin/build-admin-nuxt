@@ -5,4 +5,5 @@ export default {
     Cancel: 'Cancel',
     Save: 'Save',
     Upload: 'Upload',
+    Add: 'Add',
 }

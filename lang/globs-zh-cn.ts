@@ -5,4 +5,5 @@ export default {
     Cancel: '取消',
     Save: '保存',
     Upload: '上传',
+    Add: '添加',
 }
