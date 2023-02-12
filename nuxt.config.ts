@@ -11,6 +11,11 @@ if (!envData.VITE_API_BASE_URL) {
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    app: {
+        head: {
+            link: [{ rel: 'stylesheet', href: '//cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' }],
+        },
+    },
     runtimeConfig: {
         public: {
             env: envData.VITE_ENV,
@@ -37,7 +42,7 @@ export default defineNuxtConfig({
         },
     },
     elementPlus: {
-        icon: 'ElIcon',
+        icon: false,
     },
     i18n: {
         vueI18n: {
