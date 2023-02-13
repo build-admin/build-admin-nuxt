@@ -1,4 +1,5 @@
 import { loadEnv } from 'vite'
+import { buildLocalIconNames } from './assets/script/buildIcons'
 
 let envScript = 'development'
 if (['build', 'generate'].includes(process.env.npm_lifecycle_event ?? '')) {
@@ -28,6 +29,11 @@ export default defineNuxtConfig({
     modules: ['@vueuse/nuxt', '@unocss/nuxt', '@element-plus/nuxt', '@nuxtjs/i18n', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', 'nuxt-icons'],
     imports: {
         dirs: ['stores'],
+    },
+    hooks: {
+        'build:before': () => {
+            buildLocalIconNames()
+        },
     },
     // 直接加载el的css以供随时使用 --el 开头的css类
     css: ['element-plus/dist/index.css', 'element-plus/theme-chalk/display.css', '~/assets/scss/index.scss'],
