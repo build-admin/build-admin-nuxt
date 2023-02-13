@@ -6,4 +6,5 @@ export default {
     Save: 'Save',
     Upload: 'Upload',
     Add: 'Add',
+    Search: 'Search',
 }

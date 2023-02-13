@@ -14,7 +14,7 @@ if (!envData.VITE_API_BASE_URL) {
 export default defineNuxtConfig({
     app: {
         head: {
-            link: [{ rel: 'stylesheet', href: '//cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' }],
+            link: [{ rel: 'stylesheet', crossorigin: 'anonymous', href: '//cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' }],
         },
     },
     runtimeConfig: {
