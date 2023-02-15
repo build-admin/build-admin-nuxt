@@ -26,14 +26,6 @@ export function initialize() {
     return Http.request({
         url: indexUrl,
         method: 'get',
-    }).then((res) => {
-        useServerSeoMeta({
-            title: i18n.global.t('Home'),
-            titleTemplate: (titleChunk?: string) => {
-                return titleChunk ? `${titleChunk} - ${res.value?.data.site.siteName}` : res.value?.data.site.siteName
-            },
-        })
-        siteConfig.dataFill({ ...res.value?.data.site, openMemberCenter: res.value?.data.openMemberCenter })
     })
 }
 
