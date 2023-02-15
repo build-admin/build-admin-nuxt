@@ -1,17 +1,18 @@
 import { isEmpty } from 'lodash-es'
+import { i18n } from '~~/plugins/i18n'
 import { LANG } from '~/stores/constant/keys'
 
-export function getLanguage() {
+export type Locales = 'zh-cn' | 'en'
+
+export function getLanguage(): Locales {
     const lang = useCookie(LANG)
-    return lang.value || 'zh-cn'
+    return (lang.value as Locales) || 'zh-cn'
 }
 
-export function setLanguage(locale: string) {
-    const { $i18n } = useNuxtApp()
-    $i18n.setLocale(locale)
-
+export function setLanguage(locale: 'zh-cn' | 'en') {
     const lang = useCookie(LANG)
     lang.value = locale
+    i18n.global.locale.value = locale
 
     /**
      * 客户端直接刷新页面
@@ -25,15 +26,14 @@ export function setLanguage(locale: string) {
 
 /**
  * 合并语言翻译到当前语言
- * @param nuxtApp
  * @param message
  * @param pathName
  * @returns
  */
-export function mergeMessage(nuxtApp: any, message: anyObj, pathName = '') {
+export function mergeMessage(message: anyObj, pathName = '') {
     if (isEmpty(message)) return
     if (!pathName) {
-        return nuxtApp.$i18n.mergeLocaleMessage(nuxtApp.$i18n.locale.value, message)
+        return i18n.global.mergeLocaleMessage(i18n.global.locale.value, message)
     }
     let msg: anyObj = {}
     if (pathName.indexOf('/') > 0) {
@@ -41,7 +41,7 @@ export function mergeMessage(nuxtApp: any, message: anyObj, pathName = '') {
     } else {
         msg[pathName] = message
     }
-    nuxtApp.$i18n.mergeLocaleMessage(nuxtApp.$i18n.locale.value, msg)
+    i18n.global.mergeLocaleMessage(i18n.global.locale.value, msg)
 }
 
 export function getLangFileMessage(mList: any, locale: string) {

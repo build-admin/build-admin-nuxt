@@ -1,6 +1,7 @@
 import { UseFetchOptions } from 'nuxt/dist/app/composables/fetch'
 import { ElLoading, LoadingOptions, ElNotification } from 'element-plus'
 import { getLanguage } from '~/lang'
+import { i18n } from '~/plugins/i18n'
 import { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
 
 interface FetchOptions<DataT = any> extends UseFetchOptions<ApiResponse<DataT>> {
@@ -55,7 +56,6 @@ export const requestConfig = <DataT = any>(
     config: Partial<FetchConfig> = {},
     loading: LoadingOptions = {}
 ): UseFetchOptions<ApiResponse<DataT>> => {
-    const { $i18n } = useNuxtApp()
     const runtimeConfig = useRuntimeConfig()
     config = Object.assign(
         {
@@ -113,7 +113,7 @@ export const requestConfig = <DataT = any>(
                 }
             } else if (config.showSuccessMessage && response._data && response._data.code == 1) {
                 ElNotification({
-                    message: response._data.msg ? response._data.msg : $i18n.t('request.Operation successful'),
+                    message: response._data.msg ? response._data.msg : i18n.global.t('request.Operation successful'),
                     type: 'success',
                 })
             }
@@ -142,57 +142,56 @@ function closeLoading(options: Partial<FetchConfig>) {
  */
 function httpErrorStatusHandle(response: any) {
     // 处理被取消的请求
-    const { $i18n } = useNuxtApp()
     let message = ''
     if (response) {
         switch (response.status) {
             case 302:
-                message = $i18n.t('request.Interface redirected!')
+                message = i18n.global.t('request.Interface redirected!')
                 break
             case 400:
-                message = $i18n.t('request.Incorrect parameter!')
+                message = i18n.global.t('request.Incorrect parameter!')
                 break
             case 401:
-                message = $i18n.t('request.You do not have permission to operate!')
+                message = i18n.global.t('request.You do not have permission to operate!')
                 break
             case 403:
-                message = $i18n.t('request.You do not have permission to operate!')
+                message = i18n.global.t('request.You do not have permission to operate!')
                 break
             case 404:
-                message = $i18n.t('request.Error requesting address:') + response.url
+                message = i18n.global.t('request.Error requesting address:') + response.url
                 break
             case 408:
-                message = $i18n.t('request.Request timed out!')
+                message = i18n.global.t('request.Request timed out!')
                 break
             case 409:
-                message = $i18n.t('request.The same data already exists in the system!')
+                message = i18n.global.t('request.The same data already exists in the system!')
                 break
             case 500:
-                message = $i18n.t('request.Server internal error!')
+                message = i18n.global.t('request.Server internal error!')
                 break
             case 501:
-                message = $i18n.t('request.Service not implemented!')
+                message = i18n.global.t('request.Service not implemented!')
                 break
             case 502:
-                message = $i18n.t('request.Gateway error!')
+                message = i18n.global.t('request.Gateway error!')
                 break
             case 503:
-                message = $i18n.t('request.Service unavailable!')
+                message = i18n.global.t('request.Service unavailable!')
                 break
             case 504:
-                message = $i18n.t('request.The service is temporarily unavailable Please try again later!')
+                message = i18n.global.t('request.The service is temporarily unavailable Please try again later!')
                 break
             case 505:
-                message = $i18n.t('request.HTTP version is not supported!')
+                message = i18n.global.t('request.HTTP version is not supported!')
                 break
             default:
-                message = $i18n.t('request.Abnormal problem, please contact the website administrator!')
+                message = i18n.global.t('request.Abnormal problem, please contact the website administrator!')
                 break
         }
     }
-    if (response.statusText.includes('timeout')) message = $i18n.t('request.Network request timeout!')
+    if (response.statusText.includes('timeout')) message = i18n.global.t('request.Network request timeout!')
     if (response.statusText.includes('Network'))
-        message = window.navigator.onLine ? $i18n.t('request.Server exception!') : $i18n.t('request.You are disconnected!')
+        message = window.navigator.onLine ? i18n.global.t('request.Server exception!') : i18n.global.t('request.You are disconnected!')
 
     ElNotification({
         type: 'error',

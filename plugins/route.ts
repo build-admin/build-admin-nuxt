@@ -2,6 +2,7 @@ import NProgress from 'nprogress'
 import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
 import langAutoLoadMap from '~/lang/autoload'
 import { uniq } from 'lodash-es'
+import { i18n } from './i18n'
 import { mergeMessage } from '~/lang/index'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -13,7 +14,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
         // 按需动态加载页面的语言包-start
         let loadPath: string[] = []
-        const locale = nuxtApp.$i18n.locale.value
+        const locale = i18n.global.locale.value
 
         // 根据 autoload.ts 加载的语言包
         if (to.path in langAutoLoadMap) {
@@ -37,7 +38,7 @@ export default defineNuxtPlugin((nuxtApp) => {
                 const res = await globals.loadLangHandle[loadPath[key]]()
                 if (res.default) {
                     const pathName = loadPath[key].slice(loadPath[key].lastIndexOf(prefix) + (prefix.length + 1), loadPath[key].lastIndexOf('.'))
-                    mergeMessage(nuxtApp, res.default, pathName)
+                    mergeMessage(res.default, pathName)
                 }
             }
         }

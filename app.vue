@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import type { Language } from 'element-plus/es/locale'
 const { locale, getLocaleMessage } = useI18n()
 const messages = getLocaleMessage(locale.value) as Language

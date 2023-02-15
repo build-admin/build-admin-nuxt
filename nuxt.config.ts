@@ -26,13 +26,20 @@ export default defineNuxtConfig({
     typescript: {
         shim: false,
     },
-    modules: ['@vueuse/nuxt', '@unocss/nuxt', '@element-plus/nuxt', '@nuxtjs/i18n', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', 'nuxt-icons'],
+    modules: ['@vueuse/nuxt', '@unocss/nuxt', '@element-plus/nuxt', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', 'nuxt-icons'],
     imports: {
         dirs: ['stores'],
     },
     hooks: {
         'build:before': () => {
             buildLocalIconNames()
+        },
+    },
+    vite: {
+        resolve: {
+            alias: {
+                'vue-i18n': envData.VITE_ENV == 'production' ? 'vue-i18n/dist/vue-i18n.cjs.prod.js' : 'vue-i18n/dist/vue-i18n.cjs.js',
+            },
         },
     },
     // 直接加载el的css以供随时使用 --el 开头的css类
@@ -49,15 +56,6 @@ export default defineNuxtConfig({
     },
     elementPlus: {
         icon: false,
-    },
-    i18n: {
-        vueI18n: {
-            legacy: false,
-            locale: 'zh-cn',
-            globalInjection: true,
-            messages: {},
-        },
-        detectBrowserLanguage: false,
     },
     pinia: {
         autoImports: ['defineStore', 'acceptHMRUpdate'],
