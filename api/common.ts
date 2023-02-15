@@ -1,4 +1,5 @@
 import { i18n } from '~/plugins/i18n'
+import { useSiteConfig } from '~~/stores/siteConfig'
 
 // 公共
 export const captchaUrl = '/api/common/captcha'
@@ -10,6 +11,31 @@ export const apiBuildSuffixSvgUrl = '/api/ajax/buildSuffixSvg'
 export const apiAreaUrl = '/api/ajax/area'
 export const apiSendSms = '/api/Sms/send'
 export const apiSendEms = '/api/Ems/send'
+export const indexUrl = '/api/index/index'
+
+/**
+ * 初始化
+ */
+export function initialize() {
+    const siteConfig = useSiteConfig()
+
+    if (siteConfig.siteName) {
+        return
+    }
+
+    return Http.request({
+        url: indexUrl,
+        method: 'get',
+    }).then((res) => {
+        useServerSeoMeta({
+            title: i18n.global.t('Home'),
+            titleTemplate: (titleChunk?: string) => {
+                return titleChunk ? `${titleChunk} - ${res.value?.data.site.siteName}` : res.value?.data.site.siteName
+            },
+        })
+        siteConfig.dataFill({ ...res.value?.data.site, openMemberCenter: res.value?.data.openMemberCenter })
+    })
+}
 
 /**
  * 获取地区数据
