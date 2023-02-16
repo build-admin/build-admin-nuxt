@@ -71,7 +71,7 @@
 
 <script setup lang="ts">
 import { Placement } from 'element-plus'
-import { getLocalIconfontNames, getAwesomeIconfontNames, getElementPlusIconfontNames } from '~/components/baInput/iconfont'
+import { getLocalIconfontNames, getAwesomeIconfontNames, getElementPlusIconfontNames } from '~/composables/baInput/iconfont'
 
 type IconType = 'ele' | 'awe' | 'local'
 
