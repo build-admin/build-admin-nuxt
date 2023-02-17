@@ -37,7 +37,7 @@ export function initialize() {
  * @param params 请求额外参数
  * @param forceLocal 上传到本地，而不使用云存储
  */
-export function fileUpload(fd: FormData, params: anyObj = {}, forceLocal = false) {
+export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, forceLocal = false): Promise<Ref<ApiResponse<DataT> | null>> {
     let errorMsg = ''
     const file = fd.get('file') as UploadRawFile
     const siteConfig = useSiteConfig()
