@@ -82,7 +82,7 @@ export function getArea(values: number[]) {
     if (values[1]) {
         params.city = values[1]
     }
-    return Http.request({
+    return Http.fetch({
         url: apiAreaUrl,
         method: 'GET',
         params: params,
