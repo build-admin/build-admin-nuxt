@@ -13,13 +13,10 @@ export function randomNum(min: number, max: number) {
     switch (arguments.length) {
         case 1:
             return parseInt((Math.random() * min + 1).toString(), 10)
-            break
         case 2:
             return parseInt((Math.random() * (max - min + 1) + min).toString(), 10)
-            break
         default:
             return 0
-            break
     }
 }
 

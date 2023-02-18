@@ -8,8 +8,8 @@
         "generate": "nuxt generate",
         "preview": "nuxt preview",
         "postinstall": "nuxt prepare",
-        "lint": "eslint --ext .js,.jsx,.ts,.vue src",
-        "lint-fix": "eslint --ext .js,.jsx,.ts,.vue src --fix",
+        "lint": "eslint --ext .js,.jsx,.ts,.vue ./",
+        "lint-fix": "eslint --ext .js,.jsx,.ts,.vue ./ --fix",
         "format": "npx prettier --write ."
     },
     "dependencies": {

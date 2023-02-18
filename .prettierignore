@@ -1,0 +1,10 @@
+.nuxt
+.output
+.nitro
+.cache
+dist
+*.log*
+.env
+.vscode
+*.md
+assets/script/iconNames.ts
