@@ -1,4 +1,5 @@
 import { CSSProperties } from 'vue'
+import type { FormItemRule } from 'element-plus'
 
 // 支持的输入框类型
 export const inputTypes = [
@@ -169,4 +170,19 @@ export interface InputAttr {
     onPanelChange?: Function
     onActiveChange?: Function
     [key: string]: any
+}
+
+export interface FormItemAttr {
+    id?: string
+    class?: string
+    prop?: string | string[]
+    'label-width'?: string | number
+    required?: boolean
+    rules?: FormItemRule | FormItemRule[]
+    error?: string
+    'show-message'?: boolean
+    'inline-message'?: boolean
+    size?: 'large' | 'default' | 'small'
+    style?: CSSProperties
+    'block-help'?: string
 }
