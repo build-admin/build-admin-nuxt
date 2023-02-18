@@ -72,6 +72,92 @@ export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, force
 }
 
 /**
+ * 发送短信
+ */
+export function sendSms(mobile: string, templateCode: string, extend: anyObj = {}) {
+    return Http.request(
+        {
+            url: apiSendSms,
+            method: 'POST',
+            body: {
+                mobile: mobile,
+                template_code: templateCode,
+                ...extend,
+            },
+        },
+        {
+            showSuccessMessage: true,
+        }
+    )
+}
+
+/**
+ * 发送邮件
+ */
+export function sendEms(email: string, event: string, extend: anyObj = {}) {
+    return Http.request(
+        {
+            url: apiSendEms,
+            method: 'POST',
+            body: {
+                email: email,
+                event: event,
+                ...extend,
+            },
+        },
+        {
+            showSuccessMessage: true,
+        }
+    )
+}
+
+/**
+ * 构建验证码 URL
+ */
+export function buildCaptchaUrl() {
+    return import.meta.env.VITE_API_BASE_URL + captchaUrl + '?server=1'
+}
+
+/**
+ * 用户注销登录
+ */
+export function userLogout() {
+    const userInfo = useUserInfo()
+    return Http.request({
+        url: '/api/user/logout',
+        method: 'POST',
+        body: {
+            refresh_token: userInfo.getToken('refresh'),
+        },
+    })
+}
+
+/**
+ * 刷新用户 token
+ */
+export function refreshToken<DataT = any>(): Promise<Ref<ApiResponse<DataT> | null>> {
+    const userInfo = useUserInfo()
+    return Http.request({
+        url: refreshTokenUrl,
+        method: 'POST',
+        body: {
+            refresh_token: userInfo.getToken('refresh'),
+        },
+    })
+}
+
+/**
+ * 生成文件后缀icon的svg图片
+ * @param suffix 后缀名
+ * @param background 背景色,如:rgb(255,255,255)
+ */
+export function buildSuffixSvgUrl(suffix: string, background = '') {
+    return (
+        import.meta.env.VITE_API_BASE_URL + apiBuildSuffixSvgUrl + '?suffix=' + suffix + (background ? '&background=' + background : '') + '&server=1'
+    )
+}
+
+/**
  * 获取地区数据
  */
 export function getArea(values: number[]) {
