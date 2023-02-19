@@ -31,6 +31,10 @@
                                 <el-menu-item @click="userInfo.logout()" v-blur index="user-logout">{{ $t('Logout login') }}</el-menu-item>
                             </el-sub-menu>
                             <el-menu-item v-else @click="navigateTo({ name: 'user' })" v-blur index="user">{{ $t('Member Center') }}</el-menu-item>
+
+                            <el-menu-item index="theme-switch" class="theme-switch">
+                                <DarkSwitch @click="setDark(!getDark())" />
+                            </el-menu-item>
                         </template>
                     </el-menu>
                 </client-only>
@@ -111,6 +115,9 @@ switch (route.path) {
             color: var(--el-menu-hover-text-color);
         }
     }
+}
+.theme-switch {
+    --el-menu-hover-bg-color: none;
 }
 @at-root .dark {
     .header-logo .site-name {
