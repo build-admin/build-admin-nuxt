@@ -135,4 +135,9 @@ definePageMeta({
         width: 300px !important;
     }
 }
+@at-root html.dark {
+    .index-container {
+        background: url(~/assets/images/bg-dark.jpg) repeat;
+    }
+}
 </style>
