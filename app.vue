@@ -19,7 +19,9 @@ const messages = getLocaleMessage(locale.value) as Language
 
 const siteConfig = useSiteConfig()
 const initData = await initialize()
-siteConfig.dataFill({ ...initData?.value?.data.site, openMemberCenter: initData?.value?.data.openMemberCenter })
+if (initData?.value?.code == 1) {
+    siteConfig.dataFill({ ...initData?.value?.data.site, openMemberCenter: initData?.value?.data.openMemberCenter })
+}
 
 // 根据站点名称设置默认标题模板
 useServerSeoMeta({

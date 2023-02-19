@@ -12,7 +12,7 @@
                         <client-only>
                             <el-button
                                 v-if="siteConfig.openMemberCenter"
-                                @click="navigateTo('/user')"
+                                @click="navigateTo({ name: 'user' })"
                                 class="container-button"
                                 color="#ffffff"
                                 size="large"
@@ -34,6 +34,10 @@
 import indexCover from '~/assets/images/index-cover.svg'
 
 const siteConfig = useSiteConfig()
+
+definePageMeta({
+    name: '/',
+})
 </script>
 
 <style scoped lang="scss">

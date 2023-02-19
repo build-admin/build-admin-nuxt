@@ -2,7 +2,7 @@
     <el-header class="ba-header">
         <el-row justify="center">
             <el-col class="header-row" :span="16" :xs="24">
-                <div @click="navigateTo('/')" class="header-logo hidden-sm-and-down">
+                <div @click="navigateTo({ name: '/' })" class="header-logo hidden-sm-and-down">
                     <img src="~/assets/images/logo.png" />
                     <span class="site-name">{{ siteConfig.siteName }}</span>
                 </div>
@@ -11,7 +11,7 @@
                 </div>
                 <client-only>
                     <el-menu :default-active="state.activeMenu" class="frontend-header-menu" mode="horizontal" :ellipsis="false">
-                        <el-menu-item @click="navigateTo('/')" v-blur index="index">{{ $t('Home') }}</el-menu-item>
+                        <el-menu-item @click="navigateTo({ name: '/' })" v-blur index="index">{{ $t('Home') }}</el-menu-item>
 
                         <template v-if="siteConfig.openMemberCenter">
                             <el-sub-menu v-if="userInfo.isLogin()" v-blur index="user">
@@ -25,12 +25,12 @@
                                         {{ userInfo.nickname }}
                                     </div>
                                 </template>
-                                <el-menu-item @click="navigateTo('/user')" v-blur index="user-index">
+                                <el-menu-item @click="navigateTo({ name: 'user' })" v-blur index="user-index">
                                     {{ $t('Member Center') }}
                                 </el-menu-item>
                                 <el-menu-item @click="userInfo.logout()" v-blur index="user-logout">{{ $t('Logout login') }}</el-menu-item>
                             </el-sub-menu>
-                            <el-menu-item v-else @click="navigateTo('/user')" v-blur index="user">{{ $t('Member Center') }}</el-menu-item>
+                            <el-menu-item v-else @click="navigateTo({ name: 'user' })" v-blur index="user">{{ $t('Member Center') }}</el-menu-item>
                         </template>
                     </el-menu>
                 </client-only>
