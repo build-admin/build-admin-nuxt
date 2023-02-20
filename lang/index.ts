@@ -4,12 +4,17 @@ import { LANG } from '~/stores/constant/keys'
 
 export type Locales = 'zh-cn' | 'en'
 
+export const languageList = [
+    { name: 'en', value: 'English' },
+    { name: 'zh-cn', value: '中文简体' },
+]
+
 export function getLanguage(): Locales {
     const lang = useCookie(LANG)
     return (lang.value as Locales) || 'zh-cn'
 }
 
-export function setLanguage(locale: 'zh-cn' | 'en') {
+export function setLanguage(locale: Locales) {
     const lang = useCookie(LANG)
     lang.value = locale
     i18n.global.locale.value = locale

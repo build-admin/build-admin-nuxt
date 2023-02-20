@@ -32,6 +32,17 @@
                             </el-sub-menu>
                             <el-menu-item v-else @click="navigateTo({ name: 'user' })" v-blur index="user">{{ $t('Member Center') }}</el-menu-item>
 
+                            <el-sub-menu v-blur index="switch-language">
+                                <template #title>{{ $t('Language') }}</template>
+                                <el-menu-item
+                                    @click="setLanguage(item.name as Locales)"
+                                    v-for="item in languageList"
+                                    :key="item.name"
+                                    :index="'switch-language-' + item.value"
+                                    >{{ item.value }}</el-menu-item
+                                >
+                            </el-sub-menu>
+
                             <el-menu-item index="theme-switch" class="theme-switch">
                                 <DarkSwitch @click="setDark(!getDark())" />
                             </el-menu-item>
@@ -44,6 +55,7 @@
 </template>
 
 <script setup lang="ts">
+import { Locales, languageList, setLanguage } from '~/lang/index'
 const userInfo = useUserInfo()
 const siteConfig = useSiteConfig()
 
@@ -67,8 +79,8 @@ switch (route.path) {
 
 <style scoped lang="scss">
 .ba-header {
-    position: fixed;
-    width: 100%;
+    background-color: var(--ba-bg-color-overlay);
+    box-shadow: 0 0 8px rgba(0 0 0 / 8%);
 }
 .header-row {
     display: flex;
@@ -93,33 +105,37 @@ switch (route.path) {
         font-size: var(--el-font-size-large);
     }
 }
+.switch-language {
+    display: flex;
+    align-items: center;
+    span {
+        padding-right: 4px;
+    }
+}
 .el-menu--horizontal {
     margin-left: auto;
     border-bottom: none;
+}
+.header-user-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .header-user-avatar {
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+        border-radius: 50%;
+    }
 }
 .el-menu--horizontal > .el-menu-item,
 .el-menu--horizontal > :deep(.el-sub-menu) .el-sub-menu__title,
 .el-menu--horizontal > .el-menu-item.is-active {
     border-bottom: none;
 }
-.frontend-header-menu {
-    background: transparent;
-    .el-menu-item,
-    .el-sub-menu .el-sub-menu__title {
-        color: var(--el-color-white);
-        &.is-active {
-            color: var(--el-color-white) !important;
-        }
-        &:hover {
-            background-color: transparent;
-            color: var(--el-menu-hover-text-color);
-        }
-    }
-}
 .theme-switch {
     --el-menu-hover-bg-color: none;
 }
-@at-root .dark {
+@at-root html.dark {
     .header-logo .site-name {
         color: var(--el-text-color-primary);
     }

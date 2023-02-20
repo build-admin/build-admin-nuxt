@@ -7,6 +7,7 @@ export default {
     Upload: '上传',
     Add: '添加',
     Search: '搜索',
+    Language: '语言',
     'Member Center': '会员中心',
     'Logout login': '注销登录',
     Confirm: '确认',

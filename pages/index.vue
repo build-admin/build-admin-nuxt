@@ -78,7 +78,7 @@ definePageMeta({
         }
     }
 }
-.header {
+.ba-header {
     background-color: transparent !important;
     box-shadow: none !important;
     position: fixed;
@@ -99,15 +99,12 @@ definePageMeta({
             }
             &:hover {
                 background-color: transparent;
-                color: var(--el-menu-hover-text-color);
+                color: var(--el-menu-hover-text-color) !important;
             }
         }
     }
-    :deep(.theme-switch) {
-        display: none;
-    }
 }
-.footer {
+.ba-footer {
     color: var(--el-text-color-secondary);
     background-color: transparent !important;
     position: fixed;

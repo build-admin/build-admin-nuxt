@@ -7,6 +7,7 @@ export default {
     Upload: 'Upload',
     Add: 'Add',
     Search: 'Search',
+    Language: 'Language',
     'Member Center': 'Member Center',
     'Logout login': 'Logout login',
     Confirm: 'Confirm',

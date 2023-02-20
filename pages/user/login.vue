@@ -1,6 +1,7 @@
 <template>
     <div>
         <el-container class="is-vertical">
+            <BaHeader />
             <el-main>
                 <el-row justify="center">
                     <el-col :span="16" :xs="24">
