@@ -26,6 +26,7 @@
                     </div>
                 </div>
             </el-main>
+            <BaFooter />
         </el-container>
     </div>
 </template>

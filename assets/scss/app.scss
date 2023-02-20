@@ -60,6 +60,12 @@ body,
 }
 /* 图片上传预览-e */
 
+/* 布局相关-s */
+.layouts-main {
+    min-height: calc(100vh - 120px);
+}
+/* 布局相关-e */
+
 /* 暗黑模式公共样式-s */
 .ba-icon-dark {
     color: var(--el-text-color-primary) !important;

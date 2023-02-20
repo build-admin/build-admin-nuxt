@@ -14,4 +14,5 @@ export default {
     'Please input field': 'Please input {field}',
     'Please select field': 'Please select {field}',
     'Please enter the correct field': 'Please enter the correct {field}',
+    Copyright: 'Copyright',
 }

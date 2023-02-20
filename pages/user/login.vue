@@ -2,7 +2,7 @@
     <div>
         <el-container class="is-vertical">
             <BaHeader />
-            <el-main>
+            <el-main class="layouts-main">
                 <el-row justify="center">
                     <el-col :span="16" :xs="24">
                         <div v-if="siteConfig.openMemberCenter" class="form-box">
@@ -226,6 +226,7 @@
                     </el-col>
                 </el-row>
             </el-main>
+            <BaFooter />
         </el-container>
 
         <!-- 找回密码表单 -->

@@ -14,4 +14,5 @@ export default {
     'Please input field': '请输入{field}',
     'Please select field': '请选择{field}',
     'Please enter the correct field': '请输入正确的{field}',
+    Copyright: '版权所有',
 }
