@@ -8,4 +8,14 @@ export default {
     'The type of uploaded file is not allowed!': '上传文件的类型不被允许！',
     'The data of the uploaded file is incomplete!': '上传文件的资料不完整！',
     'The size of the uploaded file exceeds the allowed range!': '上传文件的大小超出允许范围！',
+    // 验证类型
+    Mobile: '手机号',
+    Account: '账户名',
+    Password: '密码',
+    'Variable name': '变量名',
+    Email: '邮箱地址',
+    Date: '日期',
+    Number: '数字',
+    Integer: '整数',
+    Float: '浮点数',
 }

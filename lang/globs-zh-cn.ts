@@ -9,4 +9,8 @@ export default {
     Search: '搜索',
     'Member Center': '会员中心',
     'Logout login': '注销登录',
+    Confirm: '确认',
+    'Please input field': '请输入{field}',
+    'Please select field': '请选择{field}',
+    'Please enter the correct field': '请输入正确的{field}',
 }
