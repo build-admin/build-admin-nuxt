@@ -56,6 +56,7 @@ export const requestConfig = <DataT = any>(
     config: Partial<FetchConfig> = {},
     loading: LoadingOptions = {}
 ): UseFetchOptions<ApiResponse<DataT>> => {
+    const userInfo = useUserInfo()
     const runtimeConfig = useRuntimeConfig()
     config = Object.assign(
         {
@@ -84,9 +85,10 @@ export const requestConfig = <DataT = any>(
                 }
             }
 
-            // TODO
             // 自动携带token
             options.headers = options.headers || {}
+            const userToken = userInfo.getToken('auth')
+            if (userToken) (options.headers as anyObj)['ba-user-token'] = userToken
         },
         onResponse: ({ response }) => {
             config.loading && closeLoading(config) // 关闭loading
