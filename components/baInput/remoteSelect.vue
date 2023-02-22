@@ -139,7 +139,7 @@ const onClear = () => {
 
 const onLogKeyword = (q: string) => {
     state.keyword = q
-    getData()
+    debounce(getData, 500)()
 }
 
 const getData = (initValue: valType = '') => {
@@ -147,7 +147,7 @@ const getData = (initValue: valType = '') => {
     state.params.page = state.currentPage
     state.params.initKey = props.pk
     state.params.initValue = initValue
-    getSelectData(props.remoteUrl, state.keyword, state.params)
+    getSelectData(props.remoteUrl, state.keyword, { ...state.params })
         .then(({ data }) => {
             let initializeData = true
             let opts = data.value?.data.options ? data.value.data.options : data.value?.data.list
