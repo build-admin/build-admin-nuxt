@@ -148,16 +148,16 @@ const getData = (initValue: valType = '') => {
     state.params.initKey = props.pk
     state.params.initValue = initValue
     getSelectData(props.remoteUrl, state.keyword, state.params)
-        .then((res) => {
+        .then(({ data }) => {
             let initializeData = true
-            let opts = res.value?.data.options ? res.value.data.options : res.value?.data.list
+            let opts = data.value?.data.options ? data.value.data.options : data.value?.data.list
             if (typeof props.labelFormatter == 'function') {
                 for (const key in opts) {
                     opts[key][props.field] = props.labelFormatter(opts[key], key)
                 }
             }
             state.options = opts
-            state.total = res.value?.data.total ?? 0
+            state.total = data.value?.data.total ?? 0
             if (initValue) {
                 // 重新渲染组件,确保在赋值前,opts已加载到-兼容 modelValue 更新
                 state.selectKey = uuid()

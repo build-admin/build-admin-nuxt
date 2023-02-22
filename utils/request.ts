@@ -2,66 +2,91 @@ import { UseFetchOptions } from 'nuxt/dist/app/composables/fetch'
 import { ElLoading, LoadingOptions, ElNotification } from 'element-plus'
 import { getLanguage } from '~/lang'
 import { i18n } from '~/plugins/i18n'
+import { USER_TOKEN_KEY } from '~/stores/constant/keys'
+import type { FetchError } from 'ofetch'
 import { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
 
 interface FetchOptions<DataT = any> extends UseFetchOptions<ApiResponse<DataT>> {
-    url: string
+    url?: string
 }
-const loadingInstance: LoadingInstance = {
-    target: null,
-    count: 0,
+const requestStatus: RequestStatus = {
+    loading: {
+        target: null,
+        count: 0,
+    },
+    respond302: false,
 }
 
 export class Http {
-    /**
-     * 网络请求
-     * @param options 请求参数（url、method 等），请参考 useFetch 文档
-     * @param config 请求配置（简洁响应、开启成功提示等），请看类型定义
-     * @param loading ElLoading 的参数，config.loading 开启时有效
-     * 本方法 code != 1 进 catch，只返回 data
-     */
-    static async request<DataT = any>(
-        options: FetchOptions<DataT>,
-        config: Partial<FetchConfig> = {},
-        loading: LoadingOptions = {}
-    ): Promise<Ref<ApiResponse<DataT> | null>> {
-        const { data } = await useFetch(options.url, requestConfig(options, config, loading))
-        return data.value?.code == 1 ? Promise.resolve(data) : Promise.reject(data)
-    }
-
     /**
      * 网络请求（配置好了请求参数的 useFetch）
      * @param options 请求参数（url、method 等），请参考 useFetch 文档
      * @param config 请求配置（简洁响应、开启成功提示等），请看类型定义
      * @param loading ElLoading 的参数，config.loading 开启时有效
-     * 本方法 code != 1 任然进 then，nuxt暂不支持在响应拦截中 reject
+     * @return 同 useFetch code != 1 任然进 then，nuxt 不支持在响应拦截中 reject（服务端请求时无法渲染）
      */
-    static async fetch<DataT = any>(options: FetchOptions<DataT>, config: Partial<FetchConfig> = {}, loading: LoadingOptions = {}) {
+    static async fetch<DataT = any>(
+        options: FetchOptions<DataT>,
+        config: Partial<FetchConfig> = {},
+        loading: LoadingOptions = {}
+    ): Promise<_AsyncData<ApiResponse<DataT>, FetchError | null>> {
         if (config.reductDataFormat && !options.pick) {
             options.pick = ['data']
         }
-        return useFetch(options.url, requestConfig(options, config, loading))
+
+        const res = useFetch(options.url ? options.url : '', requestConfig(options, config, loading))
+
+        // 响应拦截，useFetch 的 onResponse 无法使用 navigateTo
+        config.loading && closeLoading(config) // 关闭loading
+        if (config.showSuccessMessage && res.data.value?.code == 1) {
+            ElNotification({
+                message: res.data.value.msg ? res.data.value.msg : i18n.global.t('request.Operation successful'),
+                type: 'success',
+            })
+        } else {
+            if (config.showCodeMessage && res.data.value?.msg) {
+                ElNotification({
+                    type: 'error',
+                    message: res.data.value.msg,
+                })
+            }
+            if (!requestStatus.respond302 && res.data.value?.code == 302) {
+                const resData = res.data.value.data as anyObj
+                const userInfo = useUserInfo()
+                userInfo.removeToken()
+                if (resData.routeName) {
+                    navigateTo({ name: resData.routeName })
+                } else if (resData.routePath) {
+                    navigateTo({ path: resData.routePath })
+                }
+                requestStatus.respond302 = true
+            }
+        }
+
+        return new Promise((resolve) => {
+            resolve(res)
+        })
     }
 }
 
 /**
  * 请求通用配置组装
  * 开发者可以导出它然后直接传递给 nuxt 的网络请求方法(useFetch、useLazyFetch等)使用
- * @param options useFetch 的 options，此处不含 url 字段
+ * @param options useFetch 的 options，额外一个 url 字段
  * @param config 请求配置，请看类型定义
  * @param loading loading 配置，config 内开启 loading 有效
  */
 export const requestConfig = <DataT = any>(
-    options: UseFetchOptions<ApiResponse<DataT>> = {},
+    options: FetchOptions<DataT> = {},
     config: Partial<FetchConfig> = {},
     loading: LoadingOptions = {}
-): UseFetchOptions<ApiResponse<DataT>> => {
+): FetchOptions<DataT> => {
     const userInfo = useUserInfo()
     const runtimeConfig = useRuntimeConfig()
     config = Object.assign(
         {
             loading: false, // 是否开启loading层效果, 默认为false
-            reductDataFormat: false, // 是否开启简洁的数据结构响应,默认为false,只 Http.fetch 支持
+            reductDataFormat: false, // 是否开启简洁的数据结构响应,默认为false
             showErrorMessage: true, // 是否开启接口错误信息展示,默认为true
             showCodeMessage: true, // 是否开启code不为1时的信息提示, 默认为true
             showSuccessMessage: false, // 是否开启code为1时的信息提示, 默认为false
@@ -79,45 +104,17 @@ export const requestConfig = <DataT = any>(
         onRequest: ({ options }) => {
             // 创建loading实例
             if (config.loading) {
-                loadingInstance.count++
-                if (loadingInstance.count === 1) {
-                    loadingInstance.target = ElLoading.service(loading)
+                requestStatus.loading.count++
+                if (requestStatus.loading.count === 1) {
+                    requestStatus.loading.target = ElLoading.service(loading)
                 }
             }
 
             // 自动携带token
             options.headers = options.headers || {}
-            const userToken = userInfo.getToken('auth')
-            if (userToken) (options.headers as anyObj)['ba-user-token'] = userToken
-        },
-        onResponse: ({ response }) => {
-            config.loading && closeLoading(config) // 关闭loading
-            if (response._data && response._data.code !== 1) {
-                if (response._data.code == 409) {
-                    // TODO
-                    // 刷新 token
-                }
-                if (config.showCodeMessage && response._data.msg) {
-                    ElNotification({
-                        type: 'error',
-                        message: response._data.msg,
-                    })
-                }
-                if (response._data.code == 302) {
-                    // 自动跳转到路由 name 或 path，仅限 server 端返回302的情况
-                    // TODO
-                    // 删除 token
-                    if (response._data.data.routeName) {
-                        navigateTo({ name: response._data.data.routeName })
-                    } else if (response._data.data.routePath) {
-                        navigateTo({ path: response._data.data.routePath })
-                    }
-                }
-            } else if (config.showSuccessMessage && response._data && response._data.code == 1) {
-                ElNotification({
-                    message: response._data.msg ? response._data.msg : i18n.global.t('request.Operation successful'),
-                    type: 'success',
-                })
+            if (!(options.headers as anyObj)[USER_TOKEN_KEY]) {
+                const userToken = userInfo.getToken('auth')
+                if (userToken) (options.headers as anyObj)[USER_TOKEN_KEY] = userToken
             }
         },
         onResponseError: ({ response }) => {
@@ -131,10 +128,10 @@ export const requestConfig = <DataT = any>(
  * 关闭网络请求 Loading 层实例
  */
 function closeLoading(options: Partial<FetchConfig>) {
-    if (options.loading && loadingInstance.count > 0) loadingInstance.count--
-    if (loadingInstance.count === 0) {
-        loadingInstance.target.close()
-        loadingInstance.target = null
+    if (options.loading && requestStatus.loading.count > 0) requestStatus.loading.count--
+    if (requestStatus.loading.count === 0) {
+        requestStatus.loading.target.close()
+        requestStatus.loading.target = null
     }
 }
 

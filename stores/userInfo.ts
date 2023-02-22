@@ -51,8 +51,8 @@ export const useUserInfo = defineStore('userInfo', {
             return icon
         },
         logout() {
-            userLogout().then((res) => {
-                if (res.value?.code == 1) {
+            userLogout().then(({ data }) => {
+                if (data.value?.code == 1) {
                     const userInfo = useCookie(USER_INFO)
                     userInfo.value = ''
                     const router = useRouter()

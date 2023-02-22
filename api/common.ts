@@ -2,10 +2,11 @@ import { i18n } from '~/plugins/i18n'
 import type { UploadRawFile } from 'element-plus'
 import { useSiteConfig } from '~/stores/siteConfig'
 import { state as uploadExpandState, fileUpload as uploadExpand } from '~/composables/mixins/baUpload'
+import type { FetchError } from 'ofetch'
+import { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
 
 // 公共
 export const captchaUrl = '/api/common/captcha'
-export const refreshTokenUrl = '/api/common/refreshToken'
 
 // api模块(前台)
 export const apiUploadUrl = '/api/ajax/upload'
@@ -19,13 +20,7 @@ export const indexUrl = '/api/index/index'
  * 初始化
  */
 export function initialize() {
-    const siteConfig = useSiteConfig()
-
-    if (siteConfig.siteName) {
-        return
-    }
-
-    return Http.request({
+    return Http.fetch({
         url: indexUrl,
         method: 'get',
     })
@@ -37,7 +32,11 @@ export function initialize() {
  * @param params 请求额外参数
  * @param forceLocal 上传到本地，而不使用云存储
  */
-export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, forceLocal = false): Promise<Ref<ApiResponse<DataT> | null>> {
+export function fileUpload<DataT = anyObj>(
+    fd: FormData,
+    params: anyObj = {},
+    forceLocal = false
+): Promise<_AsyncData<ApiResponse<DataT>, FetchError | null>> {
     let errorMsg = ''
     const file = fd.get('file') as UploadRawFile
     const siteConfig = useSiteConfig()
@@ -63,7 +62,7 @@ export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, force
         return uploadExpand(fd, params)
     }
 
-    return Http.request({
+    return Http.fetch({
         url: apiUploadUrl,
         method: 'POST',
         body: fd,
@@ -75,7 +74,7 @@ export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, force
  * 发送短信
  */
 export function sendSms(mobile: string, templateCode: string, extend: anyObj = {}) {
-    return Http.request(
+    return Http.fetch(
         {
             url: apiSendSms,
             method: 'POST',
@@ -95,7 +94,7 @@ export function sendSms(mobile: string, templateCode: string, extend: anyObj = {
  * 发送邮件
  */
 export function sendEms(email: string, event: string, extend: anyObj = {}) {
-    return Http.request(
+    return Http.fetch(
         {
             url: apiSendEms,
             method: 'POST',
@@ -123,22 +122,8 @@ export function buildCaptchaUrl() {
  */
 export function userLogout() {
     const userInfo = useUserInfo()
-    return Http.request({
+    return Http.fetch({
         url: '/api/user/logout',
-        method: 'POST',
-        body: {
-            refresh_token: userInfo.getToken('refresh'),
-        },
-    })
-}
-
-/**
- * 刷新用户 token
- */
-export function refreshToken<DataT = any>(): Promise<Ref<ApiResponse<DataT> | null>> {
-    const userInfo = useUserInfo()
-    return Http.request({
-        url: refreshTokenUrl,
         method: 'POST',
         body: {
             refresh_token: userInfo.getToken('refresh'),
@@ -179,7 +164,7 @@ export function getArea(values: number[]) {
  * 远程下拉框数据获取
  */
 export function getSelectData(remoteUrl: string, q: string, params: {}) {
-    return Http.request({
+    return Http.fetch({
         url: remoteUrl,
         method: 'get',
         params: Object.assign(params, {

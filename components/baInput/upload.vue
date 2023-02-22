@@ -117,23 +117,23 @@ const onElChange = (file: UploadFileExt) => {
     fd = formDataAppend(fd)
     state.uploading++
     fileUpload(fd, { uuid: uuid() })
-        .then((res) => {
-            if (res.value?.code == 1) {
-                file.serverUrl = res.value?.data.file.url
+        .then(({ data }) => {
+            if (data.value?.code == 1) {
+                file.serverUrl = data.value?.data.file.url
                 file.status = 'success'
                 const urls = getAllUrls()
-                typeof state.events['onSuccess'] == 'function' && state.events['onSuccess'](res.value, file, urls)
+                typeof state.events['onSuccess'] == 'function' && state.events['onSuccess'](data.value, file, urls)
                 emits('update:modelValue', urls)
             } else {
                 file.status = 'fail'
                 state.fileList.splice(state.fileList.indexOf(file), 1)
-                typeof state.events['onError'] == 'function' && state.events['onError'](res.value, file, getAllUrls())
+                typeof state.events['onError'] == 'function' && state.events['onError'](data.value, file, getAllUrls())
             }
         })
         .catch((res) => {
             file.status = 'fail'
             state.fileList.splice(state.fileList.indexOf(file), 1)
-            typeof state.events['onError'] == 'function' && state.events['onError'](res.value, file, getAllUrls())
+            typeof state.events['onError'] == 'function' && state.events['onError'](res, file, getAllUrls())
         })
         .finally(() => {
             state.uploading--

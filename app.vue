@@ -18,15 +18,15 @@ const { locale, getLocaleMessage } = useI18n()
 const messages = getLocaleMessage(locale.value) as Language
 
 const siteConfig = useSiteConfig()
-const initData = await initialize()
-if (initData?.value?.code == 1) {
-    siteConfig.dataFill({ ...initData?.value?.data.site, openMemberCenter: initData?.value?.data.openMemberCenter })
+const { data } = await initialize()
+if (data.value?.code == 1) {
+    siteConfig.dataFill({ ...data.value.data.site, openMemberCenter: data.value.data.openMemberCenter })
 }
 
 // 根据站点名称设置默认标题模板
-useServerSeoMeta({
+useSeoMeta({
     titleTemplate: (titleChunk?: string) => {
-        return titleChunk ? `${titleChunk} - ${initData?.value?.data.site.siteName}` : initData?.value?.data.site.siteName
+        return titleChunk ? `${titleChunk} - ${siteConfig.siteName}` : siteConfig.siteName
     },
 })
 </script>

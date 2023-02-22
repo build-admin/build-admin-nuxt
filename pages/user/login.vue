@@ -336,7 +336,7 @@ definePageMeta({
     layout: false,
     name: 'userLogin',
 })
-useServerSeoMeta({
+useSeoMeta({
     title: t('user.login.Login'),
 })
 
@@ -452,9 +452,9 @@ const onLoginSubmit = (loginRef: FormInstance | undefined = undefined) => {
         if (!valid) return onChangeCaptcha()
         state.loading.login = true
         checkIn('post', { ...state.login, tab: state.tab.toLocaleLowerCase() })
-            .then((res) => {
-                userInfo.dataFill(res.value?.data.userInfo)
-                navigateTo({ path: res.value?.data.routePath })
+            .then(({ data }) => {
+                userInfo.dataFill(data.value?.data.userInfo)
+                navigateTo({ path: data.value?.data.routePath })
             })
             .catch(() => {
                 onChangeCaptcha()
@@ -483,8 +483,8 @@ const sendRegisterCaptcha = (registerRef: FormInstance | undefined = undefined) 
             state.sendCaptchaLoading = true
             const func = state.register.registerType == 'email' ? sendEms : sendSms
             func(state.register[state.register.registerType], 'user_register')
-                .then((res) => {
-                    if (res.value?.code == 1) startTiming(60)
+                .then(({ data }) => {
+                    if (data.value?.code == 1) startTiming(60)
                 })
                 .finally(() => {
                     state.sendCaptchaLoading = false
@@ -500,8 +500,8 @@ const sendRetrieveCaptcha = (retrieveRef: FormInstance | undefined = undefined) 
             state.sendCaptchaLoading = true
             const func = state.retrievePasswordForm.type == 'email' ? sendEms : sendSms
             func(state.retrievePasswordForm.account, 'user_retrieve_pwd')
-                .then((res) => {
-                    if (res.value?.code == 1) startTiming(60)
+                .then(({ data }) => {
+                    if (data.value?.code == 1) startTiming(60)
                 })
                 .finally(() => {
                     state.sendCaptchaLoading = false
@@ -516,9 +516,9 @@ const onRegisterSubmit = (registerRef: FormInstance | undefined = undefined) => 
         if (!valid) return
         state.loading.register = true
         checkIn('post', { ...state.register, tab: state.tab.toLocaleLowerCase() })
-            .then((res) => {
-                userInfo.dataFill(res.value?.data.userInfo)
-                navigateTo({ path: res.value?.data.routePath })
+            .then(({ data }) => {
+                userInfo.dataFill(data.value?.data.userInfo)
+                navigateTo({ path: data.value?.data.routePath })
             })
             .finally(() => {
                 state.loading.register = false
@@ -532,8 +532,8 @@ const onSubmitRetrieve = (retrieveRef: FormInstance | undefined = undefined) => 
         if (valid) {
             state.loading.retrievePassword = true
             retrievePassword({ ...state.retrievePasswordForm })
-                .then((res) => {
-                    if (res.value?.code == 1) {
+                .then(({ data }) => {
+                    if (data.value?.code == 1) {
                         state.showRetrievePasswordDialog = false
                         onChangeCaptcha()
                         endTiming()
@@ -575,9 +575,9 @@ const dialogSize = () => {
     state.retrieveDialogWidth = width
 }
 
-checkIn('get').then((res) => {
-    state.accountVerificationType = res.value?.data.accountVerificationType
-    state.retrievePasswordForm.type = res.value?.data.accountVerificationType.length > 0 ? res.value?.data.accountVerificationType[0] : ''
+checkIn('get').then(({ data }) => {
+    state.accountVerificationType = data.value?.data.accountVerificationType
+    state.retrievePasswordForm.type = data.value?.data.accountVerificationType.length > 0 ? data.value?.data.accountVerificationType[0] : ''
 })
 
 onMounted(() => {

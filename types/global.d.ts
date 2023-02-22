@@ -17,7 +17,11 @@ interface ApiResponse<T = any> {
     time: number
 }
 
-interface LoadingInstance {
-    target: any
-    count: number
+interface RequestStatus {
+    loading: {
+        target: any
+        count: number
+    }
+    // 防302产生多次跳转或下次请求重复跳转
+    respond302: boolean
 }
