@@ -1,5 +1,4 @@
-import { defineStore } from 'pinia'
-import { SiteConfig } from './interface'
+import { SiteConfig } from '~/stores/interface'
 
 export const useSiteConfig = defineStore('siteConfig', {
     state: (): SiteConfig => {

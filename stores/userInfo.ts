@@ -1,4 +1,3 @@
-import { defineStore } from 'pinia'
 import { USER_INFO } from '~/stores/constant/keys'
 import { UserInfo } from '~/stores/interface'
 import { userLogout } from '~/api/common'
