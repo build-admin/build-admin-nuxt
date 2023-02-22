@@ -72,13 +72,15 @@
                                 </el-form-item>
                                 <div class="form-footer">
                                     <el-checkbox v-model="state.login.keep" :label="t('user.login.Remember me')" size="default"></el-checkbox>
-                                    <div
-                                        v-if="state.accountVerificationType.length > 0"
-                                        @click="state.showRetrievePasswordDialog = true"
-                                        class="forgot-password"
-                                    >
-                                        {{ t('user.login.Forgot your password?') }}
-                                    </div>
+                                    <client-only>
+                                        <div
+                                            v-if="state.accountVerificationType.length > 0"
+                                            @click="state.showRetrievePasswordDialog = true"
+                                            class="forgot-password"
+                                        >
+                                            {{ t('user.login.Forgot your password?') }}
+                                        </div>
+                                    </client-only>
                                 </div>
                                 <el-form-item class="form-buttons">
                                     <el-button
