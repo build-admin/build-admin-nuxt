@@ -5,7 +5,7 @@
             <el-main class="layouts-main">
                 <el-row justify="center">
                     <el-col :span="16" :xs="24">
-                        <div v-if="siteConfig.openMemberCenter" class="form-box">
+                        <div v-if="memberCenter.state.open" class="form-box">
                             <div class="form-title">
                                 {{ $t('user.login.' + state.tab) + $t('user.login.Reach') + ' ' + siteConfig.siteName }}
                             </div>
@@ -380,6 +380,7 @@ interface State {
 const route = useRoute()
 const userInfo = useUserInfo()
 const siteConfig = useSiteConfig()
+const memberCenter = useMemberCenter()
 const loginRef = ref<FormInstance>()
 const registerRef = ref<FormInstance>()
 const retrieveRef = ref<FormInstance>()

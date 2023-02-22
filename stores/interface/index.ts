@@ -20,7 +20,6 @@ export interface SiteConfig {
         url?: string
         params?: anyObj
     }
-    openMemberCenter?: boolean
 }
 
 export interface UserInfo {

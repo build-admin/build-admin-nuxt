@@ -11,7 +11,7 @@
                         </div>
                         <client-only>
                             <el-button
-                                v-if="siteConfig.openMemberCenter"
+                                v-if="memberCenter.state.open"
                                 @click="navigateTo({ name: 'user' })"
                                 class="container-button"
                                 color="#ffffff"
@@ -35,6 +35,7 @@
 import indexCover from '~/assets/images/index-cover.svg'
 
 const siteConfig = useSiteConfig()
+const memberCenter = useMemberCenter()
 
 definePageMeta({
     name: '/',

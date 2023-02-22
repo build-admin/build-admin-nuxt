@@ -14,7 +14,6 @@ export const useSiteConfig = defineStore('siteConfig', {
                 mimetype: '',
                 savename: '',
             },
-            openMemberCenter: true,
         }
     },
     actions: {

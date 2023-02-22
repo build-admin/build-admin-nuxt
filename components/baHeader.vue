@@ -13,7 +13,7 @@
                     <el-menu :default-active="state.activeMenu" class="frontend-header-menu" mode="horizontal" :ellipsis="false">
                         <el-menu-item @click="navigateTo({ name: '/' })" v-blur index="index">{{ $t('Home') }}</el-menu-item>
 
-                        <template v-if="siteConfig.openMemberCenter">
+                        <template v-if="memberCenter.state.open">
                             <el-sub-menu v-if="userInfo.isLogin()" v-blur index="user">
                                 <template #title>
                                     <div class="header-user-box">
@@ -58,6 +58,7 @@
 import { Locales, languageList, setLanguage } from '~/lang/index'
 const userInfo = useUserInfo()
 const siteConfig = useSiteConfig()
+const memberCenter = useMemberCenter()
 
 const state = reactive({
     activeMenu: '',
