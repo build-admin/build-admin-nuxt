@@ -1,3 +1,5 @@
+import type { RouteRecordRaw, RouteLocationNormalized } from 'vue-router'
+
 export interface Globals {
     lazy: NodeJS.Timer | null
     unique: Ref<number>
@@ -38,4 +40,14 @@ export interface UserInfo {
     motto: string
     token: string
     refreshToken: string
+}
+
+export interface MemberCenter {
+    open: boolean
+    activeRoute: RouteRecordRaw | RouteLocationNormalized | null
+    viewRoutes: RouteRecordRaw[]
+    showHeadline: boolean
+    authNode: Map<string, string[]>
+    shrink: boolean
+    menuExpand: boolean
 }
