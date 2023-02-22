@@ -36,6 +36,12 @@ export class Http {
         }
 
         const res = await useFetch(requestConfigData.options.url ? requestConfigData.options.url : '', requestConfigData.options)
+        if (res.error.value) {
+            ElNotification({
+                type: 'error',
+                message: res.error.value?.message,
+            })
+        }
 
         // 响应拦截，useFetch 的 onResponse 无法使用 navigateTo
         requestConfigData.config.loading && closeLoading(requestConfigData.config) // 关闭loading
@@ -128,7 +134,7 @@ export const requestConfig = <DataT = any>(options: FetchOptions<DataT> = {}, co
  */
 function closeLoading(config: Partial<FetchConfig>) {
     if (config.loading && requestStatus.loading.count > 0) requestStatus.loading.count--
-    if (requestStatus.loading.count === 0) {
+    if (requestStatus.loading.count === 0 && requestStatus.loading.target) {
         requestStatus.loading.target.close()
         requestStatus.loading.target = null
     }
