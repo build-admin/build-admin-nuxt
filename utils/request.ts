@@ -30,21 +30,17 @@ export class Http {
         config: Partial<FetchConfig> = {},
         loading: LoadingOptions = {}
     ): Promise<_AsyncData<ApiResponse<DataT>, FetchError | null>> {
-        if (config.reductDataFormat && !options.pick) {
-            options.pick = ['data']
+        const requestConfigData = requestConfig(options, config, loading)
+        if (requestConfigData.config.reductDataFormat && !requestConfigData.options.pick) {
+            requestConfigData.options.pick = ['data']
         }
 
-        const res = useFetch(options.url ? options.url : '', requestConfig(options, config, loading))
+        const res = await useFetch(requestConfigData.options.url ? requestConfigData.options.url : '', requestConfigData.options)
 
         // 响应拦截，useFetch 的 onResponse 无法使用 navigateTo
-        config.loading && closeLoading(config) // 关闭loading
-        if (config.showSuccessMessage && res.data.value?.code == 1) {
-            ElNotification({
-                message: res.data.value.msg ? res.data.value.msg : i18n.global.t('request.Operation successful'),
-                type: 'success',
-            })
-        } else {
-            if (config.showCodeMessage && res.data.value?.msg) {
+        requestConfigData.config.loading && closeLoading(requestConfigData.config) // 关闭loading
+        if (res.data.value?.code != 1) {
+            if (requestConfigData.config.showCodeMessage && res.data.value?.msg) {
                 ElNotification({
                     type: 'error',
                     message: res.data.value.msg,
@@ -61,6 +57,11 @@ export class Http {
                 }
                 requestStatus.respond302 = true
             }
+        } else if (requestConfigData.config.showSuccessMessage && res.data.value?.code == 1) {
+            ElNotification({
+                message: res.data.value.msg ? res.data.value.msg : i18n.global.t('request.Operation successful'),
+                type: 'success',
+            })
         }
 
         return new Promise((resolve) => {
@@ -70,17 +71,13 @@ export class Http {
 }
 
 /**
- * 请求通用配置组装
- * 开发者可以导出它然后直接传递给 nuxt 的网络请求方法(useFetch、useLazyFetch等)使用
+ * 请求配置组装
+ * 开发者可以导出它然后传递给 nuxt 的网络请求方法(useFetch、useLazyFetch等)使用
  * @param options useFetch 的 options，额外一个 url 字段
  * @param config 请求配置，请看类型定义
  * @param loading loading 配置，config 内开启 loading 有效
  */
-export const requestConfig = <DataT = any>(
-    options: FetchOptions<DataT> = {},
-    config: Partial<FetchConfig> = {},
-    loading: LoadingOptions = {}
-): FetchOptions<DataT> => {
+export const requestConfig = <DataT = any>(options: FetchOptions<DataT> = {}, config: Partial<FetchConfig> = {}, loading: LoadingOptions = {}) => {
     const userInfo = useUserInfo()
     const runtimeConfig = useRuntimeConfig()
     config = Object.assign(
@@ -94,7 +91,7 @@ export const requestConfig = <DataT = any>(
         config
     )
 
-    return {
+    options = {
         baseURL: runtimeConfig.public.apiBaseUrl,
         headers: {
             server: 'true',
@@ -122,13 +119,15 @@ export const requestConfig = <DataT = any>(
         },
         ...options,
     }
+
+    return { options, config, loading }
 }
 
 /**
  * 关闭网络请求 Loading 层实例
  */
-function closeLoading(options: Partial<FetchConfig>) {
-    if (options.loading && requestStatus.loading.count > 0) requestStatus.loading.count--
+function closeLoading(config: Partial<FetchConfig>) {
+    if (config.loading && requestStatus.loading.count > 0) requestStatus.loading.count--
     if (requestStatus.loading.count === 0) {
         requestStatus.loading.target.close()
         requestStatus.loading.target = null
