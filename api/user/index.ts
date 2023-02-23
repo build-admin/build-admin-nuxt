@@ -29,3 +29,10 @@ export function retrievePassword(params: anyObj) {
         }
     )
 }
+
+export function overview() {
+    return Http.fetch({
+        url: accountUrl + 'overview',
+        method: 'get',
+    })
+}

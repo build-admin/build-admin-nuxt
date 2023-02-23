@@ -17,4 +17,6 @@ export default {
     Copyright: 'Copyright',
     'No route found to jump~': 'Failed to find a jump route.',
     None: 'None',
+    Integral: 'Integral',
+    Balance: 'Balance',
 }

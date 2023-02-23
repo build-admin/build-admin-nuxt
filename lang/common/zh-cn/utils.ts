@@ -16,6 +16,7 @@ export default {
     'Good afternoon': '下午好！',
     'Good evening': '晚上好！',
     'Hello!': '您好！',
+    Comma: '，',
     // 验证类型
     Mobile: '手机号',
     Account: '账户名',

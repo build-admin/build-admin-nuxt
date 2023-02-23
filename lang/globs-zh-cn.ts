@@ -17,4 +17,6 @@ export default {
     Copyright: '版权所有',
     'No route found to jump~': '没有找到可以跳转的路由~',
     None: '无',
+    Integral: '积分',
+    Balance: '余额',
 }
