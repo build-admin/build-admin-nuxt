@@ -24,7 +24,8 @@
         "nprogress": "^0.2.0",
         "nuxt": "^3.1.2",
         "nuxt-icons": "^3.1.0",
-        "vue-i18n": "^9.2.2"
+        "vue-i18n": "^9.2.2",
+        "echarts": "~5.4.1"
     },
     "devDependencies": {
         "@types/node": "^18.13.0",
