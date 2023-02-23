@@ -21,14 +21,11 @@
     --el-table-border-color: var(--ba-border-color);
 }
 
-.el-card {
+.el-card.is-hover-shadow {
     border: none;
 }
-.el-card__header {
+.el-card .el-card__header {
     border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-.el-textarea__inner {
-    padding: 5px 11px;
 }
 
 /* dialog滚动条-s */
