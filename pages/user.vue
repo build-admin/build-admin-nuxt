@@ -42,7 +42,7 @@ if (userInfo.isLogin()) {
 
 if (process.client) {
     // 跳转到第一个菜单
-    if (route.name == 'user') {
+    if (userInfo.isLogin() && route.name == 'user') {
         let firstRoute = getFirstRoute(memberCenter.state.viewRoutes)
         if (firstRoute) {
             navigateTo({ path: firstRoute.path })
