@@ -4,6 +4,7 @@ export default {
     Home: 'Home',
     Cancel: 'Cancel',
     Save: 'Save',
+    Reset: 'Reset',
     Upload: 'Upload',
     Add: 'Add',
     Search: 'Search',

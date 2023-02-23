@@ -22,7 +22,7 @@ export default {
     Account: '账户名',
     Password: '密码',
     'Variable name': '变量名',
-    Email: '邮箱地址',
+    Email: '电子邮箱',
     Date: '日期',
     Number: '数字',
     Integer: '整数',

@@ -36,3 +36,44 @@ export function overview() {
         method: 'get',
     })
 }
+
+export function getProfile() {
+    return Http.fetch({
+        url: accountUrl + 'profile',
+        method: 'get',
+    })
+}
+
+export function postProfile(params: anyObj) {
+    return Http.fetch(
+        {
+            url: accountUrl + 'profile',
+            method: 'POST',
+            body: params,
+        },
+        {
+            showSuccessMessage: true,
+        }
+    )
+}
+
+export function postVerification(data: anyObj) {
+    return Http.fetch({
+        url: accountUrl + 'verification',
+        method: 'post',
+        body: data,
+    })
+}
+
+export function postChangeBind(data: anyObj) {
+    return Http.fetch(
+        {
+            url: accountUrl + 'changeBind',
+            method: 'post',
+            body: data,
+        },
+        {
+            showSuccessMessage: true,
+        }
+    )
+}
