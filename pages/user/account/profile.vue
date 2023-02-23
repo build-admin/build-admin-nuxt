@@ -246,6 +246,10 @@ import { sendEms, sendSms } from '~/api/common'
 import UserProfileMixin from '~/composables/mixins/userProfile.vue'
 let timer: NodeJS.Timer
 
+definePageMeta({
+    name: 'account/profile',
+})
+
 const { t } = useI18n()
 const router = useRouter()
 const userInfo = useUserInfo()

@@ -79,6 +79,9 @@ import * as echarts from 'echarts'
 import { useI18n } from 'vue-i18n'
 import { overview } from '~/api/user/index'
 
+definePageMeta({
+    name: 'account/overview',
+})
 useSeoMeta({
     title: '账户概览',
 })
