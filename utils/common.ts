@@ -123,3 +123,29 @@ const padStart = (str: string, maxLength: number, fillString = ' ') => {
     }
     return fillString.slice(0, fillLength) + str
 }
+
+/**
+ * 根据当前时间生成问候语
+ */
+export const getGreet = () => {
+    const now = new Date()
+    const hour = now.getHours()
+    let greet = ''
+
+    if (hour < 5) {
+        greet = i18n.global.t('utils.Late at night, pay attention to your body!')
+    } else if (hour < 9) {
+        greet = i18n.global.t('utils.Good morning!-sw') + i18n.global.t('utils.Welcome back')
+    } else if (hour < 12) {
+        greet = i18n.global.t('utils.Good morning!') + i18n.global.t('utils.Welcome back')
+    } else if (hour < 14) {
+        greet = i18n.global.t('utils.Good noon!') + i18n.global.t('utils.Welcome back')
+    } else if (hour < 18) {
+        greet = i18n.global.t('utils.Good afternoon') + i18n.global.t('utils.Welcome back')
+    } else if (hour < 24) {
+        greet = i18n.global.t('utils.Good evening') + i18n.global.t('utils.Welcome back')
+    } else {
+        greet = i18n.global.t('utils.Hello!') + i18n.global.t('utils.Welcome back')
+    }
+    return greet
+}
