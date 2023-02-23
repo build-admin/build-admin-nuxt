@@ -16,4 +16,5 @@ export default {
     'Please enter the correct field': 'Please enter the correct {field}',
     Copyright: 'Copyright',
     'No route found to jump~': 'Failed to find a jump route.',
+    None: 'None',
 }

@@ -16,4 +16,5 @@ export default {
     'Please enter the correct field': '请输入正确的{field}',
     Copyright: '版权所有',
     'No route found to jump~': '没有找到可以跳转的路由~',
+    None: '无',
 }
