@@ -77,3 +77,16 @@ export function postChangeBind(data: anyObj) {
         }
     )
 }
+
+export function changePassword(params: anyObj) {
+    return Http.fetch(
+        {
+            url: accountUrl + 'changePassword',
+            method: 'POST',
+            body: params,
+        },
+        {
+            showSuccessMessage: true,
+        }
+    )
+}
