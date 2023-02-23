@@ -90,3 +90,14 @@ export function changePassword(params: anyObj) {
         }
     )
 }
+
+export function getIntegralLog(page: number, pageSize: number) {
+    return Http.fetch({
+        url: accountUrl + 'integral',
+        method: 'GET',
+        params: {
+            page: page,
+            limit: pageSize,
+        },
+    })
+}
