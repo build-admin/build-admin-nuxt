@@ -22,6 +22,6 @@ interface RequestStatus {
         target: any
         count: number
     }
-    // 防302产生多次跳转或下次请求重复跳转
-    respond302: boolean
+    // 因302、409中断了请求
+    requestInterrupt: boolean
 }

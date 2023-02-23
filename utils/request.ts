@@ -14,7 +14,7 @@ const requestStatus: RequestStatus = {
         target: null,
         count: 0,
     },
-    respond302: false,
+    requestInterrupt: false,
 }
 
 export class Http {
@@ -46,22 +46,25 @@ export class Http {
         // 响应拦截，useFetch 的 onResponse 无法使用 navigateTo
         requestConfigData.config.loading && closeLoading(requestConfigData.config) // 关闭loading
         if (res.data.value?.code != 1) {
-            if (requestConfigData.config.showCodeMessage && res.data.value?.msg) {
-                ElNotification({
-                    type: 'error',
-                    message: res.data.value.msg,
-                })
+            // 排除302和409防止多个错误消息弹出
+            if (requestConfigData.config.showCodeMessage && res.data.value?.msg && ![302, 409].includes(res.data.value.code)) {
+                ElNotification({ type: 'error', message: res.data.value.msg })
             }
-            if (!requestStatus.respond302 && res.data.value?.code == 302) {
+
+            // 多个请求并发的发送时，会触发多次 navigateTo 导致报错，使用 requestInterrupt 做唯一限制
+            if (process.client && !requestStatus.requestInterrupt && res.data.value && [302, 409].includes(res.data.value.code)) {
                 const resData = res.data.value.data as anyObj
                 const userInfo = useUserInfo()
                 userInfo.removeToken()
+                requestStatus.requestInterrupt = true
+                ElNotification({ type: 'error', message: res.data.value.msg })
                 if (resData.routeName) {
                     navigateTo({ name: resData.routeName })
                 } else if (resData.routePath) {
                     navigateTo({ path: resData.routePath })
+                } else {
+                    navigateTo({ path: '/user/login' })
                 }
-                requestStatus.respond302 = true
             }
         } else if (requestConfigData.config.showSuccessMessage && res.data.value?.code == 1) {
             ElNotification({
