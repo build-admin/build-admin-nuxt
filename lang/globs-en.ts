@@ -15,4 +15,5 @@ export default {
     'Please select field': 'Please select {field}',
     'Please enter the correct field': 'Please enter the correct {field}',
     Copyright: 'Copyright',
+    'No route found to jump~': 'Failed to find a jump route.',
 }

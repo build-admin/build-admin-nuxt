@@ -1,4 +1,4 @@
-import { FormInstance } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 
 /**
  * 获取资源完整地址
