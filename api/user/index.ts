@@ -101,3 +101,14 @@ export function getIntegralLog(page: number, pageSize: number) {
         },
     })
 }
+
+export function getBalanceLog(page: number, pageSize: number) {
+    return Http.fetch({
+        url: accountUrl + 'balance',
+        method: 'GET',
+        params: {
+            page: page,
+            limit: pageSize,
+        },
+    })
+}
