@@ -4,7 +4,7 @@
             <template #header>
                 <div class="card-header">
                     <span>{{ $t('user.account.profile.Personal data') }}</span>
-                    <el-button @click="router.push({ name: 'account/changePassword' })" type="info" v-blur plain>
+                    <el-button @click="navigateTo({ name: 'account/changePassword' })" type="info" v-blur plain>
                         {{ $t('user.account.profile.Change Password') }}
                     </el-button>
                 </div>
@@ -251,7 +251,6 @@ definePageMeta({
 })
 
 const { t } = useI18n()
-const router = useRouter()
 const userInfo = useUserInfo()
 
 const formRef = ref<FormInstance>()

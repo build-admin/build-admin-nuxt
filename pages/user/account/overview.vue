@@ -4,7 +4,7 @@
             <template #header>
                 <div class="card-header">
                     <span>{{ $t('user.account.overview.Account information') }}</span>
-                    <el-button @click="router.push({ name: 'account/profile' })" type="info" v-blur plain>
+                    <el-button @click="navigateTo({ name: 'account/profile' })" type="info" v-blur plain>
                         {{ $t('user.account.overview.Personal data') }}
                     </el-button>
                 </div>
@@ -13,7 +13,7 @@
                 <div class="user-avatar">
                     <img :src="userInfo.avatar" alt="" />
                     <div class="user-avatar-icons">
-                        <div @click="router.push({ name: 'account/profile' })" class="avatar-icon-item">
+                        <div @click="navigateTo({ name: 'account/profile' })" class="avatar-icon-item">
                             <el-tooltip
                                 effect="light"
                                 placement="right"
@@ -29,7 +29,7 @@
                                 />
                             </el-tooltip>
                         </div>
-                        <div @click="router.push({ name: 'account/profile' })" class="avatar-icon-item">
+                        <div @click="navigateTo({ name: 'account/profile' })" class="avatar-icon-item">
                             <el-tooltip
                                 effect="light"
                                 placement="right"
@@ -52,11 +52,11 @@
                     <el-row class="data-item">
                         <el-col :span="4">{{ $t('Integral') }}</el-col>
                         <el-col :span="8">
-                            <el-link @click="router.push({ name: 'account/integral' })" type="primary">{{ userInfo.score }}</el-link>
+                            <el-link @click="navigateTo({ name: 'account/integral' })" type="primary">{{ userInfo.score }}</el-link>
                         </el-col>
                         <el-col :span="4">{{ $t('Balance') }}</el-col>
                         <el-col :span="8">
-                            <el-link @click="router.push({ name: 'account/balance' })" type="primary">{{ userInfo.money }}</el-link>
+                            <el-link @click="navigateTo({ name: 'account/balance' })" type="primary">{{ userInfo.money }}</el-link>
                         </el-col>
                     </el-row>
                     <el-row class="data-item">
@@ -96,7 +96,6 @@ useSeoMeta({
 })
 
 const { t } = useI18n()
-const router = useRouter()
 const userInfo = useUserInfo()
 const accountGrowthChartRef = ref<HTMLElement>()
 
