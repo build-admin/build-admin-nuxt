@@ -69,7 +69,16 @@
             </div>
         </el-card>
         <el-card class="user-views-card" shadow="hover" :header="$t('user.account.overview.Growth statistics')">
-            <div class="account-growth" ref="accountGrowthChartRef"></div>
+            <div class="account-growth-box">
+                <client-only>
+                    <template #fallback>
+                        <div class="fallback-loading">
+                            <Loading />
+                        </div>
+                    </template>
+                </client-only>
+                <div class="account-growth" ref="accountGrowthChartRef"></div>
+            </div>
         </el-card>
     </div>
 </template>
@@ -250,9 +259,13 @@ onBeforeMount(() => {
         padding: 3px 0;
     }
 }
-.account-growth {
+.account-growth-box {
     width: 100%;
     height: 300px;
+}
+.account-growth {
+    width: 100%;
+    height: 100%;
 }
 @media screen and (max-width: 992px) {
     .user-data {

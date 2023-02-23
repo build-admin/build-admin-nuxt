@@ -34,7 +34,7 @@
             <client-only>
                 <template #fallback>
                     <div class="fallback-loading">
-                        <span>Loading...</span>
+                        <Loading />
                     </div>
                 </template>
                 <template v-for="(item, idx) in memberCenter.state.viewRoutes" :key="idx">
