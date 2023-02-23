@@ -70,12 +70,11 @@ switch (route.path) {
         state.activeMenu = 'index'
         break
     case '/user':
-        state.activeMenu = 'user'
-        break
-    case '/user':
+    case '/user/login':
         state.activeMenu = 'user'
         break
 }
+if (route.path.startsWith('/user/')) state.activeMenu = 'user'
 </script>
 
 <style scoped lang="scss">

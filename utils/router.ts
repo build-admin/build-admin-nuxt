@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import { i18n } from '~/plugins/i18n'
 
 /**
  * 会员中心菜单规则处理
@@ -66,4 +67,27 @@ export const getFirstRoute = (routes: RouteRecordRaw[]): false | RouteRecordRaw 
         }
     }
     return find
+}
+
+/**
+ * 打开侧边菜单
+ * @param menu 菜单数据
+ */
+export const onClickMenu = (menu: RouteRecordRaw) => {
+    switch (menu.meta?.type) {
+        case 'iframe':
+        case 'tab':
+            navigateTo({ path: menu.path })
+            break
+        case 'link':
+            window.open(menu.path, '_blank')
+            break
+
+        default:
+            ElNotification({
+                message: i18n.global.t('utils.Navigation failed, the menu type is unrecognized!'),
+                type: 'error',
+            })
+            break
+    }
 }

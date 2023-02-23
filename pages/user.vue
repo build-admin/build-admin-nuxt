@@ -22,6 +22,10 @@ const route = useRoute()
 const userInfo = useUserInfo()
 const memberCenter = useMemberCenter()
 
+onBeforeRouteUpdate((to) => {
+    memberCenter.setActiveRoute(to)
+})
+
 if (userInfo.isLogin()) {
     if (isEmpty(memberCenter.state.viewRoutes)) {
         const { data } = await index()
@@ -53,8 +57,12 @@ if (process.client) {
             })
         }
     }
-    memberCenter.setShrink(document.body.clientWidth < 1024)
 }
+
+onMounted(() => {
+    memberCenter.setShrink(document.body.clientWidth < 992)
+    memberCenter.setActiveRoute(route)
+})
 </script>
 
 <style scoped lang="scss"></style>

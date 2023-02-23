@@ -5,7 +5,7 @@
             <el-scrollbar :style="mainScrollbarHeight()" ref="mainScrollbarRef">
                 <el-row class="layouts-main" justify="center">
                     <el-col class="user-layouts" :span="16" :xs="24">
-                        <!-- <BaAside class="hidden-sm-and-down" /> -->
+                        <BaAside class="hidden-sm-and-down" />
                         <el-main class="layout-main">
                             <slot />
                         </el-main>

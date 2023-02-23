@@ -9,6 +9,7 @@ export default {
     'The data of the uploaded file is incomplete!': '上传文件的资料不完整！',
     'The size of the uploaded file exceeds the allowed range!': '上传文件的大小超出允许范围！',
     'Late at night, pay attention to your body!': '夜深了，注意身体哦！',
+    'Navigation failed, the menu type is unrecognized!': '导航失败，菜单类型无法识别！',
     'Good morning!': '早上好！',
     'Good morning!-sw': '上午好！',
     'Welcome back': '欢迎回来！',

@@ -9,6 +9,7 @@ export default {
     'The data of the uploaded file is incomplete!': 'The data of the uploaded file is incomplete!',
     'The size of the uploaded file exceeds the allowed range!': 'The size of the uploaded file exceeds the allowed range!',
     'Late at night, pay attention to your body!': 'It is late at night. Please tack care of your body!',
+    'Navigation failed, the menu type is unrecognized!': 'Navigation failed, menu type not recognized!',
     'Good morning!': 'Good morning!',
     'Good morning!-sw': 'Good morning!',
     'Welcome back': 'Welcome back!',

@@ -64,6 +64,12 @@ body,
 .layouts-main {
     min-height: calc(100vh - 120px);
 }
+.user-views {
+    padding-left: 15px;
+    .user-views-card {
+        margin-bottom: 15px;
+    }
+}
 /* 布局相关-e */
 
 /* 暗黑模式公共样式-s */
