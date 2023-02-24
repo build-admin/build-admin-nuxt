@@ -149,6 +149,7 @@ const getData = (initValue: valType = '') => {
     state.params.initValue = initValue
     getSelectData(props.remoteUrl, state.keyword, { ...state.params })
         .then(({ data }) => {
+            if (data.value?.code != 1) return
             let initializeData = true
             let opts = data.value?.data.options ? data.value.data.options : data.value?.data.list
             if (typeof props.labelFormatter == 'function') {
@@ -163,7 +164,6 @@ const getData = (initValue: valType = '') => {
                 state.selectKey = uuid()
                 initializeData = false
             }
-            state.loading = false
             state.initializeData = initializeData
             if (state.accidentBlur) {
                 nextTick(() => {
@@ -173,7 +173,7 @@ const getData = (initValue: valType = '') => {
                 })
             }
         })
-        .catch(() => {
+        .finally(() => {
             state.loading = false
         })
 }

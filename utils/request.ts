@@ -74,9 +74,7 @@ export class Http {
             })
         }
 
-        return new Promise((resolve) => {
-            resolve(res)
-        })
+        return Promise.resolve(res)
     }
 }
 

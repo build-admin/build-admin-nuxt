@@ -459,6 +459,7 @@ const onLoginSubmit = (loginRef: FormInstance | undefined = undefined) => {
         state.loading.login = true
         checkIn('post', { ...state.login, tab: state.tab.toLocaleLowerCase() })
             .then(({ data }) => {
+                if (data.value?.code != 1) return
                 userInfo.dataFill(data.value?.data.userInfo)
                 navigateTo({ path: data.value?.data.routePath })
             })
@@ -523,6 +524,7 @@ const onRegisterSubmit = (registerRef: FormInstance | undefined = undefined) => 
         state.loading.register = true
         checkIn('post', { ...state.register, tab: state.tab.toLocaleLowerCase() })
             .then(({ data }) => {
+                if (data.value?.code != 1) return
                 userInfo.dataFill(data.value?.data.userInfo)
                 navigateTo({ path: data.value?.data.routePath })
             })
@@ -582,6 +584,7 @@ const dialogSize = () => {
 }
 
 checkIn('get').then(({ data }) => {
+    if (data.value?.code != 1) return
     state.accountVerificationType = data.value?.data.accountVerificationType
     state.retrievePasswordForm.type = data.value?.data.accountVerificationType.length > 0 ? data.value?.data.accountVerificationType[0] : ''
 })

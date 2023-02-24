@@ -179,9 +179,11 @@ onActivated(() => {
 })
 
 const { data } = await overview()
-state.days = data.value?.data.days
-state.score = data.value?.data.score
-state.money = data.value?.data.money
+if (data.value?.code == 1) {
+    state.days = data.value?.data.days
+    state.score = data.value?.data.score
+    state.money = data.value?.data.money
+}
 
 onMounted(() => {
     initUserGrowthChart()
