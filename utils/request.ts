@@ -54,15 +54,16 @@ export class Http {
             // 多个请求并发的发送时，会触发多次 navigateTo 导致报错，使用 requestInterrupt 做唯一限制
             if (process.client && !requestStatus.requestInterrupt && res.data.value && [302, 409].includes(res.data.value.code)) {
                 const resData = res.data.value.data as anyObj
+                const route = useRoute()
                 const userInfo = useUserInfo()
                 userInfo.removeToken()
                 requestStatus.requestInterrupt = true
-                ElNotification({ type: 'error', message: res.data.value.msg })
-                if (resData.routeName) {
+                if (route.name != 'userLogin') ElNotification({ type: 'error', message: res.data.value.msg })
+                if (resData.routeName && route.name != resData.routeName) {
                     navigateTo({ name: resData.routeName })
-                } else if (resData.routePath) {
+                } else if (resData.routePath && route.path != resData.routePath) {
                     navigateTo({ path: resData.routePath })
-                } else {
+                } else if (route.path != '/user/login') {
                     navigateTo({ path: '/user/login' })
                 }
             }

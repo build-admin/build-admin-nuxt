@@ -10,54 +10,67 @@ import { useI18n } from 'vue-i18n'
 import { isEmpty } from 'lodash-es'
 const { t } = useI18n()
 
+useSeoMeta({
+    title: t('Member Center'),
+})
 definePageMeta({
     layout: 'user',
     name: 'user',
-})
-useSeoMeta({
-    title: t('Member Center'),
+    middleware: async (to) => {
+        const userInfo = useUserInfo()
+        if (!userInfo.isLogin() && to.name != 'userLogin') {
+            return navigateTo({ name: 'userLogin' })
+        }
+    },
 })
 
 const route = useRoute()
 const userInfo = useUserInfo()
 const memberCenter = useMemberCenter()
 
-onBeforeRouteUpdate((to) => {
-    memberCenter.setActiveRoute(to)
-})
-
-if (userInfo.isLogin()) {
-    if (isEmpty(memberCenter.state.viewRoutes)) {
-        const { data } = await index()
-        if (data.value?.code == 1) {
-            data.value.data.userInfo.refreshToken = userInfo.refreshToken
-            userInfo.dataFill(data.value.data.userInfo)
-            if (data.value.data.menus) {
-                const menuMemberCenterBaseRoute = '/user/'
-                const menuRule = handleMenuRule(data.value.data.menus, menuMemberCenterBaseRoute, menuMemberCenterBaseRoute)
-                memberCenter.setViewRoutes(menuRule)
-                memberCenter.setShowHeadline(data.value.data.menus.length > 1 ? true : false)
-            }
-        }
-    }
-} else if (route.name != 'userLogin') {
-    navigateTo({ name: 'userLogin' })
-}
-
-if (process.client) {
-    // 跳转到第一个菜单
-    if (userInfo.isLogin() && route.name == 'user') {
-        let firstRoute = getFirstRoute(memberCenter.state.viewRoutes)
-        if (firstRoute) {
-            navigateTo({ path: firstRoute.path })
-        } else {
-            ElNotification({
-                type: 'error',
-                message: t('No route found to jump~'),
-            })
+if (isEmpty(memberCenter.state.viewRoutes)) {
+    const { data } = await index()
+    if (data.value?.code == 1) {
+        data.value.data.userInfo.refreshToken = userInfo.refreshToken
+        userInfo.dataFill(data.value.data.userInfo)
+        if (data.value.data.menus) {
+            const menuMemberCenterBaseRoute = '/user/'
+            const menuRule = handleMenuRule(data.value.data.menus, menuMemberCenterBaseRoute, menuMemberCenterBaseRoute)
+            memberCenter.setViewRoutes(menuRule)
+            memberCenter.setShowHeadline(data.value.data.menus.length > 1 ? true : false)
         }
     }
 }
+
+const jumpFirstMenu = () => {
+    let firstRoute = getFirstRoute(memberCenter.state.viewRoutes)
+    if (firstRoute) {
+        navigateTo({ path: firstRoute.path })
+    } else {
+        ElNotification({
+            type: 'error',
+            message: t('No route found to jump~'),
+        })
+    }
+}
+
+/**
+ * 在中间件中处理时，jumpFirstMenu 后将导致部分元素水合失败
+ */
+if (userInfo.isLogin() && process.client && route.name == 'user') {
+    jumpFirstMenu()
+}
+
+/**
+ * onBeforeRouteUpdate 中不能跳转，直接监听
+ */
+watch(
+    () => route.name,
+    (val) => {
+        if (val == 'user') jumpFirstMenu()
+        memberCenter.setActiveRoute(route)
+    }
+)
 
 onMounted(() => {
     memberCenter.setShrink(document.body.clientWidth < 992)

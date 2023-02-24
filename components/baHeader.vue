@@ -14,7 +14,7 @@
                         <el-menu-item @click="navigateTo({ name: '/' })" v-blur index="index">{{ $t('Home') }}</el-menu-item>
 
                         <template v-if="memberCenter.state.open">
-                            <el-sub-menu v-if="userInfo.isLogin()" v-blur index="user">
+                            <el-sub-menu v-if="userInfo.isLogin()" v-blur index="user-box">
                                 <template #title>
                                     <div class="header-user-box">
                                         <img
@@ -25,7 +25,7 @@
                                         {{ userInfo.nickname }}
                                     </div>
                                 </template>
-                                <el-menu-item @click="navigateTo({ name: 'user' })" v-blur index="user-index">
+                                <el-menu-item @click="navigateTo({ name: 'user' })" v-blur index="user">
                                     {{ $t('Member Center') }}
                                 </el-menu-item>
                                 <el-menu-item @click="userInfo.logout()" v-blur index="user-logout">{{ $t('Logout login') }}</el-menu-item>
@@ -65,16 +65,22 @@ const state = reactive({
 })
 
 const route = useRoute()
-switch (route.path) {
-    case '/':
+
+const setActiveMenu = (path: string) => {
+    if (path == '/') {
         state.activeMenu = 'index'
-        break
-    case '/user':
-    case '/user/login':
+    } else if (path.startsWith('/user')) {
         state.activeMenu = 'user'
-        break
+    }
 }
-if (route.path.startsWith('/user/')) state.activeMenu = 'user'
+setActiveMenu(route.path)
+
+watch(
+    () => route.path,
+    (val) => {
+        setActiveMenu(val)
+    }
+)
 </script>
 
 <style scoped lang="scss">

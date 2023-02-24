@@ -61,7 +61,9 @@
                     </el-row>
                     <el-row class="data-item">
                         <el-col class="lastlogin title" :span="4">{{ $t('user.account.overview.Last login') }}</el-col>
-                        <el-col class="lastlogin value" :span="8">{{ timeFormat(userInfo.lastlogintime) }}</el-col>
+                        <el-col class="lastlogin value" :span="8">
+                            <client-only>{{ timeFormat(userInfo.lastlogintime) }}</client-only>
+                        </el-col>
                         <el-col class="lastip" :span="4">{{ $t('user.account.overview.Last login IP') }}</el-col>
                         <el-col class="lastip" :span="8">{{ userInfo.lastloginip }}</el-col>
                     </el-row>
