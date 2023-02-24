@@ -1,6 +1,6 @@
 <br />
 <div align="center">
-    <img src="https://wonderful-code.gitee.io/images/readme/logo-title.png" alt="" />
+    <img src="https://wonderful-code.gitee.io/images/readme/nuxt-logo-title.png" alt="" />
     <br />
     <a href="https://buildadmin.com/" target="_blank">官网</a> | <a href="https://demo.buildadmin.com/" target="_blank">演示站</a> |
     <a href="https://wonderful-code.gitee.io/" target="_blank">文档</a> |
@@ -12,7 +12,7 @@
 <br />
 <p align="center">
     <a href="https://www.thinkphp.cn/" target="_blank">
-        <img src="https://img.shields.io/badge/ThinkPHP-%3E6.0-brightgreen?color=91aac3&labelColor=439EFD" alt="vue">
+        <img src="https://img.shields.io/badge/Nuxt-%3E3.1.2-brightgreen?color=91aac3&labelColor=439EFD" alt="vue">
     </a>
     <a href="https://v3.vuejs.org/" target="_blank">
         <img src="https://img.shields.io/badge/Vue-%3E3.x-brightgreen?color=91aac3&labelColor=439EFD" alt="vue">
@@ -36,12 +36,12 @@
 
 <br>
 <div align="center">
-  <img src="https://wonderful-code.gitee.io/images/readme/index.gif" />
+  <img src="https://wonderful-code.gitee.io/images/readme/nuxt-index.png" />
 </div>
 <br>
 
 ### 介绍
-🌈 [BuildAdmin](https://gitee.com/wonderful-code/buildadmin) 的`Nuxt`工程（不含后台，只有会员前台的`BuildAdmin-nuxt`版本，以满足完整的`SEO`需求），基于 Vue3.x setup + ThinkPHP6 + TypeScript + Vite + Pinia + Element Plus等流行技术栈的后台管理系统，自适应多端、可视化CRUD代码生成、自带WEB终端、同时提供Web和Server端、内置全局数据回收站和字段级数据修改保护、自动注册路由、无限子级权限管理等，无需授权即可免费商用，希望能帮助大家实现快速开发。
+🌈 [BuildAdmin](https://gitee.com/wonderful-code/buildadmin) 的`Nuxt`工程（不含后台，只有会员前台的`BuildAdmin-Nuxt`版本，以满足完整的`SEO`需求），[BuildAdmin](https://gitee.com/wonderful-code/buildadmin) 是基于 Vue3.x setup + ThinkPHP6 + TypeScript + Vite + Pinia + Element Plus等流行技术栈的后台管理系统，自适应多端、可视化CRUD代码生成、自带WEB终端、同时提供Web和Server端、内置全局数据回收站和字段级数据修改保护、自动注册路由、无限子级权限管理等，无需授权即可免费商用，希望能帮助大家实现快速开发。
 
 ### 主要特性
 **🚀 CRUD代码生成：**
