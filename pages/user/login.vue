@@ -97,6 +97,7 @@
                                         {{ t('user.login.No account yet? Click Register') }}
                                     </el-button>
                                 </el-form-item>
+                                <LoginFooterMixin />
                             </el-form>
 
                             <!-- 注册表单 -->
@@ -223,6 +224,7 @@
                                         {{ t('user.login.Back to login') }}
                                     </el-button>
                                 </el-form-item>
+                                <LoginFooterMixin />
                             </el-form>
                         </div>
                     </el-col>
@@ -330,6 +332,7 @@
 import type { FormItemRule, FormInstance } from 'element-plus'
 import { buildCaptchaUrl, sendEms, sendSms } from '~/api/common'
 import { checkIn, retrievePassword } from '~/api/user/index'
+import LoginFooterMixin from '~/composables/mixins/loginFooter.vue'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 let timer: NodeJS.Timer
