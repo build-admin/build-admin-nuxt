@@ -33,7 +33,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         loadPath = uniq(loadPath)
 
         for (const key in loadPath) {
-            loadPath[key] = loadPath[key].replaceAll('${lang}', locale)
+            loadPath[key] = loadPath[key].replace(/\$\{lang\}/g, locale)
             if (loadPath[key] in globals.loadLangHandle) {
                 const res = await globals.loadLangHandle[loadPath[key]]()
                 if (res.default) {
