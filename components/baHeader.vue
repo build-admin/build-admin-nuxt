@@ -6,7 +6,11 @@
                     <img src="~/assets/images/logo.png" />
                     <span class="site-name">{{ siteConfig.siteName }}</span>
                 </div>
-                <div class="user-menus-expand hidden-md-and-up">
+                <div
+                    v-if="userInfo.isLogin() && memberCenter.state.viewRoutes.length"
+                    @click="memberCenter.toggleMenuExpand(true)"
+                    class="user-menus-expand hidden-md-and-up"
+                >
                     <Icon name="fa fa-indent" color="var(--el-color-primary)" size="20" />
                 </div>
                 <client-only>
@@ -51,6 +55,18 @@
                 </client-only>
             </el-col>
         </el-row>
+        <client-only>
+            <el-drawer
+                class="ba-aside-drawer"
+                :append-to-body="true"
+                v-model="memberCenter.state.menuExpand"
+                :with-header="false"
+                direction="ltr"
+                size="40%"
+            >
+                <BaAside />
+            </el-drawer>
+        </client-only>
     </el-header>
 </template>
 
@@ -96,6 +112,7 @@ watch(
     height: 60px;
     align-items: center;
     justify-content: center;
+    padding-left: 15px;
 }
 .header-logo {
     display: flex;
@@ -144,6 +161,26 @@ watch(
 @at-root html.dark {
     .header-logo .site-name {
         color: var(--el-text-color-primary);
+    }
+}
+.theme-switch {
+    padding-right: 0;
+}
+@media screen and (max-width: 768px) {
+    .user-menus-expand {
+        padding: 0;
+    }
+
+    .theme-toggle-content {
+        padding-right: 0;
+    }
+}
+@media screen and (max-width: 414px) {
+    .frontend-header-menu :deep(.el-sub-menu .el-sub-menu__title) {
+        padding: 0 20px;
+        .el-icon {
+            display: none;
+        }
     }
 }
 </style>

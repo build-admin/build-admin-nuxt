@@ -44,7 +44,7 @@
                         :key="index"
                         @click="routerPush('', menu)"
                         class="user-menu-item"
-                        :class="memberCenter.state.activeRoute?.name == menu.name ? 'active' : ''"
+                        :class="memberCenter.state.activeRoute?.name == menu.name && $route.path.startsWith('/user') ? 'active' : ''"
                     >
                         <Icon v-if="menu.meta" :name="(menu.meta.icon as string)" size="16" color="var(--el-text-color-secondary)" />
                         <span>{{ menu.meta?.title }}</span>

@@ -65,7 +65,7 @@ body,
     min-height: calc(100vh - 120px);
 }
 .user-views {
-    padding-left: 15px;
+    padding: 0 15px;
     .user-views-card {
         margin-bottom: 15px;
     }
@@ -74,6 +74,16 @@ body,
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.ba-aside-drawer {
+    .el-drawer__body {
+        padding: 0;
+    }
+}
+@media screen and (max-width: 540px) {
+    .ba-aside-drawer {
+        width: 70% !important;
+    }
 }
 /* 布局相关-e */
 

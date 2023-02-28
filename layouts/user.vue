@@ -43,9 +43,4 @@ function mainScrollbarHeight(extra = 0): CSSProperties {
     padding: 0 !important;
     overflow-x: hidden;
 }
-@media screen and (max-width: 768px) {
-    .user-layouts {
-        padding-top: 0;
-    }
-}
 </style>
