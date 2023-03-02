@@ -6,14 +6,14 @@
                     <img src="~/assets/images/logo.png" />
                     <span class="site-name">{{ siteConfig.siteName }}</span>
                 </div>
-                <div
-                    v-if="userInfo.isLogin() && memberCenter.state.viewRoutes.length"
-                    @click="memberCenter.toggleMenuExpand(true)"
-                    class="user-menus-expand hidden-md-and-up"
-                >
-                    <Icon name="fa fa-indent" color="var(--el-color-primary)" size="20" />
-                </div>
                 <client-only>
+                    <div
+                        v-if="userInfo.isLogin() && memberCenter.state.viewRoutes.length"
+                        @click="memberCenter.toggleMenuExpand(true)"
+                        class="user-menus-expand hidden-md-and-up"
+                    >
+                        <Icon name="fa fa-indent" color="var(--el-color-primary)" size="20" />
+                    </div>
                     <el-menu :default-active="state.activeMenu" class="frontend-header-menu" mode="horizontal" :ellipsis="false">
                         <el-menu-item @click="navigateTo({ name: '/' })" v-blur index="index">{{ $t('Home') }}</el-menu-item>
 
