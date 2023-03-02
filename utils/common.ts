@@ -70,6 +70,18 @@ export function isExternal(path: string): boolean {
 }
 
 /**
+ * 是否为手机设备
+ */
+export const isMobile = () => {
+    const event = useRequestEvent()
+    const userAgent = process.client ? navigator.userAgent : event.node.req.headers['user-agent']
+    if (!userAgent) return false
+    return !!userAgent.match(
+        /android|webos|ip(hone|ad|od)|opera (mini|mobi|tablet)|iemobile|windows.+(phone|touch)|mobile|fennec|kindle (Fire)|Silk|maemo|blackberry|playbook|bb10\; (touch|kbd)|Symbian(OS)|Ubuntu Touch/i
+    )
+}
+
+/**
  * 防抖
  * @param fn 执行函数
  * @param ms 间隔毫秒数
