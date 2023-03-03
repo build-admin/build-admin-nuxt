@@ -16,12 +16,7 @@ useSeoMeta({
 definePageMeta({
     layout: 'user',
     name: 'user',
-    middleware: async (to) => {
-        const userInfo = useUserInfo()
-        if (!userInfo.isLogin() && to.name != 'userLogin') {
-            return navigateTo({ name: 'userLogin' })
-        }
-    },
+    middleware: ['user-mount', 'auth'],
 })
 
 const route = useRoute()
