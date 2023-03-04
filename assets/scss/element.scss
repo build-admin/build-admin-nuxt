@@ -28,6 +28,10 @@
     border-bottom: 1px solid var(--el-border-color-extra-light);
 }
 
+.w100 .el-input__wrapper {
+    width: 100%;
+}
+
 /* dialog滚动条-s */
 .el-overlay-dialog,
 .ba-scroll-style {
