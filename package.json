@@ -13,18 +13,18 @@
         "format": "npx prettier --write ."
     },
     "dependencies": {
-        "@element-plus/icons-vue": "^2.0.10",
-        "@element-plus/nuxt": "^1.0.2",
+        "@element-plus/icons-vue": "2.0.10",
+        "@element-plus/nuxt": "1.0.3",
         "@pinia-plugin-persistedstate/nuxt": "^1.0.0",
         "@pinia/nuxt": "^0.4.6",
         "@unocss/nuxt": "^0.48.0",
         "@vueuse/nuxt": "^9.9.0",
-        "element-plus": "^2.2.27",
+        "element-plus": "2.2.32",
         "lodash-es": "^4.17.21",
         "nprogress": "^0.2.0",
         "nuxt": "^3.1.2",
         "nuxt-icons": "^3.1.0",
-        "vue-i18n": "^9.2.2",
+        "vue-i18n": "~9.2.2",
         "echarts": "~5.4.1"
     },
     "devDependencies": {
