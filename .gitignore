@@ -6,4 +6,9 @@ node_modules
 .output
 .env
 dist
+yarn.lock
 pnpm-lock.yaml
+package-lock.json
+composer.lock
+/public/*.lock
+Desktop.ini
