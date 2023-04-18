@@ -43,8 +43,9 @@
                                     v-for="item in languageList"
                                     :key="item.name"
                                     :index="'switch-language-' + item.value"
-                                    >{{ item.value }}</el-menu-item
                                 >
+                                    {{ item.value }}
+                                </el-menu-item>
                             </el-sub-menu>
 
                             <el-menu-item index="theme-switch" class="theme-switch">
