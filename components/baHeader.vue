@@ -2,11 +2,11 @@
     <el-header class="ba-header">
         <el-row justify="center">
             <el-col class="header-row" :span="16" :xs="24">
-                <div @click="navigateTo({ name: '/' })" class="header-logo hidden-sm-and-down">
-                    <img src="~/assets/images/logo.png" />
-                    <span class="site-name">{{ siteConfig.siteName }}</span>
-                </div>
                 <client-only>
+                    <div @click="navigateTo({ name: '/' })" class="header-logo hidden-sm-and-down">
+                        <img src="~/assets/images/logo.png" />
+                        <span class="site-name">{{ siteConfig.siteName }}</span>
+                    </div>
                     <div
                         v-if="userInfo.isLogin() && memberCenter.state.viewRoutes.length"
                         @click="memberCenter.toggleMenuExpand(true)"
