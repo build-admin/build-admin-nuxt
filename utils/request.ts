@@ -5,6 +5,7 @@ import { i18n } from '~/plugins/i18n'
 import { USER_TOKEN_KEY } from '~/stores/constant/keys'
 import type { FetchError } from 'ofetch'
 import { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
+import { isArray } from 'lodash-es'
 
 interface FetchOptions<DataT = any> extends UseFetchOptions<ApiResponse<DataT>> {
     url?: string
@@ -126,6 +127,20 @@ export const requestConfig = <DataT = any>(options: FetchOptions<DataT> = {}, co
             config.showErrorMessage && httpErrorStatusHandle(response) // 处理错误状态码
         },
         ...options,
+    }
+    if (options.params) {
+        let params: anyObj = {}
+        for (const key in options.params) {
+            if (isArray(options.params[key as keyof typeof options.params])) {
+                const tempParams: anyObj = {}
+                for (const pKey in options.params[key as keyof typeof options.params]) {
+                    tempParams[key + '[' + pKey + ']'] = options.params[key as keyof typeof options.params][pKey]
+                }
+                delete options.params[key as keyof typeof options.params]
+                params = { ...params, ...tempParams }
+            }
+        }
+        options.params = { ...options.params, ...params }
     }
 
     return { options, config, loading }
