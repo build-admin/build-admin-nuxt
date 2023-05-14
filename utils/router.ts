@@ -120,7 +120,7 @@ export const handleHeadNav = (rules: anyObj, prefix = '/') => {
             if ('link' == rules[key].menu_type) {
                 rules[key].path = rules[key].url
             } else if ('iframe' == rules[key].menu_type) {
-                rules[key].path = '/user/iframe/' + encodeURIComponent(rules[key].url)
+                rules[key].path = '/iframe/' + encodeURIComponent(rules[key].url)
             } else {
                 rules[key].path = prefix + rules[key].path
             }
