@@ -74,6 +74,8 @@ const props = withDefaults(defineProps<Props>(), {
     },
 })
 
+const instance = getCurrentInstance()
+
 const state: {
     // 主表字段名(不带表别名)
     primaryKey: string
@@ -105,10 +107,24 @@ const state: {
 
 const emits = defineEmits<{
     (e: 'update:modelValue', value: valType): void
+    (e: 'row', value: any): void
 }>()
 
 const onChangeSelect = (val: valType) => {
     emits('update:modelValue', val)
+    if (typeof instance?.vnode.props?.onRow == 'function') {
+        if (typeof val == 'number' || typeof val == 'string') {
+            const dataKey = getArrayKey(state.options, state.primaryKey, val.toString())
+            emits('row', dataKey ? toRaw(state.options[dataKey]) : {})
+        } else {
+            const valueArr = []
+            for (const key in val) {
+                let dataKey = getArrayKey(state.options, state.primaryKey, val[key].toString())
+                if (dataKey) valueArr.push(toRaw(state.options[dataKey]))
+            }
+            emits('row', valueArr)
+        }
+    }
 }
 
 const onVisibleChange = (val: boolean) => {
@@ -197,11 +213,12 @@ const initDefaultValue = () => {
     }
 }
 
-onMounted(() => {
+onMounted(async () => {
     if (props.pk.indexOf('.') > 0) {
         let pk = props.pk.split('.')
         state.primaryKey = pk[1] ? pk[1] : pk[0]
     }
+    await nextTick()
     initDefaultValue()
 })
 
@@ -214,6 +231,24 @@ watch(
         }
     }
 )
+
+const getSelectRef = () => {
+    return selectRef.value
+}
+
+const focus = () => {
+    selectRef.value?.focus()
+}
+
+const blur = () => {
+    selectRef.value?.blur()
+}
+
+defineExpose({
+    blur,
+    focus,
+    getSelectRef,
+})
 </script>
 
 <style scoped lang="scss">

@@ -106,6 +106,21 @@ export const onResetForm = (formEl: FormInstance | undefined) => {
     formEl.resetFields && formEl.resetFields()
 }
 
+/**
+ * 根据pk字段的值从数组中获取key
+ * @param arr
+ * @param pk
+ * @param value
+ */
+export const getArrayKey = (arr: any, pk: string, value: string): any => {
+    for (const key in arr) {
+        if (arr[key][pk] == value) {
+            return key
+        }
+    }
+    return false
+}
+
 /*
  * 格式化时间戳
  */
