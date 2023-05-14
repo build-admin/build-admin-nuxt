@@ -5,11 +5,9 @@ import { i18n } from '~/plugins/i18n'
  * 会员中心菜单规则处理
  * @param routes 菜单规则数据
  * @param pathPrefix 路径前缀
- * @param parent 上级规则
  */
-export const handleMenuRule = (routes: any, pathPrefix = '/', parent = '/') => {
+export const handleMenuRule = (routes: any, pathPrefix = '/') => {
     const menuRule: RouteRecordRaw[] = []
-    const authNode: string[] = []
     for (const key in routes) {
         if (routes[key].extend == 'add_rules_only') {
             continue
@@ -21,7 +19,7 @@ export const handleMenuRule = (routes: any, pathPrefix = '/', parent = '/') => {
             const currentPath = routes[key].menu_type == 'link' || routes[key].menu_type == 'iframe' ? routes[key].url : pathPrefix + routes[key].path
             let children: RouteRecordRaw[] = []
             if (routes[key].children && routes[key].children.length > 0) {
-                children = handleMenuRule(routes[key].children, pathPrefix, currentPath)
+                children = handleMenuRule(routes[key].children, pathPrefix)
             }
             menuRule.push({
                 path: currentPath,
@@ -35,14 +33,7 @@ export const handleMenuRule = (routes: any, pathPrefix = '/', parent = '/') => {
                 },
                 children: children,
             })
-        } else {
-            // 权限节点
-            authNode.push(pathPrefix + routes[key].name)
         }
-    }
-    if (authNode.length) {
-        const memberCenter = useMemberCenter()
-        memberCenter.setAuthNode(parent, authNode)
     }
     return menuRule
 }
@@ -89,5 +80,29 @@ export const onClickMenu = (menu: RouteRecordRaw) => {
                 type: 'error',
             })
             break
+    }
+}
+
+/**
+ * 处理权限节点
+ * @param routes 路由数据
+ * @param prefix 节点前缀
+ * @returns 组装好的权限节点
+ */
+export const handleAuthNode = (routes: any, prefix = '/') => {
+    const authNode: Map<string, string[]> = new Map([])
+    assembleAuthNode(routes, authNode, prefix, prefix)
+    return authNode
+}
+const assembleAuthNode = (routes: any, authNode: Map<string, string[]>, prefix = '/', parent = '/') => {
+    const authNodeTemp = []
+    for (const key in routes) {
+        if (routes[key].type == 'button') authNodeTemp.push(prefix + routes[key].name)
+        if (routes[key].children && routes[key].children.length > 0) {
+            assembleAuthNode(routes[key].children, authNode, prefix, prefix + routes[key].name)
+        }
+    }
+    if (authNodeTemp && authNodeTemp.length > 0) {
+        authNode.set(parent, authNodeTemp)
     }
 }

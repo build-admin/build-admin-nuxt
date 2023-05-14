@@ -121,6 +121,21 @@ export const getArrayKey = (arr: any, pk: string, value: string): any => {
     return false
 }
 
+/**
+ * 页面按钮鉴权
+ * @param name
+ */
+export const auth = (name: string) => {
+    const router = useRouter()
+    const store = useMemberCenter()
+    if (store.state.authNode.has(router.currentRoute.value.path)) {
+        if (store.state.authNode.get(router.currentRoute.value.path)!.some((v: string) => v == router.currentRoute.value.path + '/' + name)) {
+            return true
+        }
+    }
+    return false
+}
+
 /*
  * 格式化时间戳
  */

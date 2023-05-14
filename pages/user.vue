@@ -30,9 +30,10 @@ if (isEmpty(memberCenter.state.viewRoutes)) {
         userInfo.dataFill(data.value.data.userInfo)
         if (data.value.data.menus) {
             const menuMemberCenterBaseRoute = '/user/'
-            const menuRule = handleMenuRule(data.value.data.menus, menuMemberCenterBaseRoute, menuMemberCenterBaseRoute)
+            const menuRule = handleMenuRule(data.value.data.menus, menuMemberCenterBaseRoute)
             memberCenter.setViewRoutes(menuRule)
             memberCenter.setShowHeadline(data.value.data.menus.length > 1 ? true : false)
+            memberCenter.mergeAuthNode(handleAuthNode(data.value.data.menus, menuMemberCenterBaseRoute))
         }
     }
 }
