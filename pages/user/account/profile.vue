@@ -43,7 +43,7 @@
                             </template>
                         </el-input>
                     </el-form-item>
-                    <el-form-item v-if="state.accountVerificationType.includes('mobile')" :label="t('utils.Email')">
+                    <el-form-item v-if="state.accountVerificationType.includes('mobile')" :label="t('utils.Mobile')">
                         <el-input v-model="state.form.mobile" readonly :placeholder="t('user.account.profile.Operation via right button')">
                             <template #append>
                                 <el-button type="primary" @click="onChangeBindInfo('mobile')">
