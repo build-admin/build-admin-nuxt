@@ -1,5 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { i18n } from '~/plugins/i18n'
+import { HeadNav } from '~/stores/interface'
 
 /**
  * 会员中心菜单规则处理
@@ -105,4 +106,33 @@ const assembleAuthNode = (routes: any, authNode: Map<string, string[]>, prefix =
     if (authNodeTemp && authNodeTemp.length > 0) {
         authNode.set(parent, authNodeTemp)
     }
+}
+
+export const handleHeadNav = (rules: anyObj, prefix = '/') => {
+    const headNav: HeadNav[] = []
+    for (const key in rules) {
+        let children: HeadNav[] = []
+        if (rules[key].children && rules[key].children.length > 0) {
+            children = handleHeadNav(rules[key].children, prefix)
+        }
+
+        if (rules[key].type == 'nav') {
+            if ('link' == rules[key].menu_type) {
+                rules[key].path = rules[key].url
+            } else if ('iframe' == rules[key].menu_type) {
+                rules[key].path = '/user/iframe/' + encodeURIComponent(rules[key].url)
+            } else {
+                rules[key].path = prefix + rules[key].path
+            }
+            headNav.push({
+                ...rules[key],
+                meta: {
+                    type: rules[key].menu_type,
+                },
+                path: rules[key].path,
+                children: children,
+            })
+        }
+    }
+    return headNav
 }

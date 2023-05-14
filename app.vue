@@ -22,6 +22,10 @@ const memberCenter = useMemberCenter()
 const { data } = await initialize()
 if (data.value?.code == 1) {
     memberCenter.setStatus(data.value.data.openMemberCenter)
+    if (data.value.data.rules) {
+        memberCenter.mergeAuthNode(handleAuthNode(data.value.data.rules, '/'))
+        data.value.data.site.headNav = handleHeadNav(data.value.data.rules)
+    }
     siteConfig.dataFill(data.value.data.site)
 }
 

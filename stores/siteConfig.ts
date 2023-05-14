@@ -14,6 +14,7 @@ export const useSiteConfig = defineStore('siteConfig', {
                 mimetype: '',
                 savename: '',
             },
+            headNav: [],
         }
     },
     actions: {
