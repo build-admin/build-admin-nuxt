@@ -14,7 +14,7 @@
                             <el-form
                                 v-if="state.tab == 'Login'"
                                 ref="loginRef"
-                                @keyup.enter="onLoginSubmit(loginRef)"
+                                @keyup.enter="onLoginSubmitPre"
                                 :rules="loginRules"
                                 :model="state.login"
                             >
@@ -43,33 +43,6 @@
                                         </template>
                                     </el-input>
                                 </el-form-item>
-                                <el-form-item prop="captcha">
-                                    <el-row class="w100">
-                                        <el-col :span="16">
-                                            <el-input
-                                                v-model="state.login.captcha"
-                                                clearable
-                                                autocomplete="off"
-                                                :placeholder="t('Please input field', { field: t('user.login.Captcha') })"
-                                                size="large"
-                                            >
-                                                <template #prefix>
-                                                    <Icon name="fa fa-ellipsis-h" size="16" color="var(--el-input-icon-color)" />
-                                                </template>
-                                            </el-input>
-                                        </el-col>
-                                        <el-col class="captcha-box" :span="8">
-                                            <client-only :fallback="t('user.login.Captcha')">
-                                                <img
-                                                    @click="onChangeCaptcha"
-                                                    class="captcha-img"
-                                                    :src="buildCaptchaUrl() + '&id=' + state.login.captchaId"
-                                                    alt=""
-                                                />
-                                            </client-only>
-                                        </el-col>
-                                    </el-row>
-                                </el-form-item>
                                 <div class="form-footer">
                                     <el-checkbox v-model="state.login.keep" :label="t('user.login.Remember me')" size="default"></el-checkbox>
                                     <client-only>
@@ -85,7 +58,7 @@
                                 <el-form-item class="form-buttons">
                                     <el-button
                                         class="form-btn"
-                                        @click="onLoginSubmit(loginRef)"
+                                        @click="onLoginSubmitPre"
                                         :loading="state.loading.login"
                                         round
                                         type="primary"
@@ -330,9 +303,10 @@
 
 <script setup lang="ts">
 import type { FormItemRule, FormInstance } from 'element-plus'
-import { buildCaptchaUrl, sendEms, sendSms } from '~/api/common'
+import { sendEms, sendSms } from '~/api/common'
 import { checkIn, retrievePassword } from '~/api/user/index'
 import LoginFooterMixin from '~/composables/mixins/loginFooter.vue'
+import clickCaptcha from '~/composables/clickCaptcha'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 let timer: NodeJS.Timer
@@ -355,7 +329,7 @@ interface State {
     login: {
         username: string
         password: string
-        captcha: string
+        captchaInfo: string
         captchaId: string
         keep: boolean
     }
@@ -397,7 +371,7 @@ const state: State = reactive({
     login: {
         username: '',
         password: '',
-        captcha: '',
+        captchaInfo: '',
         captchaId: uuid(),
         keep: false,
     },
@@ -425,7 +399,6 @@ const state: State = reactive({
 const loginRules: Partial<Record<string, FormItemRule[]>> = reactive({
     username: [buildValidatorData({ name: 'required', title: t('user.login.User name') })],
     password: [buildValidatorData({ name: 'required', title: t('user.login.Password') }), buildValidatorData({ name: 'password' })],
-    captcha: [buildValidatorData({ name: 'required', title: t('user.login.Captcha') })],
 })
 const registerRules: Partial<Record<string, FormItemRule[]>> = reactive({
     username: [
@@ -447,29 +420,24 @@ const retrieveRules: Partial<Record<string, FormItemRule[]>> = reactive({
     password: [buildValidatorData({ name: 'required', title: t('user.login.Password') }), buildValidatorData({ name: 'password' })],
 })
 
-const onChangeCaptcha = () => {
-    state.login.captcha = ''
-    state.login.captchaId = uuid()
-}
-
-const onLoginSubmit = (loginRef: FormInstance | undefined = undefined) => {
-    if (!loginRef) return
-    loginRef.validate((valid) => {
-        if (!valid) return onChangeCaptcha()
-        state.loading.login = true
-        checkIn('post', { ...state.login, tab: state.tab.toLocaleLowerCase() })
-            .then(({ data }) => {
-                if (data.value?.code != 1) return
-                userInfo.dataFill(data.value?.data.userInfo)
-                navigateTo({ path: data.value?.data.routePath })
-            })
-            .catch(() => {
-                onChangeCaptcha()
-            })
-            .finally(() => {
-                state.loading.login = false
-            })
+const onLoginSubmitPre = () => {
+    loginRef.value?.validate((valid) => {
+        if (!valid) return
+        clickCaptcha(state.login.captchaId, (captchaInfo: string) => onLoginSubmit(captchaInfo))
     })
+}
+const onLoginSubmit = (captchaInfo: string) => {
+    state.loading.login = true
+    state.login.captchaInfo = captchaInfo
+    checkIn('post', { ...state.login, tab: state.tab.toLocaleLowerCase() })
+        .then(({ data }) => {
+            if (data.value?.code != 1) return
+            userInfo.dataFill(data.value?.data.userInfo)
+            navigateTo({ path: data.value?.data.routePath })
+        })
+        .finally(() => {
+            state.loading.login = false
+        })
 }
 
 const switchTab = (type: State['tab']) => {
@@ -543,7 +511,6 @@ const onSubmitRetrieve = (retrieveRef: FormInstance | undefined = undefined) => 
                 .then(({ data }) => {
                     if (data.value?.code == 1) {
                         state.showRetrievePasswordDialog = false
-                        onChangeCaptcha()
                         endTiming()
                         onResetForm(retrieveRef)
                     }
