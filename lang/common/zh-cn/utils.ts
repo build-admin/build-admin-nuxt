@@ -18,6 +18,8 @@ export default {
     'Good evening': '晚上好！',
     'Hello!': '您好！',
     Comma: '，',
+    Refresh: '刷新',
+    Loading: '加载中...',
     // 验证类型
     Mobile: '手机号',
     Account: '账户名',

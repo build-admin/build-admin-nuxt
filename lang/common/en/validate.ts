@@ -1,4 +1,8 @@
 export default {
+    'Captcha loading failed, please click refresh button': 'Captcha loading failed, please click refresh button',
+    'The correct area is not clicked, please try again!': 'The correct area is not clicked, please try again!',
+    'Verification is successful!': 'Verification is successful!',
+    'Please click': 'Please click',
     Required: 'Required',
     'Editor required': 'Editor required',
     'Floating point number': ' Floating number',

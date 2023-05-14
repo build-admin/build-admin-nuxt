@@ -1,4 +1,8 @@
 export default {
+    'Captcha loading failed, please click refresh button': '验证码加载失败，请点击刷新按钮',
+    'The correct area is not clicked, please try again!': '未点中正确区域，请重试！',
+    'Verification is successful!': '验证成功！',
+    'Please click': '请依次点击',
     Required: '必填',
     'Editor required': '富文本必填',
     'Floating point number': '浮点数',

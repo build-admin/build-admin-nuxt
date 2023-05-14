@@ -7,6 +7,8 @@ import { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
 
 // 公共
 export const captchaUrl = '/api/common/captcha'
+export const clickCaptchaUrl = '/api/common/clickCaptcha'
+export const checkClickCaptchaUrl = '/api/common/checkClickCaptcha'
 
 // api模块(前台)
 export const apiUploadUrl = '/api/ajax/upload'
@@ -115,6 +117,43 @@ export function sendEms(email: string, event: string, extend: anyObj = {}) {
  */
 export function buildCaptchaUrl() {
     return import.meta.env.VITE_API_BASE_URL + captchaUrl + '?server=1'
+}
+
+/**
+ * 获取文字点击验证码数据
+ * @param id 验证码ID
+ */
+export function getCaptchaData(id: string) {
+    return Http.fetch({
+        url: clickCaptchaUrl,
+        method: 'get',
+        params: {
+            id,
+        },
+    })
+}
+
+/**
+ * 验证文字点击验证码
+ * @param id 验证码ID
+ * @param info 点选的文字信息
+ * @param unset 验证完成清理验证码数据
+ */
+export function checkClickCaptcha(id: string, info: string, unset: boolean) {
+    return Http.fetch(
+        {
+            url: checkClickCaptchaUrl,
+            method: 'post',
+            body: {
+                id,
+                info,
+                unset,
+            },
+        },
+        {
+            showCodeMessage: false,
+        }
+    )
 }
 
 /**
