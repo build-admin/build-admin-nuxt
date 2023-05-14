@@ -22,6 +22,7 @@ export default {
     Loading: 'Loading...',
     // 验证类型
     Mobile: 'Mobile',
+    'Id number': 'Id Number',
     Account: 'Account',
     Password: 'Password',
     'Variable name': 'Variable name',

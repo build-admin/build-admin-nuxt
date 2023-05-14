@@ -11,4 +11,5 @@ export default {
     'Please enter the correct mobile number': '请输入正确的手机号',
     'Please enter the correct account': '要求3到15位，字母开头且只含字母、数字、下划线',
     'Please enter the correct password': '密码要求6到32位，不能包含 & < > " \'',
+    'Please enter the correct ID number': '请输入正确的身份证号码',
 }

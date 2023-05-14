@@ -22,6 +22,7 @@ export default {
     Loading: '加载中...',
     // 验证类型
     Mobile: '手机号',
+    'Id number': '身份证号',
     Account: '账户名',
     Password: '密码',
     'Variable name': '变量名',
