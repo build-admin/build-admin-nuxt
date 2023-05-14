@@ -74,6 +74,7 @@ const props = withDefaults(defineProps<Props>(), {
     },
 })
 
+let io: null | IntersectionObserver = null
 const instance = getCurrentInstance()
 
 const state: {
@@ -220,6 +221,23 @@ onMounted(async () => {
     }
     await nextTick()
     initDefaultValue()
+
+    if (process.client) {
+        setTimeout(() => {
+            if (window?.IntersectionObserver) {
+                io = new IntersectionObserver((entries) => {
+                    for (const key in entries) {
+                        if (!entries[key].isIntersecting) selectRef.value?.blur()
+                    }
+                })
+                io.observe(selectRef.value?.$el)
+            }
+        }, 500)
+    }
+})
+
+onUnmounted(() => {
+    io?.disconnect()
 })
 
 watch(
