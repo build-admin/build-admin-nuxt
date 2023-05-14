@@ -167,7 +167,7 @@
                                         <el-col class="captcha-box" :span="8">
                                             <el-button
                                                 size="large"
-                                                @click="sendRegisterCaptcha(registerRef)"
+                                                @click="sendRegisterCaptchaPre"
                                                 :loading="state.sendCaptchaLoading"
                                                 :disabled="state.codeSendCountdown <= 0 ? false : true"
                                                 type="primary"
@@ -267,7 +267,7 @@
                                 </el-col>
                                 <el-col class="captcha-box" :span="8">
                                     <el-button
-                                        @click="sendRetrieveCaptcha(retrieveRef)"
+                                        @click="sendRetrieveCaptchaPre"
                                         :loading="state.sendCaptchaLoading"
                                         :disabled="state.codeSendCountdown <= 0 ? false : true"
                                         type="primary"
@@ -451,38 +451,48 @@ const switchTab = (type: State['tab']) => {
     }
 }
 
-const sendRegisterCaptcha = (registerRef: FormInstance | undefined = undefined) => {
+const sendRegisterCaptchaPre = () => {
     if (state.codeSendCountdown > 0) return
-    registerRef!.validateField([state.register.registerType, 'username', 'password']).then((valid) => {
-        if (valid) {
-            state.sendCaptchaLoading = true
-            const func = state.register.registerType == 'email' ? sendEms : sendSms
-            func(state.register[state.register.registerType], 'user_register')
-                .then(({ data }) => {
-                    if (data.value?.code == 1) startTiming(60)
-                })
-                .finally(() => {
-                    state.sendCaptchaLoading = false
-                })
-        }
+    registerRef.value?.validateField([state.register.registerType, 'username', 'password']).then((valid) => {
+        if (!valid) return
+        clickCaptcha(state.login.captchaId, (captchaInfo: string) => sendRegisterCaptcha(captchaInfo))
     })
 }
-
-const sendRetrieveCaptcha = (retrieveRef: FormInstance | undefined = undefined) => {
-    if (state.codeSendCountdown > 0) return
-    retrieveRef!.validateField('account').then((valid) => {
-        if (valid) {
-            state.sendCaptchaLoading = true
-            const func = state.retrievePasswordForm.type == 'email' ? sendEms : sendSms
-            func(state.retrievePasswordForm.account, 'user_retrieve_pwd')
-                .then(({ data }) => {
-                    if (data.value?.code == 1) startTiming(60)
-                })
-                .finally(() => {
-                    state.sendCaptchaLoading = false
-                })
-        }
+const sendRegisterCaptcha = (captchaInfo: string) => {
+    state.sendCaptchaLoading = true
+    const func = state.register.registerType == 'email' ? sendEms : sendSms
+    func(state.register[state.register.registerType], 'user_register', {
+        captchaInfo,
+        captchaId: state.login.captchaId,
     })
+        .then(({ data }) => {
+            if (data.value?.code == 1) startTiming(60)
+        })
+        .finally(() => {
+            state.sendCaptchaLoading = false
+        })
+}
+
+const sendRetrieveCaptchaPre = () => {
+    if (state.codeSendCountdown > 0) return
+    retrieveRef.value?.validateField('account').then((valid) => {
+        if (!valid) return
+        clickCaptcha(state.login.captchaId, (captchaInfo: string) => sendRetrieveCaptcha(captchaInfo))
+    })
+}
+const sendRetrieveCaptcha = (captchaInfo: string) => {
+    state.sendCaptchaLoading = true
+    const func = state.retrievePasswordForm.type == 'email' ? sendEms : sendSms
+    func(state.retrievePasswordForm.account, 'user_retrieve_pwd', {
+        captchaInfo,
+        captchaId: state.login.captchaId,
+    })
+        .then(({ data }) => {
+            if (data.value?.code == 1) startTiming(60)
+        })
+        .finally(() => {
+            state.sendCaptchaLoading = false
+        })
 }
 
 const onRegisterSubmit = (registerRef: FormInstance | undefined = undefined) => {
