@@ -14,7 +14,14 @@ if (!envData.VITE_API_BASE_URL) {
 export default defineNuxtConfig({
     app: {
         head: {
-            link: [{ rel: 'stylesheet', crossorigin: 'anonymous', href: '//cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' }],
+            link: [
+                // 动态的加载样式表，以实现：获取样式表内容（图标名称列表等）
+                // font-awesome 图标库CDN地址，任取其一即可，若图标无法显示，可尝试更换CDN地址
+                // 1. Bootstrap 中文网同款
+                // { rel: 'stylesheet', crossorigin: 'anonymous', href: '//cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' },
+                // 2. cdnjs
+                { rel: 'stylesheet', crossorigin: 'anonymous', href: '//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' },
+            ],
         },
     },
     runtimeConfig: {
