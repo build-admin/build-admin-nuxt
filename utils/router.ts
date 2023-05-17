@@ -117,19 +117,20 @@ export const handleHeadNav = (rules: anyObj, prefix = '/') => {
         }
 
         if (rules[key].type == 'nav') {
+            let path = ''
             if ('link' == rules[key].menu_type) {
-                rules[key].path = rules[key].url
+                path = rules[key].url
             } else if ('iframe' == rules[key].menu_type) {
-                rules[key].path = '/iframe/' + encodeURIComponent(rules[key].url)
+                path = '/iframe/' + encodeURIComponent(rules[key].url)
             } else {
-                rules[key].path = prefix + rules[key].path
+                path = prefix + rules[key].path
             }
             headNav.push({
                 ...rules[key],
                 meta: {
                     type: rules[key].menu_type,
                 },
-                path: rules[key].path,
+                path: path,
                 children: children,
             })
         }
