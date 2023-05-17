@@ -78,6 +78,7 @@
 
 <script setup lang="ts">
 import { Locales, languageList, setLanguage } from '~/lang/index'
+import { RouteLocationNormalizedLoaded } from 'vue-router'
 const userInfo = useUserInfo()
 const siteConfig = useSiteConfig()
 const memberCenter = useMemberCenter()
@@ -88,19 +89,36 @@ const state = reactive({
 
 const route = useRoute()
 
-const setActiveMenu = (path: string) => {
-    if (path == '/') {
-        state.activeMenu = 'index'
-    } else if (path.startsWith('/user')) {
+const findMenu = (route: RouteLocationNormalizedLoaded) => {
+    for (const key in memberCenter.state.navUserMenus) {
+        if (memberCenter.state.navUserMenus[key].path == route.path || memberCenter.state.navUserMenus[key].name == route.name) {
+            return memberCenter.state.navUserMenus[key].id
+        }
+    }
+    for (const key in siteConfig.headNav) {
+        if (siteConfig.headNav[key].path == route.path || siteConfig.headNav[key].name == route.name) {
+            return siteConfig.headNav[key].id
+        }
+    }
+}
+
+const setActiveMenu = (route: RouteLocationNormalizedLoaded) => {
+    if (route.path == '/') return (state.activeMenu = 'index')
+
+    // 动态菜单
+    const menuId = findMenu(route)
+    if (menuId) {
+        state.activeMenu = 'column-' + menuId
+    } else if (route.path.startsWith('/user')) {
         state.activeMenu = 'user'
     }
 }
-setActiveMenu(route.path)
+setActiveMenu(route)
 
 watch(
     () => route.path,
-    (val) => {
-        setActiveMenu(val)
+    () => {
+        setActiveMenu(route)
     }
 )
 </script>
