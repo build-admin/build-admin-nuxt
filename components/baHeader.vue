@@ -17,27 +17,8 @@
                     <el-menu :default-active="state.activeMenu" class="frontend-header-menu" mode="horizontal" :ellipsis="false">
                         <el-menu-item @click="navigateTo({ name: '/' })" v-blur index="index">{{ $t('Home') }}</el-menu-item>
 
-                        <template v-for="(item, idx) in siteConfig.headNav" :key="idx">
-                            <template v-if="!isEmpty(item.children)">
-                                <el-sub-menu v-blur :index="`column-${item.id}`">
-                                    <template #title>{{ item.title }}</template>
-                                    <el-menu-item
-                                        v-for="(subItem, subIndex) in item.children"
-                                        :key="subIndex"
-                                        @click="onClickMenu(subItem)"
-                                        v-blur
-                                        :index="'column-' + subItem.id"
-                                    >
-                                        {{ subItem.title }}
-                                    </el-menu-item>
-                                </el-sub-menu>
-                            </template>
-                            <template v-else>
-                                <el-menu-item @click="onClickMenu(item)" v-blur :index="'column-' + item.id">
-                                    {{ item.title }}
-                                </el-menu-item>
-                            </template>
-                        </template>
+                        <!-- 动态菜单 -->
+                        <MenuSub :menus="siteConfig.headNav" />
 
                         <template v-if="memberCenter.state.open">
                             <el-sub-menu v-if="userInfo.isLogin()" v-blur index="user-box">
@@ -54,6 +35,8 @@
                                 <el-menu-item @click="navigateTo({ name: 'user' })" v-blur index="user">
                                     {{ $t('Member Center') }}
                                 </el-menu-item>
+                                <!-- 动态菜单 -->
+                                <MenuSub :menus="memberCenter.state.navUserMenus" />
                                 <el-menu-item @click="userInfo.logout()" v-blur index="user-logout">{{ $t('Logout login') }}</el-menu-item>
                             </el-sub-menu>
                             <el-menu-item v-else @click="navigateTo({ name: 'user' })" v-blur index="user">{{ $t('Member Center') }}</el-menu-item>
@@ -94,7 +77,6 @@
 </template>
 
 <script setup lang="ts">
-import { isEmpty } from 'lodash-es'
 import { Locales, languageList, setLanguage } from '~/lang/index'
 const userInfo = useUserInfo()
 const siteConfig = useSiteConfig()

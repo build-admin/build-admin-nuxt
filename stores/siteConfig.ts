@@ -1,4 +1,4 @@
-import { SiteConfig } from '~/stores/interface'
+import { SiteConfig, Menus } from '~/stores/interface'
 
 export const useSiteConfig = defineStore('siteConfig', {
     state: (): SiteConfig => {
@@ -20,6 +20,9 @@ export const useSiteConfig = defineStore('siteConfig', {
     actions: {
         dataFill(state: SiteConfig) {
             this.$state = state
+        },
+        setHeadNav(headNav: Menus[]) {
+            this.headNav = headNav
         },
     },
 })

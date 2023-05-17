@@ -1,6 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { i18n } from '~/plugins/i18n'
-import { HeadNav } from '~/stores/interface'
+import { Menus } from '~/stores/interface'
 
 /**
  * 会员中心菜单规则处理
@@ -108,15 +108,18 @@ const assembleAuthNode = (routes: any, authNode: Map<string, string[]>, prefix =
     }
 }
 
-export const handleHeadNav = (rules: anyObj, prefix = '/') => {
-    const headNav: HeadNav[] = []
+export const handleMenus = (rules: anyObj, prefix = '/', type = 'nav') => {
+    const menus: Menus[] = []
     for (const key in rules) {
-        let children: HeadNav[] = []
+        if (rules[key].extend == 'add_rules_only') {
+            continue
+        }
+        let children: Menus[] = []
         if (rules[key].children && rules[key].children.length > 0) {
-            children = handleHeadNav(rules[key].children, prefix)
+            children = handleMenus(rules[key].children, prefix)
         }
 
-        if (rules[key].type == 'nav') {
+        if (rules[key].type == type) {
             let path = ''
             if ('link' == rules[key].menu_type) {
                 path = rules[key].url
@@ -125,7 +128,7 @@ export const handleHeadNav = (rules: anyObj, prefix = '/') => {
             } else {
                 path = prefix + rules[key].path
             }
-            headNav.push({
+            menus.push({
                 ...rules[key],
                 meta: {
                     type: rules[key].menu_type,
@@ -135,5 +138,5 @@ export const handleHeadNav = (rules: anyObj, prefix = '/') => {
             })
         }
     }
-    return headNav
+    return menus
 }

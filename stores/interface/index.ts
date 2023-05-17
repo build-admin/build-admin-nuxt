@@ -6,7 +6,7 @@ export interface Globals {
     loadLangHandle: Record<string, any>
 }
 
-export interface HeadNav {
+export interface Menus {
     id: number
     name: string
     type: string
@@ -16,7 +16,7 @@ export interface HeadNav {
     meta: {
         type: 'tab' | 'link' | 'iframe'
     }
-    children: HeadNav[]
+    children: Menus[]
 }
 
 export interface SiteConfig {
@@ -33,7 +33,7 @@ export interface SiteConfig {
         url?: string
         params?: anyObj
     }
-    headNav: HeadNav[]
+    headNav: Menus[]
 }
 
 export interface UserInfo {
@@ -63,4 +63,5 @@ export interface MemberCenter {
     authNode: Map<string, string[]>
     shrink: boolean
     menuExpand: boolean
+    navUserMenus: Menus[]
 }

@@ -21,12 +21,13 @@ const siteConfig = useSiteConfig()
 const memberCenter = useMemberCenter()
 const { data } = await initialize()
 if (data.value?.code == 1) {
+    siteConfig.dataFill(data.value.data.site)
     memberCenter.setStatus(data.value.data.openMemberCenter)
     if (data.value.data.rules) {
         memberCenter.mergeAuthNode(handleAuthNode(data.value.data.rules, '/'))
-        data.value.data.site.headNav = handleHeadNav(data.value.data.rules)
+        memberCenter.setNavUserMenus(handleMenus(data.value.data.rules, '/', 'nav_user_menu'))
+        siteConfig.setHeadNav(handleMenus(data.value.data.rules, '/', 'nav'))
     }
-    siteConfig.dataFill(data.value.data.site)
 }
 
 // 根据站点名称设置默认标题模板

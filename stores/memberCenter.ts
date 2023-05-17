@@ -1,4 +1,4 @@
-import { MemberCenter } from '~/stores/interface/index'
+import { MemberCenter, Menus } from '~/stores/interface/index'
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 
 export const useMemberCenter = defineStore('memberCenter', () => {
@@ -17,7 +17,13 @@ export const useMemberCenter = defineStore('memberCenter', () => {
         shrink: false,
         // 菜单展开（小屏设备）
         menuExpand: false,
+        // 顶栏会员菜单下拉项
+        navUserMenus: [],
     })
+
+    const setNavUserMenus = (menus: Menus[]) => {
+        state.navUserMenus = menus
+    }
 
     const setAuthNode = (key: string, data: string[]) => {
         state.authNode.set(key, data)
@@ -51,7 +57,18 @@ export const useMemberCenter = defineStore('memberCenter', () => {
         state.menuExpand = expand
     }
 
-    return { state, setAuthNode, mergeAuthNode, setViewRoutes, setShowHeadline, setActiveRoute, setShrink, setStatus, toggleMenuExpand }
+    return {
+        state,
+        setAuthNode,
+        setNavUserMenus,
+        mergeAuthNode,
+        setViewRoutes,
+        setShowHeadline,
+        setActiveRoute,
+        setShrink,
+        setStatus,
+        toggleMenuExpand,
+    }
 })
 
 function encodeRoutesURI(data: RouteRecordRaw[]) {

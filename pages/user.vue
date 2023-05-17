@@ -21,6 +21,7 @@ definePageMeta({
 
 const route = useRoute()
 const userInfo = useUserInfo()
+const siteConfig = useSiteConfig()
 const memberCenter = useMemberCenter()
 
 if (isEmpty(memberCenter.state.viewRoutes)) {
@@ -34,6 +35,11 @@ if (isEmpty(memberCenter.state.viewRoutes)) {
             memberCenter.setViewRoutes(menuRule)
             memberCenter.setShowHeadline(data.value.data.menus.length > 1 ? true : false)
             memberCenter.mergeAuthNode(handleAuthNode(data.value.data.menus, menuMemberCenterBaseRoute))
+        }
+        if (data.value.data.rules) {
+            memberCenter.mergeAuthNode(handleAuthNode(data.value.data.rules, '/'))
+            memberCenter.setNavUserMenus(handleMenus(data.value.data.rules, '/', 'nav_user_menu'))
+            siteConfig.setHeadNav(handleMenus(data.value.data.rules, '/', 'nav'))
         }
     }
 }
