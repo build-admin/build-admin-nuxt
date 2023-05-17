@@ -5,8 +5,9 @@ import { uniq } from 'lodash-es'
 import { i18n } from './i18n'
 import { mergeMessage } from '~/lang/index'
 
-export default defineNuxtPlugin((nuxtApp) => {
-    nuxtApp.$router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+export default defineNuxtPlugin(() => {
+    const router = useRouter()
+    router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
         if (process.client) {
             NProgress.configure({ showSpinner: false })
             NProgress.start()
@@ -47,7 +48,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         next()
     })
 
-    nuxtApp.$router.afterEach(() => {
+    router.afterEach(() => {
         if (process.client) {
             NProgress.done()
         }
