@@ -167,6 +167,7 @@ watch(
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
     .header-user-avatar {
         width: 16px;
         height: 16px;

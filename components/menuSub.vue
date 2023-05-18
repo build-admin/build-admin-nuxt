@@ -9,13 +9,14 @@
                     @click="onClickMenu(subItem)"
                     v-blur
                     :index="'column-' + subItem.id"
+                    :class="subItem.name"
                 >
                     {{ subItem.title }}
                 </el-menu-item>
             </el-sub-menu>
         </template>
         <template v-else>
-            <el-menu-item @click="onClickMenu(item)" v-blur :index="'column-' + item.id">
+            <el-menu-item @click="onClickMenu(item)" v-blur :index="'column-' + item.id" :class="item.name">
                 {{ item.title }}
             </el-menu-item>
         </template>
