@@ -20,4 +20,5 @@ export default {
     None: 'None',
     Integral: 'Integral',
     Balance: 'Balance',
+    defaultMotto: "This guy is very lazy and hasn't written anything!",
 }

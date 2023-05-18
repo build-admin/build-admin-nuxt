@@ -20,4 +20,5 @@ export default {
     None: '无',
     Integral: '积分',
     Balance: '余额',
+    defaultMotto: '这家伙很懒，什么也没写！',
 }
