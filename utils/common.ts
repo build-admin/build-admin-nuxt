@@ -2,6 +2,7 @@ import { i18n } from '~/plugins/i18n'
 import type { FormInstance } from 'element-plus'
 import { trim } from 'lodash-es'
 import { TranslateOptions } from 'vue-i18n'
+import { CSSProperties } from 'vue'
 
 /**
  * 获取根据当前路由路径动态加载的语言翻译
@@ -180,6 +181,17 @@ const padStart = (str: string, maxLength: number, fillString = ' ') => {
         }
     }
     return fillString.slice(0, fillLength) + str
+}
+
+/**
+ * calc(100vh - minusHeight)
+ * @param minusHeight 需要减去的高度
+ * @returns CSSProperties
+ */
+export function calcHeight(minusHeight = 60): CSSProperties {
+    return {
+        height: 'calc(100vh - ' + minusHeight.toString() + 'px)',
+    }
 }
 
 /**
