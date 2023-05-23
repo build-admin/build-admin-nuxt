@@ -24,7 +24,7 @@ const userInfo = useUserInfo()
 const siteConfig = useSiteConfig()
 const memberCenter = useMemberCenter()
 
-if (isEmpty(memberCenter.state.viewRoutes)) {
+if (isEmpty(memberCenter.state.viewRoutes) && userInfo.isLogin()) {
     const { data } = await index()
     if (data.value?.code == 1) {
         data.value.data.userInfo.refreshToken = userInfo.refreshToken

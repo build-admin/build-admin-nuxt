@@ -314,6 +314,7 @@ let timer: NodeJS.Timer
 definePageMeta({
     layout: false,
     name: 'userLogin',
+    noNeedLogin: true,
 })
 useSeoMeta({
     title: t('user.login.Login'),
