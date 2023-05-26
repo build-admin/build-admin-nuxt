@@ -18,6 +18,7 @@ export const inputTypes = [
     'select',
     'selects',
     'remoteSelect',
+    'remoteSelects',
     'editor',
     'city',
     'image',

@@ -176,6 +176,17 @@ export default defineComponent({
                 })
         }
 
+        // remoteSelect remoteSelects
+        const remoteSelect = () => {
+            return () =>
+                createVNode(resolveComponent('BaInputRemoteSelect'), {
+                    modelValue: props.modelValue,
+                    'onUpdate:modelValue': onValueUpdate,
+                    multiple: props.type == 'remoteSelect' ? false : true,
+                    ...props.attr,
+                })
+        }
+
         const buildFun = new Map([
             ['string', sntp],
             ['number', sntp],
@@ -268,17 +279,8 @@ export default defineComponent({
                         })
                 },
             ],
-            [
-                'remoteSelect',
-                () => {
-                    return () =>
-                        createVNode(resolveComponent('BaInputRemoteSelect'), {
-                            modelValue: props.modelValue,
-                            'onUpdate:modelValue': onValueUpdate,
-                            ...props.attr,
-                        })
-                },
-            ],
+            ['remoteSelect', remoteSelect],
+            ['remoteSelects', remoteSelect],
             [
                 'city',
                 async () => {

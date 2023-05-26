@@ -93,6 +93,7 @@ export default defineComponent({
             'select',
             'selects',
             'remoteSelect',
+            'remoteSelects',
             'city',
             'icon',
             'color',
