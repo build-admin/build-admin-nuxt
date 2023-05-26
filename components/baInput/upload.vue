@@ -10,7 +10,6 @@
             @remove="onElRemove"
             @preview="onElPreview"
             @exceed="onElExceed"
-            :before-remove="onBeforeRemove"
             v-bind="state.attr"
             :key="state.key"
         >
@@ -57,6 +56,8 @@ interface Props {
     returnFullUrl?: boolean
     // 可自定义el-upload的其他属性
     attr?: Partial<Writeable<UploadProps>>
+    // 强制上传到本地存储
+    forceLocal?: boolean
 }
 interface UploadFileExt extends UploadUserFile {
     serverUrl?: string
@@ -72,6 +73,7 @@ const props = withDefaults(defineProps<Props>(), {
     attr: () => {
         return {}
     },
+    forceLocal: false,
 })
 
 const emits = defineEmits<{
@@ -116,7 +118,7 @@ const onElChange = (file: UploadFileExt) => {
     fd.append('file', file.raw)
     fd = formDataAppend(fd)
     state.uploading++
-    fileUpload(fd, { uuid: uuid() })
+    fileUpload(fd, { uuid: uuid() }, props.forceLocal)
         .then(({ data }) => {
             if (data.value?.code == 1) {
                 file.serverUrl = data.value?.data.file.url
@@ -139,11 +141,6 @@ const onElChange = (file: UploadFileExt) => {
             state.uploading--
             typeof state.events['onChange'] == 'function' && state.events['onChange'](file, getAllUrls())
         })
-}
-
-const onBeforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
-    if (typeof state.events['beforeRemove'] == 'function' && state.events['beforeRemove'](uploadFile, uploadFiles) === false) return false
-    return true
 }
 
 const onElRemove = (file: UploadUserFile) => {
@@ -184,7 +181,7 @@ onMounted(() => {
     }
 
     const addProps: anyObj = {}
-    const evtArr = ['onPreview', 'onRemove', 'onSuccess', 'onError', 'onChange', 'onExceed', 'beforeUpload', 'beforeRemove', 'onProgress']
+    const evtArr = ['onPreview', 'onRemove', 'onSuccess', 'onError', 'onChange', 'onExceed', 'beforeUpload', 'onProgress']
     for (const key in props.attr) {
         if (evtArr.includes(key)) {
             state.events[key] = props.attr[key as keyof typeof props.attr]
