@@ -113,7 +113,7 @@ export const onResetForm = (formEl: FormInstance | undefined) => {
  * @param pk
  * @param value
  */
-export const getArrayKey = (arr: any, pk: string, value: string): any => {
+export const getArrayKey = (arr: any, pk: string, value: any): any => {
     for (const key in arr) {
         if (arr[key][pk] == value) {
             return key
