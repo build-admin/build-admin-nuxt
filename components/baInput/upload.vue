@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { UploadInstance, UploadUserFile, UploadProps, genFileId, UploadRawFile } from 'element-plus'
+import { UploadInstance, UploadUserFile, UploadProps, genFileId, UploadRawFile, UploadFiles } from 'element-plus'
 import { stringToArray } from '~/composables/baInput/helper'
 import { fileUpload } from '~/api/common'
 import { cloneDeep, isEmpty } from 'lodash-es'
@@ -111,7 +111,11 @@ const state: {
     events: [],
 })
 
-const onElChange = (file: UploadFileExt) => {
+const onElChange = (file: UploadFileExt, files: UploadFiles) => {
+    // 将 file 换为 files 中的对象，以便修改属性等操作
+    const fileIndex = getArrayKey(files, 'uid', file.uid!)
+    if (!fileIndex) return
+    file = files[fileIndex] as UploadFileExt
     if (!file || !file.raw) return
     if (typeof state.events['beforeUpload'] == 'function' && state.events['beforeUpload'](file) === false) return
     let fd = new FormData()
@@ -123,30 +127,28 @@ const onElChange = (file: UploadFileExt) => {
             if (data.value?.code == 1) {
                 file.serverUrl = data.value?.data.file.url
                 file.status = 'success'
-                const urls = getAllUrls()
-                typeof state.events['onSuccess'] == 'function' && state.events['onSuccess'](data.value, file, urls)
-                emits('update:modelValue', urls)
+                emits('update:modelValue', getAllUrls())
+                typeof state.events['onSuccess'] == 'function' && state.events['onSuccess'](data.value, file, files)
             } else {
                 file.status = 'fail'
-                state.fileList.splice(state.fileList.indexOf(file), 1)
-                typeof state.events['onError'] == 'function' && state.events['onError'](data.value, file, getAllUrls())
+                files.splice(fileIndex, 1)
+                typeof state.events['onError'] == 'function' && state.events['onError'](data.value, file, files)
             }
         })
         .catch((res) => {
             file.status = 'fail'
-            state.fileList.splice(state.fileList.indexOf(file), 1)
-            typeof state.events['onError'] == 'function' && state.events['onError'](res, file, getAllUrls())
+            files.splice(fileIndex, 1)
+            typeof state.events['onError'] == 'function' && state.events['onError'](res, file, files)
         })
         .finally(() => {
             state.uploading--
-            typeof state.events['onChange'] == 'function' && state.events['onChange'](file, getAllUrls())
+            typeof state.events['onChange'] == 'function' && state.events['onChange'](file, files)
         })
 }
 
-const onElRemove = (file: UploadUserFile) => {
-    const urls = getAllUrls()
-    typeof state.events['onRemove'] == 'function' && state.events['onRemove'](file, urls)
-    emits('update:modelValue', urls)
+const onElRemove = (file: UploadUserFile, files: UploadFiles) => {
+    typeof state.events['onRemove'] == 'function' && state.events['onRemove'](file, files)
+    emits('update:modelValue', getAllUrls())
 }
 
 const onElPreview = (file: UploadFileExt) => {
