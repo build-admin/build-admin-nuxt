@@ -49,7 +49,15 @@ body,
 }
 /* 鼠标置入浮动效果-e */
 
-/* 图片上传预览-s */
+/* 输入组件-s */
+.block-help {
+    display: block;
+    width: 100%;
+    color: #909399;
+    font-size: 13px;
+    line-height: 16px;
+    padding-top: 5px;
+}
 .img-preview-dialog .el-dialog__body {
     display: flex;
     align-items: center;
@@ -58,7 +66,7 @@ body,
         max-width: 100%;
     }
 }
-/* 图片上传预览-e */
+/* 输入组件-e */
 
 /* 布局相关-s */
 .layouts-main {
