@@ -1,7 +1,7 @@
 <template>
     <template v-for="(item, idx) in props.menus" :key="idx">
         <template v-if="!isEmpty(item.children)">
-            <el-sub-menu v-blur :index="`column-${item.id}`">
+            <el-sub-menu @click="onClickMenu(item)" v-blur :index="`column-${item.id}`">
                 <template #title>{{ item.title }}</template>
                 <el-menu-item
                     v-for="(subItem, subIndex) in item.children"
