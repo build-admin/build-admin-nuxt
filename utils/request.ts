@@ -30,7 +30,7 @@ export class Http {
         options: FetchOptions<DataT>,
         config: Partial<FetchConfig> = {},
         loading: LoadingOptions = {}
-    ): Promise<_AsyncData<ApiResponse<DataT>, FetchError | null>> {
+    ): Promise<_AsyncData<ApiResponse<DataT> | null, FetchError<any> | null>> {
         const requestConfigData = requestConfig(options, config, loading)
         if (requestConfigData.config.reductDataFormat && !requestConfigData.options.pick) {
             requestConfigData.options.pick = ['data']

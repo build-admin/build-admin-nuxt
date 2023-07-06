@@ -129,7 +129,9 @@ const onClose = () => {
 const captchaBoxTop = computed(() => (state.captcha.height + 200) / 2 + 'px')
 const captchaBoxLeft = computed(() => (state.captcha.width + 24) / 2 + 'px')
 
-load()
+nextTick(() => {
+    load()
+})
 </script>
 
 <style scoped lang="scss">
@@ -142,7 +144,9 @@ load()
     left: calc(50% - v-bind('captchaBoxLeft'));
     top: calc(50% - v-bind('captchaBoxTop'));
     border-radius: 10px;
-    box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset, 0 0.5em 1em rgba(0, 0, 0, 0.6);
+    box-shadow:
+        0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
+        0 0.5em 1em rgba(0, 0, 0, 0.6);
     .loading {
         color: var(--el-color-info);
         width: 350px;

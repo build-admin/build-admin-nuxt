@@ -38,7 +38,7 @@ export function fileUpload<DataT = anyObj>(
     fd: FormData,
     params: anyObj = {},
     forceLocal = false
-): Promise<_AsyncData<ApiResponse<DataT>, FetchError | null>> {
+): Promise<_AsyncData<ApiResponse<DataT> | null, FetchError<any> | null>> {
     let errorMsg = ''
     const file = fd.get('file') as UploadRawFile
     const siteConfig = useSiteConfig()
