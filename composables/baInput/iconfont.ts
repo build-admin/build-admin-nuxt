@@ -1,15 +1,24 @@
 import * as elIcons from '@element-plus/icons-vue'
 import localIcons from '~/assets/script/iconNames'
 
-/*
- * 获取当前页面中从指定域名加载到的样式表内容
- * 样式表未载入前无法获取
+/**
+ * 获取Vite开发服务/编译后的样式表内容
+ * @param devID style 标签的 viteDevId，只开发服务有
  */
-export function getStylesFromDomain(domain: string) {
+function getStylesFromVite(devId: string, CSSRuleLang = 0) {
     const sheets = []
     const styles: StyleSheetList = document.styleSheets
+    if (import.meta.env.MODE == 'production') {
+        for (const key in styles) {
+            if (styles[key].cssRules && styles[key].cssRules.length >= CSSRuleLang) {
+                sheets.push(styles[key])
+            }
+        }
+        return sheets
+    }
     for (const key in styles) {
-        if (styles[key].href && (styles[key].href as string).indexOf(domain) > -1) {
+        const ownerNode = styles[key].ownerNode as HTMLMapElement
+        if (ownerNode && ownerNode.dataset?.viteDevId && ownerNode.dataset.viteDevId!.indexOf(devId) > -1) {
             sheets.push(styles[key])
         }
     }
@@ -35,11 +44,14 @@ export function getAwesomeIconfontNames() {
     return new Promise<string[]>((resolve, reject) => {
         nextTick(() => {
             const iconfonts = []
-            const sheets = getStylesFromDomain('/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+            const sheets = getStylesFromVite('font-awesome.min.css', 712)
             for (const key in sheets) {
                 const rules: any = sheets[key].cssRules
                 for (const k in rules) {
-                    if (rules[k].selectorText && /^\.fa-(.*)::before$/g.test(rules[k].selectorText)) {
+                    if (!rules[k].selectorText || rules[k].selectorText.indexOf('.fa-') !== 0) {
+                        continue
+                    }
+                    if (/^\.fa-(.*)::before$/g.test(rules[k].selectorText)) {
                         if (rules[k].selectorText.indexOf(', ') > -1) {
                             const iconNames = rules[k].selectorText.split(', ')
                             iconfonts.push(`${iconNames[0].substring(1, iconNames[0].length).replace(/\:\:before/gi, '')}`)
