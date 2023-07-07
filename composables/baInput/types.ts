@@ -150,6 +150,11 @@ export interface InputAttr {
     toolbarConfig?: anyObj
     editorConfig?: anyObj
     editorType?: string
+    preview?: boolean
+    language?: string
+    theme?: 'light' | 'dark'
+    toolbarsExclude?: string[]
+    fileForceLocal?: boolean
     // 返回数据类型
     dataType?: string
     // 事件
