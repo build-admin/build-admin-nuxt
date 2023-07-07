@@ -149,6 +149,7 @@ export interface InputAttr {
     style?: CSSProperties
     toolbarConfig?: anyObj
     editorConfig?: anyObj
+    editorType?: string
     // 返回数据类型
     dataType?: string
     // 事件
