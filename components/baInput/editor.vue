@@ -4,7 +4,7 @@
 <template>
     <div>
         <client-only>
-            <component v-bind="$attrs" :is="mixins[state.editorType]" />
+            <component v-if="state.mounted" :is="mixins[state.editorType]" v-bind="$attrs" />
         </client-only>
     </div>
 </template>
@@ -19,21 +19,27 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const state = reactive({
+    mounted: false,
     editorType: props.editorType,
 })
 
 const mixins: Record<string, Component> = {}
-const mixinComponents = import.meta.glob('~/composables/mixins/editor/**.vue')
-for (const key in mixinComponents) {
-    const res: any = await mixinComponents[key]()
-    const fileName = key.replace('/composables/mixins/editor/', '').replace('.vue', '')
-    mixins[fileName] = res.default
+const getComponents = async () => {
+    if (process.server) return
+    const mixinComponents = import.meta.glob('~/composables/mixins/editor/**.vue')
+    for (const key in mixinComponents) {
+        const res: any = await mixinComponents[key]()
+        const fileName = key.replace('/composables/mixins/editor/', '').replace('.vue', '')
+        mixins[fileName] = res.default
 
-    // 未安装富文本编辑器时，值为 default，安装之后，则值为最后一个编辑器的名称
-    if (props.editorType == 'default' && fileName != 'default') {
-        state.editorType = fileName
+        // 未安装富文本编辑器时，值为 default，安装之后，则值为最后一个编辑器的名称
+        if (props.editorType == 'default' && fileName != 'default') {
+            state.editorType = fileName
+        }
     }
+    state.mounted = true
 }
+getComponents()
 </script>
 
 <style scoped lang="scss"></style>
