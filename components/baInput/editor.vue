@@ -3,7 +3,9 @@
 <!-- 向本组件传递 editorType（文件名/编辑器名称）自动加载对应的编辑器进行渲染 -->
 <template>
     <div>
-        <component v-bind="$attrs" :is="mixins[state.editorType]" />
+        <client-only>
+            <component v-bind="$attrs" :is="mixins[state.editorType]" />
+        </client-only>
     </div>
 </template>
 
