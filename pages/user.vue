@@ -27,7 +27,7 @@ const memberCenter = useMemberCenter()
 if (isEmpty(memberCenter.state.viewRoutes) && userInfo.isLogin()) {
     const { data } = await index()
     if (data.value?.code == 1) {
-        data.value.data.userInfo.refreshToken = userInfo.refreshToken
+        data.value.data.userInfo.refresh_token = userInfo.getToken('refresh')
         userInfo.dataFill(data.value.data.userInfo)
         if (data.value.data.menus) {
             const menuMemberCenterBaseRoute = '/user/'

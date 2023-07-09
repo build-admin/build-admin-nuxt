@@ -52,7 +52,7 @@ export interface UserInfo {
     join_time: string
     motto: string
     token: string
-    refreshToken: string
+    refresh_token: string
 }
 
 export interface MemberCenter {
