@@ -14,7 +14,16 @@
                     >
                         <Icon name="fa fa-indent" color="var(--el-color-primary)" size="20" />
                     </div>
-                    <el-menu :default-active="state.activeMenu" class="frontend-header-menu" mode="horizontal" :ellipsis="false">
+
+                    <!-- globals.menu.show 解决切换路由时菜单内部的 el-popper 报警告的问题 -->
+                    <!-- Slot "default" invoked outside of the render function -->
+                    <el-menu
+                        v-if="globals.menu.show"
+                        :default-active="state.activeMenu"
+                        class="frontend-header-menu"
+                        mode="horizontal"
+                        :ellipsis="false"
+                    >
                         <el-menu-item @click="navigateTo({ name: '/' })" v-blur index="index">{{ $t('Home') }}</el-menu-item>
 
                         <!-- 动态菜单 -->
@@ -39,7 +48,9 @@
                                 <MenuSub :menus="memberCenter.state.navUserMenus" />
                                 <el-menu-item @click="userInfo.logout()" v-blur index="user-logout">{{ $t('Logout login') }}</el-menu-item>
                             </el-sub-menu>
-                            <el-menu-item v-else @click="navigateTo({ name: 'user' })" v-blur index="user">{{ $t('Member Center') }}</el-menu-item>
+                            <el-menu-item v-else @click="navigateTo({ name: 'user' })" v-blur index="user">
+                                {{ $t('Member Center') }}
+                            </el-menu-item>
 
                             <el-sub-menu v-blur index="switch-language">
                                 <template #title>{{ $t('Language') }}</template>

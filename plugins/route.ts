@@ -8,9 +8,17 @@ import { mergeMessage } from '~/lang/index'
 export default defineNuxtPlugin(() => {
     const router = useRouter()
     router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+        // 修复切换路由时顶栏菜单内部的 el-popper 报警告的问题
+        globals.menu.show = false
+
         if (process.client) {
+            // 进度条
             NProgress.configure({ showSpinner: false })
             NProgress.start()
+
+            setTimeout(() => {
+                globals.menu.show = true
+            }, 100)
         }
 
         // 按需动态加载页面的语言包-start

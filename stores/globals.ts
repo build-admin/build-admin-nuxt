@@ -8,6 +8,9 @@ import type { Globals } from './interface/index'
 
 export const globals: Globals = {
     lazy: null,
+    menu: reactive({
+        show: false,
+    }),
     unique: ref(0),
     loadLangHandle: {},
 }
