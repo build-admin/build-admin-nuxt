@@ -1,7 +1,7 @@
 <template>
     <template v-for="(item, idx) in props.menus" :key="idx">
         <template v-if="!isEmpty(item.children)">
-            <el-sub-menu @click="item.path != '/' ? onClickMenu(item) : ''" v-blur :index="`column-${item.id}`">
+            <el-sub-menu @click="onClickSubMenu(item)" v-blur :index="`column-${item.id}`">
                 <template #title>
                     <Icon v-if="showIcon && item.icon" :name="item.icon" color="var(--el-text-color-primary)" />
                     {{ item.title }}
@@ -41,6 +41,15 @@ const props = withDefaults(defineProps<Props>(), {
     menus: () => [],
     showIcon: false,
 })
+
+const onClickSubMenu = (menu: Menus) => {
+    /**
+     * 1、'/'表示菜单规则的 path 为空
+     * 2、会员中心菜单目录不需要跳转
+     */
+    if (menu.path == '/' || menu.type == 'menu_dir') return
+    onClickMenu(menu)
+}
 </script>
 
 <style scoped lang="scss">

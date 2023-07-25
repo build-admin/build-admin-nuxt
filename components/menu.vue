@@ -32,6 +32,9 @@
                 <!-- 动态菜单 -->
                 <MenuSub :menus="memberCenter.state.navUserMenus" :show-icon="showIcon" />
 
+                <!-- 会员中心菜单 -->
+                <MenuSub :menus="memberCenter.state.userMenus" :show-icon="showIcon" />
+
                 <el-menu-item @click="userInfo.logout()" v-blur index="user-logout">
                     <Icon v-if="showIcon" name="fa fa-sign-out" color="var(--el-text-color-primary)" />
                     {{ $t('Logout login') }}

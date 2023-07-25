@@ -23,7 +23,13 @@ const { data } = await initialize()
 if (data.value?.code == 1) {
     siteConfig.dataFill(data.value.data.site)
     memberCenter.setStatus(data.value.data.openMemberCenter)
-    if (data.value.data.rules) {
+    if (data.value.data.menus.length) {
+        const menuMemberCenterBaseRoute = '/user/'
+        memberCenter.setUserMenus(handleMenus(data.value.data.menus, menuMemberCenterBaseRoute, ['menu', 'menu_dir']))
+        memberCenter.setShowHeadline(data.value.data.menus.length > 1 ? true : false)
+        memberCenter.mergeAuthNode(handleAuthNode(data.value.data.menus, menuMemberCenterBaseRoute))
+    }
+    if (data.value.data.rules.length) {
         memberCenter.mergeAuthNode(handleAuthNode(data.value.data.rules, '/'))
         memberCenter.setNavUserMenus(handleMenus(data.value.data.rules, '/', ['nav_user_menu']))
         siteConfig.setHeadNav(handleMenus(data.value.data.rules, '/', ['nav']))

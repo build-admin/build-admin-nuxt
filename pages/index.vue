@@ -100,7 +100,7 @@ definePageMeta({
                 color: var(--el-color-white) !important;
             }
             &:hover {
-                background-color: transparent;
+                background-color: transparent !important;
                 color: var(--el-menu-hover-text-color) !important;
             }
         }
