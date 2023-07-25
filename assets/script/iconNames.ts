@@ -1,1 +1,1 @@
-export default ["dark","light","logo"]
+export default ["dark","lang","light","logo"]
