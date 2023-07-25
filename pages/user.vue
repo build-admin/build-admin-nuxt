@@ -38,8 +38,8 @@ if (isEmpty(memberCenter.state.viewRoutes) && userInfo.isLogin()) {
         }
         if (data.value.data.rules) {
             memberCenter.mergeAuthNode(handleAuthNode(data.value.data.rules, '/'))
-            memberCenter.setNavUserMenus(handleMenus(data.value.data.rules, '/', 'nav_user_menu'))
-            siteConfig.setHeadNav(handleMenus(data.value.data.rules, '/', 'nav'))
+            memberCenter.setNavUserMenus(handleMenus(data.value.data.rules, '/', ['nav_user_menu']))
+            siteConfig.setHeadNav(handleMenus(data.value.data.rules, '/', ['nav']))
         }
     }
 }

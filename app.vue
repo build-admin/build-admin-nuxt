@@ -25,8 +25,8 @@ if (data.value?.code == 1) {
     memberCenter.setStatus(data.value.data.openMemberCenter)
     if (data.value.data.rules) {
         memberCenter.mergeAuthNode(handleAuthNode(data.value.data.rules, '/'))
-        memberCenter.setNavUserMenus(handleMenus(data.value.data.rules, '/', 'nav_user_menu'))
-        siteConfig.setHeadNav(handleMenus(data.value.data.rules, '/', 'nav'))
+        memberCenter.setNavUserMenus(handleMenus(data.value.data.rules, '/', ['nav_user_menu']))
+        siteConfig.setHeadNav(handleMenus(data.value.data.rules, '/', ['nav']))
     }
 }
 

@@ -108,7 +108,7 @@ const assembleAuthNode = (routes: any, authNode: Map<string, string[]>, prefix =
     }
 }
 
-export const handleMenus = (rules: anyObj, prefix = '/', type = 'nav') => {
+export const handleMenus = (rules: anyObj, prefix = '/', type = ['nav']) => {
     const menus: Menus[] = []
     for (const key in rules) {
         if (rules[key].extend == 'add_rules_only') {
@@ -119,7 +119,7 @@ export const handleMenus = (rules: anyObj, prefix = '/', type = 'nav') => {
             children = handleMenus(rules[key].children, prefix)
         }
 
-        if (rules[key].type == type) {
+        if (type.includes(rules[key].type)) {
             let path = ''
             if ('link' == rules[key].menu_type) {
                 path = rules[key].url
