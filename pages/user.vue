@@ -24,15 +24,14 @@ const userInfo = useUserInfo()
 const siteConfig = useSiteConfig()
 const memberCenter = useMemberCenter()
 
-if (isEmpty(memberCenter.state.viewRoutes) && userInfo.isLogin()) {
+if (isEmpty(memberCenter.state.userMenus) && userInfo.isLogin()) {
     const { data } = await index()
     if (data.value?.code == 1) {
         data.value.data.userInfo.refresh_token = userInfo.getToken('refresh')
         userInfo.dataFill(data.value.data.userInfo)
         if (data.value.data.menus) {
             const menuMemberCenterBaseRoute = '/user/'
-            const menuRule = handleMenuRule(data.value.data.menus, menuMemberCenterBaseRoute)
-            memberCenter.setViewRoutes(menuRule)
+            memberCenter.setUserMenus(handleMenus(data.value.data.menus, menuMemberCenterBaseRoute, ['menu', 'menu_dir']))
             memberCenter.setShowHeadline(data.value.data.menus.length > 1 ? true : false)
             memberCenter.mergeAuthNode(handleAuthNode(data.value.data.menus, menuMemberCenterBaseRoute))
         }
@@ -45,7 +44,7 @@ if (isEmpty(memberCenter.state.viewRoutes) && userInfo.isLogin()) {
 }
 
 const jumpFirstMenu = () => {
-    let firstRoute = getFirstRoute(memberCenter.state.viewRoutes)
+    let firstRoute = getFirstRoute(memberCenter.state.userMenus)
     if (firstRoute) {
         navigateTo({ path: firstRoute.path })
     } else {

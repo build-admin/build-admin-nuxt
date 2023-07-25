@@ -37,8 +37,8 @@
                         <Loading />
                     </div>
                 </template>
-                <template v-for="(item, idx) in memberCenter.state.viewRoutes" :key="idx">
-                    <div v-if="memberCenter.state.showHeadline" class="user-menu-max-title">{{ item.meta?.title }}</div>
+                <template v-for="(item, idx) in memberCenter.state.userMenus" :key="idx">
+                    <div v-if="memberCenter.state.showHeadline" class="user-menu-max-title">{{ item.title }}</div>
                     <div
                         v-for="(menu, index) in item.children"
                         :key="index"
@@ -46,8 +46,8 @@
                         class="user-menu-item"
                         :class="memberCenter.state.activeRoute?.name == menu.name && $route.path.startsWith('/user') ? 'active' : ''"
                     >
-                        <Icon v-if="menu.meta" :name="(menu.meta.icon as string)" size="16" color="var(--el-text-color-secondary)" />
-                        <span>{{ menu.meta?.title }}</span>
+                        <Icon v-if="menu.icon" :name="menu.icon" size="16" color="var(--el-text-color-secondary)" />
+                        <span>{{ menu.title }}</span>
                     </div>
                 </template>
             </client-only>
@@ -56,12 +56,12 @@
 </template>
 
 <script setup lang="ts">
-import { RouteRecordRaw } from 'vue-router'
+import { Menus } from '~/stores/interface'
 
 const userInfo = useUserInfo()
 const memberCenter = useMemberCenter()
 
-const routerPush = (routeName = '', route?: RouteRecordRaw) => {
+const routerPush = (routeName = '', route?: Menus) => {
     if (document.body.clientWidth < 992) {
         memberCenter.toggleMenuExpand(false)
     }

@@ -3,43 +3,6 @@ import { i18n } from '~/plugins/i18n'
 import { Menus } from '~/stores/interface'
 
 /**
- * 会员中心菜单规则处理
- * @param routes 菜单规则数据
- * @param pathPrefix 路径前缀
- */
-export const handleMenuRule = (routes: any, pathPrefix = '/') => {
-    const menuRule: RouteRecordRaw[] = []
-    for (const key in routes) {
-        if (routes[key].extend == 'add_rules_only') {
-            continue
-        }
-        if (routes[key].type == 'menu' || routes[key].type == 'menu_dir') {
-            if (routes[key].type == 'menu_dir' && routes[key].children && !routes[key].children.length) {
-                continue
-            }
-            const currentPath = routes[key].menu_type == 'link' || routes[key].menu_type == 'iframe' ? routes[key].url : pathPrefix + routes[key].path
-            let children: RouteRecordRaw[] = []
-            if (routes[key].children && routes[key].children.length > 0) {
-                children = handleMenuRule(routes[key].children, pathPrefix)
-            }
-            menuRule.push({
-                path: currentPath,
-                name: routes[key].name,
-                component: routes[key].component,
-                meta: {
-                    title: routes[key].title,
-                    icon: routes[key].icon,
-                    keepalive: routes[key].keepalive,
-                    type: routes[key].menu_type,
-                },
-                children: children,
-            })
-        }
-    }
-    return menuRule
-}
-
-/**
  * 获取第一个菜单
  */
 export const getFirstRoute = (routes: RouteRecordRaw[]): false | RouteRecordRaw => {
@@ -114,9 +77,12 @@ export const handleMenus = (rules: anyObj, prefix = '/', type = ['nav']) => {
         if (rules[key].extend == 'add_rules_only') {
             continue
         }
+        if (rules[key].type == 'menu_dir' && rules[key].children && !rules[key].children.length) {
+            continue
+        }
         let children: Menus[] = []
         if (rules[key].children && rules[key].children.length > 0) {
-            children = handleMenus(rules[key].children, prefix)
+            children = handleMenus(rules[key].children, prefix, type)
         }
 
         if (type.includes(rules[key].type)) {

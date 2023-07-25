@@ -7,8 +7,8 @@ export const useMemberCenter = defineStore('memberCenter', () => {
         open: false,
         // 当前激活菜单
         activeRoute: null,
-        // 从后台加载到的菜单
-        viewRoutes: [],
+        // 从后台加载到的，会员中心菜单
+        userMenus: [],
         // 是否显示一级菜单标题(当有多个一级菜单分组时显示)
         showHeadline: false,
         // 权限节点
@@ -33,8 +33,8 @@ export const useMemberCenter = defineStore('memberCenter', () => {
         state.authNode = new Map([...state.authNode, ...authNode])
     }
 
-    const setViewRoutes = (data: RouteRecordRaw[]): void => {
-        state.viewRoutes = encodeRoutesURI(data)
+    const setUserMenus = (menus: Menus[]): void => {
+        state.userMenus = encodeRoutesURI(menus)
     }
 
     const setShowHeadline = (show: boolean): void => {
@@ -62,7 +62,7 @@ export const useMemberCenter = defineStore('memberCenter', () => {
         setAuthNode,
         setNavUserMenus,
         mergeAuthNode,
-        setViewRoutes,
+        setUserMenus,
         setShowHeadline,
         setActiveRoute,
         setShrink,
@@ -71,7 +71,7 @@ export const useMemberCenter = defineStore('memberCenter', () => {
     }
 })
 
-function encodeRoutesURI(data: RouteRecordRaw[]) {
+function encodeRoutesURI(data: Menus[]) {
     data.forEach((item) => {
         if (item.meta?.type == 'iframe') {
             item.path = '/iframe/' + encodeURIComponent(item.path)

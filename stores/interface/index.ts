@@ -66,7 +66,7 @@ export interface UserInfo {
 export interface MemberCenter {
     open: boolean
     activeRoute: RouteRecordRaw | RouteLocationNormalized | null
-    viewRoutes: RouteRecordRaw[]
+    userMenus: Menus[]
     showHeadline: boolean
     authNode: Map<string, string[]>
     shrink: boolean
