@@ -59,6 +59,8 @@ export default defineNuxtPlugin(() => {
     router.afterEach(() => {
         if (process.client) {
             NProgress.done()
+            const memberCenter = useMemberCenter()
+            memberCenter.state.menuExpand = false
         }
     })
 })
