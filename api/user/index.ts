@@ -1,13 +1,6 @@
 const accountUrl = '/api/account/'
 const controllerUrl = '/api/user/'
 
-export function index() {
-    return Http.fetch({
-        url: controllerUrl + 'index',
-        method: 'get',
-    })
-}
-
 export function checkIn(method: 'get' | 'post', params: object = {}) {
     const opt = method == 'get' ? {} : { body: params }
     return Http.fetch({

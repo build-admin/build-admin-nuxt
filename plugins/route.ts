@@ -18,7 +18,7 @@ export default defineNuxtPlugin(() => {
 
             setTimeout(() => {
                 globals.menu.show = true
-            }, 100)
+            }, 200)
         }
 
         // 按需动态加载页面的语言包-start

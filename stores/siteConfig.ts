@@ -15,14 +15,22 @@ export const useSiteConfig = defineStore('siteConfig', {
                 savename: '',
             },
             headNav: [],
+            initialize: false,
+            userInitialize: false,
         }
     },
     actions: {
         dataFill(state: SiteConfig) {
-            this.$state = state
+            this.$state = { ...this.$state, ...state }
         },
         setHeadNav(headNav: Menus[]) {
             this.headNav = headNav
+        },
+        setInitialize(initialize: boolean) {
+            this.initialize = initialize
+        },
+        setUserInitialize(userInitialize: boolean) {
+            this.userInitialize = userInitialize
         },
     },
 })

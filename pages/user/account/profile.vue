@@ -253,6 +253,10 @@ definePageMeta({
     name: 'account/profile',
 })
 
+useSeoMeta({
+    title: '个人资料',
+})
+
 const { t } = useI18n()
 const userInfo = useUserInfo()
 

@@ -4,6 +4,7 @@ import { useSiteConfig } from '~/stores/siteConfig'
 import { state as uploadExpandState, fileUpload as uploadExpand } from '~/composables/mixins/baUpload'
 import type { FetchError } from 'ofetch'
 import { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
+import { isEmpty } from 'lodash-es'
 
 // 公共
 export const captchaUrl = '/api/common/captcha'
@@ -19,13 +20,39 @@ export const apiSendEms = '/api/Ems/send'
 export const indexUrl = '/api/index/index'
 
 /**
- * 初始化
+ * 前端初始化请求
+ * 1. 会员已登录时，一共只初始化一次
+ * 2. 会员未登录时，在会员完成登录时再初始化一次
  */
-export function initialize() {
-    return Http.fetch({
+export async function initialize() {
+    const userInfo = useUserInfo()
+    const siteConfig = useSiteConfig()
+
+    if (!userInfo.isLogin() && siteConfig.initialize) return
+    if (userInfo.isLogin() && siteConfig.userInitialize) return
+
+    const { data } = await Http.fetch({
         url: indexUrl,
         method: 'get',
     })
+    if (data.value?.code == 1) {
+        const memberCenter = useMemberCenter()
+        siteConfig.dataFill(data.value.data.site)
+        memberCenter.setStatus(data.value.data.openMemberCenter)
+        registerMenus(data.value.data.rules, data.value.data.menus)
+
+        if (!isEmpty(data.value.data.userInfo)) {
+            data.value.data.userInfo.refresh_token = userInfo.getToken('refresh')
+            userInfo.dataFill(data.value.data.userInfo)
+        }
+
+        siteConfig.setInitialize(true)
+
+        if (userInfo.isLogin()) {
+            siteConfig.setUserInitialize(true)
+        }
+    }
+    return data
 }
 
 /**

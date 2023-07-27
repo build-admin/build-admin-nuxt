@@ -5,9 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import { index } from '~/api/user/index'
 import { useI18n } from 'vue-i18n'
-import { isEmpty } from 'lodash-es'
+import { initialize } from '~/api/common'
 const { t } = useI18n()
 
 useSeoMeta({
@@ -23,14 +22,11 @@ const route = useRoute()
 const userInfo = useUserInfo()
 const memberCenter = useMemberCenter()
 
-if (isEmpty(memberCenter.state.userMenus) && userInfo.isLogin()) {
-    const { data } = await index()
-    if (data.value?.code == 1) {
-        data.value.data.userInfo.refresh_token = userInfo.getToken('refresh')
-        userInfo.dataFill(data.value.data.userInfo)
-        registerMenus(data.value.data.rules, data.value.data.menus)
-    }
-}
+/**
+ * 初始化请求
+ * 若在 app.vue 发送此请求时已经登录，initialize 内会自动放弃请求
+ */
+await initialize()
 
 const jumpFirstMenu = () => {
     let firstRoute = getFirstRoute(memberCenter.state.userMenus)

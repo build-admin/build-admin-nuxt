@@ -42,6 +42,8 @@ export interface SiteConfig {
         params?: anyObj
     }
     headNav: Menus[]
+    initialize: boolean
+    userInitialize: boolean
 }
 
 export interface UserInfo {
