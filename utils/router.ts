@@ -71,6 +71,23 @@ const assembleAuthNode = (routes: any, authNode: Map<string, string[]>, prefix =
     }
 }
 
+export const registerMenus = (rules: any, menus: any) => {
+    const siteConfig = useSiteConfig()
+    const memberCenter = useMemberCenter()
+    if (rules.length) {
+        memberCenter.mergeAuthNode(handleAuthNode(rules, '/'))
+        siteConfig.setHeadNav(handleMenus(rules, '/', ['nav']))
+    }
+    if (menus.length) {
+        const menuMemberCenterBaseRoute = '/user/'
+        memberCenter.mergeAuthNode(handleAuthNode(menus, menuMemberCenterBaseRoute))
+
+        memberCenter.setNavUserMenus(handleMenus(menus, '/', ['nav_user_menu']))
+        memberCenter.setShowHeadline(menus.length > 1 ? true : false)
+        memberCenter.setUserMenus(handleMenus(menus, menuMemberCenterBaseRoute, ['menu', 'menu_dir']))
+    }
+}
+
 export const handleMenus = (rules: anyObj, prefix = '/', type = ['nav']) => {
     const menus: Menus[] = []
     for (const key in rules) {
