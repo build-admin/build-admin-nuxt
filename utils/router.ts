@@ -87,10 +87,8 @@ export const handleMenus = (rules: anyObj, prefix = '/', type = ['nav']) => {
 
         if (type.includes(rules[key].type)) {
             let path = ''
-            if ('link' == rules[key].menu_type) {
+            if (['link', 'iframe'].includes(rules[key].menu_type)) {
                 path = rules[key].url
-            } else if ('iframe' == rules[key].menu_type) {
-                path = '/iframe/' + encodeURIComponent(rules[key].url)
             } else {
                 path = prefix + rules[key].path
             }

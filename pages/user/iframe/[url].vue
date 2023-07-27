@@ -23,6 +23,7 @@ const hideLoading = () => {
 
 <style scoped lang="scss">
 .iframe-main {
+    margin-left: 15px;
     iframe {
         height: 100vh;
     }

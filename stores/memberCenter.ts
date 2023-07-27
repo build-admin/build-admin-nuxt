@@ -74,7 +74,7 @@ export const useMemberCenter = defineStore('memberCenter', () => {
 function encodeRoutesURI(data: Menus[]) {
     data.forEach((item) => {
         if (item.meta?.type == 'iframe') {
-            item.path = '/iframe/' + encodeURIComponent(item.path)
+            item.path = '/user/iframe/' + encodeURIComponent(item.path)
         }
 
         if (item.children && item.children.length) {
