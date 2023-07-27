@@ -56,6 +56,11 @@ export default defineNuxtConfig({
         autoImports: ['defineStore', 'acceptHMRUpdate'],
         disableVuex: true,
     },
+    piniaPersistedstate: {
+        cookieOptions: {
+            sameSite: 'strict',
+        },
+    },
     // https://github.com/unocss/unocss/issues/2113
     sourcemap: {
         server: true,
