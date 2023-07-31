@@ -10,7 +10,14 @@
                 </div>
             </template>
             <div class="user-profile">
-                <el-form :model="state.form" :rules="state.rules" :label-width="100" ref="formRef" @keyup.enter="onSubmit(formRef)">
+                <el-form
+                    :label-position="memberCenter.state.shrink ? 'top' : 'right'"
+                    :model="state.form"
+                    :rules="state.rules"
+                    :label-width="100"
+                    ref="formRef"
+                    @keyup.enter="onSubmit(formRef)"
+                >
                     <FormItem
                         :label="$t('user.account.profile.Avatar')"
                         :input-attr="{
@@ -53,6 +60,7 @@
                         </el-input>
                     </el-form-item>
                     <FormItem
+                        class="form-gender"
                         :label="$t('user.account.profile.Gender')"
                         type="radio"
                         v-model="state.form.gender"
@@ -259,6 +267,7 @@ useSeoMeta({
 
 const { t } = useI18n()
 const userInfo = useUserInfo()
+const memberCenter = useMemberCenter()
 
 const formRef = ref<FormInstance>()
 const bindFormRef = ref<FormInstance>()
@@ -518,6 +527,11 @@ if (data.value?.code == 1) state.accountVerificationType = data.value?.data.acco
 @media screen and (max-width: 600px) {
     :deep(.ba-change-bind-dialog) {
         --el-dialog-width: 92% !important;
+    }
+    .form-gender {
+        .el-radio {
+            margin: 0 10px 10px 0;
+        }
     }
 }
 </style>
