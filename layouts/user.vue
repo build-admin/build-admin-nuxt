@@ -17,7 +17,13 @@
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ScrollbarInstance } from 'element-plus'
+
+const mainScrollbarRef = ref<ScrollbarInstance>()
+
+provide('mainScrollbarRef', mainScrollbarRef)
+</script>
 
 <style scoped lang="scss">
 .user-layouts {
