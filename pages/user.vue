@@ -26,7 +26,7 @@ const memberCenter = useMemberCenter()
  * 初始化请求
  * 若在 app.vue 发送此请求时已经登录，initialize 内会自动放弃请求
  */
-await initialize()
+await initialize(true)
 
 const jumpFirstMenu = () => {
     let firstRoute = getFirstRoute(memberCenter.state.userMenus)

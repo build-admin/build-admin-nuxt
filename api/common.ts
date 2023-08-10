@@ -24,7 +24,7 @@ export const indexUrl = '/api/index/index'
  * 1. 会员已登录时，一共只初始化一次
  * 2. 会员未登录时，在会员完成登录时再初始化一次
  */
-export async function initialize() {
+export async function initialize(requiredLogin?: boolean) {
     const userInfo = useUserInfo()
     const siteConfig = useSiteConfig()
 
@@ -34,6 +34,9 @@ export async function initialize() {
     const { data } = await Http.fetch({
         url: indexUrl,
         method: 'get',
+        params: {
+            requiredLogin: requiredLogin ? 1 : 0,
+        },
     })
     if (data.value?.code == 1) {
         const memberCenter = useMemberCenter()
@@ -44,13 +47,12 @@ export async function initialize() {
         if (!isEmpty(data.value.data.userInfo)) {
             data.value.data.userInfo.refresh_token = userInfo.getToken('refresh')
             userInfo.dataFill(data.value.data.userInfo)
+
+            // 请求到会员信息才设置会员中心初始化是成功的
+            siteConfig.setUserInitialize(true)
         }
 
         siteConfig.setInitialize(true)
-
-        if (userInfo.isLogin()) {
-            siteConfig.setUserInitialize(true)
-        }
     }
     return data
 }
