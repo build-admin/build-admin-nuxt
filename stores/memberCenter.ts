@@ -25,6 +25,10 @@ export const useMemberCenter = defineStore('memberCenter', () => {
         state.navUserMenus = menus
     }
 
+    const mergeNavUserMenus = (menus: Menus[]) => {
+        state.navUserMenus = [...state.navUserMenus, ...menus]
+    }
+
     const setAuthNode = (key: string, data: string[]) => {
         state.authNode.set(key, data)
     }
@@ -61,6 +65,7 @@ export const useMemberCenter = defineStore('memberCenter', () => {
         state,
         setAuthNode,
         setNavUserMenus,
+        mergeNavUserMenus,
         mergeAuthNode,
         setUserMenus,
         setShowHeadline,

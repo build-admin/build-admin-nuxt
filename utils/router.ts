@@ -77,12 +77,13 @@ export const registerMenus = (rules: any, menus: any) => {
     if (rules.length) {
         memberCenter.mergeAuthNode(handleAuthNode(rules, '/'))
         siteConfig.setHeadNav(handleMenus(rules, '/', ['nav']))
+        memberCenter.mergeNavUserMenus(handleMenus(rules, '/', ['nav_user_menu']))
     }
     if (menus.length) {
         const menuMemberCenterBaseRoute = '/user/'
         memberCenter.mergeAuthNode(handleAuthNode(menus, menuMemberCenterBaseRoute))
 
-        memberCenter.setNavUserMenus(handleMenus(menus, '/', ['nav_user_menu']))
+        memberCenter.mergeNavUserMenus(handleMenus(menus, '/', ['nav_user_menu']))
         memberCenter.setShowHeadline(menus.length > 1 ? true : false)
         memberCenter.setUserMenus(handleMenus(menus, menuMemberCenterBaseRoute, ['menu', 'menu_dir']))
     }
