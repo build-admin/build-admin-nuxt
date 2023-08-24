@@ -217,7 +217,7 @@ const initDefaultValue = () => {
 onMounted(async () => {
     if (props.pk.indexOf('.') > 0) {
         let pk = props.pk.split('.')
-        state.primaryKey = pk[1] ? pk[1] : pk[0]
+        state.primaryKey = pk[pk.length - 1]
     }
     await nextTick()
     initDefaultValue()
