@@ -142,12 +142,13 @@ const onElChange = (file: UploadFileExt, files: UploadFiles) => {
         })
         .finally(() => {
             state.uploading--
-            typeof state.events['onChange'] == 'function' && state.events['onChange'](file, files)
+            onChange(file, files)
         })
 }
 
 const onElRemove = (file: UploadUserFile, files: UploadFiles) => {
     typeof state.events['onRemove'] == 'function' && state.events['onRemove'](file, files)
+    onChange(file, files)
     emits('update:modelValue', getAllUrls())
 }
 
@@ -258,6 +259,10 @@ const formDataAppend = (fd: FormData) => {
         }
     }
     return fd
+}
+
+const onChange = (file: UploadFileExt, files: UploadFileExt[]) => {
+    typeof state.events['onChange'] == 'function' && state.events['onChange'](file, files)
 }
 
 const getUploadRef = () => {
