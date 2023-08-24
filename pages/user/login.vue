@@ -353,6 +353,7 @@ interface State {
     }
     sendCaptchaLoading: boolean
     codeSendCountdown: number
+    to: string
 }
 
 const route = useRoute()
@@ -395,6 +396,7 @@ const state: State = reactive({
     },
     sendCaptchaLoading: false,
     codeSendCountdown: 0,
+    to: route.query.to as string,
 })
 
 const loginRules: Partial<Record<string, FormItemRule[]>> = reactive({
@@ -434,6 +436,7 @@ const onLoginSubmit = (captchaInfo: string) => {
         .then(({ data }) => {
             if (data.value?.code != 1) return
             userInfo.dataFill(data.value?.data.userInfo)
+            if (state.to) return (location.href = state.to)
             navigateTo({ path: data.value?.data.routePath })
         })
         .finally(() => {
