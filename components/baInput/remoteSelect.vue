@@ -155,8 +155,10 @@ const onClear = () => {
 }
 
 const onLogKeyword = (q: string) => {
-    state.keyword = q
-    debounce(getData, 500)()
+    if (state.keyword != q) {
+        state.keyword = q
+        debounce(getData, 500)()
+    }
 }
 
 const getData = (initValue: valType = '') => {
