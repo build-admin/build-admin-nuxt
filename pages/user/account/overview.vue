@@ -11,7 +11,7 @@
             </template>
             <div class="overview-userinfo">
                 <div class="user-avatar">
-                    <img :src="userInfo.avatar" alt="" />
+                    <img :src="fullUrl(userInfo.avatar ? userInfo.avatar : '/static/images/avatar.png')" alt="" />
                     <div class="user-avatar-icons">
                         <div @click="navigateTo({ name: 'account/profile' })" class="avatar-icon-item">
                             <el-tooltip
