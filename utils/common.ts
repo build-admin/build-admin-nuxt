@@ -123,16 +123,39 @@ export const getArrayKey = (arr: any, pk: string, value: any): any => {
 }
 
 /**
- * 页面按钮鉴权
- * @param name
+ * 获取简洁的路由 path
  */
-export const auth = (name: string) => {
+export const getCurrentRoutePath = () => {
     const router = useRouter()
+    let path = router.currentRoute.value.path
+    if (path.indexOf('?') !== -1) path = path.replace(/\?.*/, '')
+    return path
+}
+
+export function auth(node: string): boolean
+export function auth(node: { name: string; subNodeName?: string }): boolean
+
+/**
+ * 鉴权
+ * 提供 string 将根据当前路由 path 自动拼接和鉴权，还可以提供路由的 name 对象进行鉴权
+ * @param node
+ */
+export function auth(node: string | { name: string; subNodeName?: string }) {
     const store = useMemberCenter()
-    if (store.state.authNode.has(router.currentRoute.value.path)) {
-        if (store.state.authNode.get(router.currentRoute.value.path)!.some((v: string) => v == router.currentRoute.value.path + '/' + name)) {
-            return true
+    if (typeof node === 'string') {
+        const path = getCurrentRoutePath()
+        if (store.state.authNode.has(path)) {
+            const subNodeName = path + (path == '/' ? '' : '/') + node
+            if (store.state.authNode.get(path)!.some((v: string) => v == subNodeName)) {
+                return true
+            }
         }
+    } else {
+        // 节点列表中没有找到 name
+        if (!node.name || !store.state.authNode.has(node.name)) return false
+
+        // 无需继续检查子节点或未找到子节点
+        if (!node.subNodeName || store.state.authNode.get(node.name)?.includes(node.subNodeName)) return true
     }
     return false
 }
