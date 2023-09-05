@@ -53,8 +53,7 @@ export const useUserInfo = defineStore('userInfo', {
         logout() {
             userLogout().then(({ data }) => {
                 if (data.value?.code == 1) {
-                    const userInfo = useCookie(USER_INFO)
-                    userInfo.value = ''
+                    this.removeToken()
                     const router = useRouter()
                     router.go(0)
                 }
@@ -66,6 +65,6 @@ export const useUserInfo = defineStore('userInfo', {
     },
     persist: {
         key: USER_INFO,
-        paths: ['id', 'nickname', 'avatar', 'gender', 'token', 'refresh_token'],
+        paths: ['id', 'token', 'refresh_token'],
     },
 })
