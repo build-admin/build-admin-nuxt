@@ -6,17 +6,7 @@
                     <Icon v-if="showIcon && item.icon" :name="item.icon" color="var(--el-text-color-primary)" />
                     {{ item.title }}
                 </template>
-                <el-menu-item
-                    v-for="(subItem, subIndex) in item.children"
-                    :key="subIndex"
-                    @click="onClickMenu(subItem)"
-                    v-blur
-                    :index="'column-' + subItem.id"
-                    :class="subItem.name.replace(/[\/]/g, '-')"
-                >
-                    <Icon v-if="showIcon && subItem.icon" :name="subItem.icon" color="var(--el-text-color-primary)" />
-                    <template #title>{{ subItem.title }}</template>
-                </el-menu-item>
+                <MenuSub :menus="item.children" :show-icon="showIcon" />
             </el-sub-menu>
         </template>
         <template v-else>
