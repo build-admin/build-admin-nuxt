@@ -59,6 +59,7 @@ export default defineNuxtConfig({
     piniaPersistedstate: {
         cookieOptions: {
             sameSite: 'strict',
+            maxAge: 2592000,
         },
     },
     // https://github.com/unocss/unocss/issues/2113
