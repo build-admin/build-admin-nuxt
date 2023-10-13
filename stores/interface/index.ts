@@ -2,7 +2,7 @@ import type { RouteRecordRaw, RouteLocationNormalized } from 'vue-router'
 
 export interface Globals {
     // 防抖计时器
-    lazy: NodeJS.Timer | null
+    lazy: NodeJS.Timeout | null
     // 修复切换路由时顶栏菜单内部的 el-popper 报警告的问题
     // Slot "default" invoked outside of the render function
     menu: {

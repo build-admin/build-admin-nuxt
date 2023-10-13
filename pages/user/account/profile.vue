@@ -255,7 +255,7 @@ import { useI18n } from 'vue-i18n'
 import { sendEms, sendSms } from '~/api/common'
 import UserProfileMixin from '~/composables/mixins/userProfile.vue'
 import clickCaptcha from '~/composables/clickCaptcha'
-let timer: NodeJS.Timer
+let timer: NodeJS.Timeout
 
 definePageMeta({
     name: 'account/profile',
