@@ -36,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import { ScrollbarInstance } from 'element-plus'
 import { getIntegralLog } from '~/api/user/index'
 
 definePageMeta({
@@ -47,6 +48,7 @@ useSeoMeta({
 
 const userInfo = useUserInfo()
 const memberCenter = useMemberCenter()
+const mainScrollbarRef = inject<Ref<ScrollbarInstance>>('mainScrollbarRef')
 const state: {
     logs: {
         memo: string
@@ -81,6 +83,7 @@ const loadData = async () => {
         state.pageLoading = false
         state.logs = data.value?.data.list
         state.total = data.value?.data.total
+        mainScrollbarRef?.value?.scrollTo(0, 0)
     }
 }
 
