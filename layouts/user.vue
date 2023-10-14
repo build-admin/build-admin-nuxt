@@ -2,7 +2,7 @@
     <div>
         <el-container class="is-vertical">
             <BaHeader />
-            <el-scrollbar :style="calcHeight(60)" ref="mainScrollbarRef">
+            <el-scrollbar :style="calcHeight(60)" class="main-scrollbar" ref="mainScrollbarRef">
                 <el-row class="layouts-main" justify="center">
                     <el-col class="user-layouts" :span="16" :xs="24">
                         <BaAside class="hidden-sm-and-down" />
