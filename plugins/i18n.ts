@@ -1,7 +1,7 @@
 import { createI18n } from 'vue-i18n'
 import { getLangFileMessage, getLanguage } from '~/lang'
-import elementEnLocale from 'element-plus/lib/locale/lang/en'
-import elementZhcnLocale from 'element-plus/lib/locale/lang/zh-cn'
+import elementEnLocale from 'element-plus/es/locale/lang/en'
+import elementZhcnLocale from 'element-plus/es/locale/lang/zh-cn'
 
 export const i18n = createI18n({
     legacy: false,
