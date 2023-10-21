@@ -70,9 +70,9 @@
 </template>
 
 <script setup lang="ts">
-import { Locales, languageList, setLanguage } from '~/lang/index'
-import { RouteLocationNormalizedLoaded } from 'vue-router'
-import { Menus } from '~/stores/interface'
+import { type Locales, languageList, setLanguage } from '~/lang/index'
+import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import type { Menus } from '~/stores/interface'
 
 const route = useRoute()
 const userInfo = useUserInfo()

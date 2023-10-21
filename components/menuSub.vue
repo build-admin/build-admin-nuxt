@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { isEmpty } from 'lodash-es'
-import { Menus } from '~/stores/interface'
+import type { Menus } from '~/stores/interface'
 
 interface Props {
     menus: Menus[]

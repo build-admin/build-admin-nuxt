@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { CSSProperties } from 'vue'
+import type { CSSProperties } from 'vue'
 
 interface Props {
     size?: string | number

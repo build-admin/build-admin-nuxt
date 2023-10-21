@@ -41,10 +41,11 @@
 </template>
 
 <script setup lang="ts">
-import { UploadInstance, UploadUserFile, UploadProps, genFileId, UploadRawFile, UploadFiles } from 'element-plus'
+import type { UploadInstance, UploadUserFile, UploadProps, UploadRawFile, UploadFiles } from 'element-plus'
 import { stringToArray } from '~/composables/baInput/helper'
-import { fileUpload } from '~/api/common'
 import { cloneDeep, isEmpty } from 'lodash-es'
+import { fileUpload } from '~/api/common'
+import { genFileId } from 'element-plus'
 
 type Writeable<T> = { -readonly [P in keyof T]: T[P] }
 interface Props {

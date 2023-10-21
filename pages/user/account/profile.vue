@@ -249,7 +249,7 @@
 </template>
 
 <script setup lang="ts">
-import { FormInstance, FormItemRule } from 'element-plus'
+import type { FormInstance, FormItemRule } from 'element-plus'
 import { getProfile, postProfile, postVerification, postChangeBind } from '~/api/user/index'
 import { useI18n } from 'vue-i18n'
 import { sendEms, sendSms } from '~/api/common'

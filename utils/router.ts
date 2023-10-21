@@ -1,6 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { i18n } from '~/plugins/i18n'
-import { Menus } from '~/stores/interface'
+import type { Menus } from '~/stores/interface'
 
 /**
  * 获取第一个菜单

@@ -1,5 +1,6 @@
 <script lang="ts">
-import { CSSProperties } from 'vue'
+import type { CSSProperties } from 'vue'
+
 export default defineComponent({
     name: 'Icon',
     props: {

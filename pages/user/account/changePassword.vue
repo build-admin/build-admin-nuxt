@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { FormInstance } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 import { changePassword } from '~/api/user/index'
 import { useI18n } from 'vue-i18n'
 

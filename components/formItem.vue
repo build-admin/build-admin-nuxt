@@ -1,6 +1,7 @@
 <script lang="ts">
 import { createVNode, resolveComponent } from 'vue'
-import { inputTypes, modelValueTypes, InputAttr, InputData, FormItemAttr } from '~/composables/baInput/types'
+import { inputTypes } from '~/composables/baInput/types'
+import type { modelValueTypes, InputAttr, InputData, FormItemAttr } from '~/composables/baInput/types'
 
 export default defineComponent({
     name: 'formItem',

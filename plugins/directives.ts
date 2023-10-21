@@ -1,4 +1,4 @@
-import { App } from 'vue'
+import type { App } from 'vue'
 
 export default defineNuxtPlugin(async (nuxtApp) => {
     blurDirective(nuxtApp.vueApp)

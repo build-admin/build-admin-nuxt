@@ -1,6 +1,6 @@
 import type { FetchError } from 'ofetch'
+import type { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
 import { ElNotification } from 'element-plus'
-import { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
 
 export const state: () => 'disable' | 'enable' = () => 'disable'
 

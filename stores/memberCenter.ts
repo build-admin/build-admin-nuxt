@@ -1,4 +1,4 @@
-import { MemberCenter, Menus } from '~/stores/interface/index'
+import type { MemberCenter, Menus } from '~/stores/interface/index'
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 
 export const useMemberCenter = defineStore('memberCenter', () => {

@@ -3,7 +3,7 @@ import type { UploadRawFile } from 'element-plus'
 import { useSiteConfig } from '~/stores/siteConfig'
 import { state as uploadExpandState, fileUpload as uploadExpand } from '~/composables/mixins/baUpload'
 import type { FetchError } from 'ofetch'
-import { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
+import type { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
 import { isEmpty } from 'lodash-es'
 
 // 公共

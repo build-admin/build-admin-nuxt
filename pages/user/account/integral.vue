@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ScrollbarInstance } from 'element-plus'
+import type { ScrollbarInstance } from 'element-plus'
 import { getIntegralLog } from '~/api/user/index'
 
 definePageMeta({

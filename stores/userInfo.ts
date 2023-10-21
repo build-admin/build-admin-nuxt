@@ -1,5 +1,5 @@
 import { USER_INFO } from '~/stores/constant/keys'
-import { UserInfo } from '~/stores/interface'
+import type { UserInfo } from '~/stores/interface'
 import { userLogout } from '~/api/common'
 
 export const useUserInfo = defineStore('userInfo', {

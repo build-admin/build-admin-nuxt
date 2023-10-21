@@ -43,8 +43,8 @@
 </template>
 
 <script setup lang="ts">
-import { getSelectData } from '~/api/common'
 import type { ElSelect } from 'element-plus'
+import { getSelectData } from '~/api/common'
 import { isEmpty } from 'lodash-es'
 
 const selectRef = ref<InstanceType<typeof ElSelect> | undefined>()

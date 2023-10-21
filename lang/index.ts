@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash-es'
-import { i18n } from '~~/plugins/i18n'
+import { i18n } from '~/plugins/i18n'
 import { LANG } from '~/stores/constant/keys'
 
 export type Locales = 'zh-cn' | 'en'

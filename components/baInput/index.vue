@@ -1,6 +1,8 @@
 <script lang="ts">
-import { createVNode, defineComponent, PropType, VNode } from 'vue'
-import { inputTypes, modelValueTypes, InputAttr, InputData } from '~/composables/baInput/types'
+import { createVNode, defineComponent } from 'vue'
+import { inputTypes } from '~/composables/baInput/types'
+import type { PropType, VNode } from 'vue'
+import type { modelValueTypes, InputAttr, InputData } from '~/composables/baInput/types'
 import { getArea } from '~/api/common'
 import { isArray } from 'lodash-es'
 

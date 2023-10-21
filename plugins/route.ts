@@ -1,5 +1,5 @@
 import NProgress from 'nprogress'
-import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
+import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
 import langAutoLoadMap from '~/lang/autoload'
 import { uniq } from 'lodash-es'
 import { i18n } from './i18n'

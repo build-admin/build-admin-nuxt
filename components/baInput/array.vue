@@ -24,8 +24,6 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, watch } from 'vue'
-
 type baInputArray = { key: string; value: string }
 interface Props {
     modelValue: baInputArray[]

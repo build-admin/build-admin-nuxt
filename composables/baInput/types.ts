@@ -1,4 +1,4 @@
-import { CSSProperties } from 'vue'
+import type { CSSProperties } from 'vue'
 import type { FormItemRule } from 'element-plus'
 
 // 支持的输入框类型

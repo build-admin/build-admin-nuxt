@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { Menus } from '~/stores/interface'
+import type { Menus } from '~/stores/interface'
 
 const userInfo = useUserInfo()
 const memberCenter = useMemberCenter()

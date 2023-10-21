@@ -1,4 +1,4 @@
-import { SiteConfig, Menus } from '~/stores/interface'
+import type { SiteConfig, Menus } from '~/stores/interface'
 
 export const useSiteConfig = defineStore('siteConfig', {
     state: (): SiteConfig => {

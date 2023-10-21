@@ -308,6 +308,7 @@ import { checkIn, retrievePassword } from '~/api/user/index'
 import LoginFooterMixin from '~/composables/mixins/loginFooter.vue'
 import clickCaptcha from '~/composables/clickCaptcha'
 import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n()
 let timer: NodeJS.Timeout
 

@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { ScrollbarInstance } from 'element-plus'
+import type { ScrollbarInstance } from 'element-plus'
 
 const mainScrollbarRef = ref<ScrollbarInstance>()
 
