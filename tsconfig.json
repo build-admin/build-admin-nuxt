@@ -4,7 +4,8 @@
         "lib": ["esnext", "dom"],
         "sourceMap": false,
         "importHelpers": true,
-        "removeComments": true
+        "removeComments": true,
+        "verbatimModuleSyntax": false
     },
     "extends": "./.nuxt/tsconfig.json",
     "exclude": ["node_modules"]
