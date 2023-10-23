@@ -48,26 +48,31 @@ export class Http {
         // 响应拦截，useFetch 的 onResponse 无法使用 navigateTo
         requestConfigData.config.loading && closeLoading(requestConfigData.config) // 关闭loading
         if (res.data.value?.code != 1) {
-            // 排除302和409防止多个错误消息弹出
-            if (requestConfigData.config.showCodeMessage && res.data.value?.msg && ![302, 409].includes(res.data.value.code)) {
+            // 排除303和409防止多个错误消息弹出
+            if (requestConfigData.config.showCodeMessage && res.data.value?.msg && ![303, 409].includes(res.data.value.code)) {
                 ElNotification({ type: 'error', message: res.data.value.msg })
             }
 
             // 多个请求并发的发送时，会触发多次 navigateTo 导致报错，使用 requestInterrupt 做唯一限制
-            if (process.client && !requestStatus.requestInterrupt && res.data.value && [302, 409].includes(res.data.value.code)) {
-                const resData = res.data.value.data as anyObj
+            if (process.client && !requestStatus.requestInterrupt && res.data.value && [303, 409].includes(res.data.value.code)) {
                 const route = useRoute()
-                const userInfo = useUserInfo()
-                userInfo.removeToken()
-                requestStatus.requestInterrupt = true
-                if (route.name != 'userLogin') ElNotification({ type: 'error', message: res.data.value.msg })
-                if (resData.routeName && route.name != resData.routeName) {
-                    navigateTo({ name: resData.routeName })
-                } else if (resData.routePath && route.path != resData.routePath) {
-                    navigateTo({ path: resData.routePath })
-                } else if (route.path != '/user/login') {
-                    navigateTo({ path: '/user/login' })
+                let newRouteName = 'user'
+                const resData = res.data.value.data as anyObj
+
+                if ((resData.type && resData.type == 'need login') || res.data.value.code == 409) {
+                    // 需要重新登录
+                    const userInfo = useUserInfo()
+                    userInfo.removeToken()
+
+                    newRouteName += 'Login'
                 }
+
+                if (route.name != newRouteName) {
+                    ElNotification({ type: 'error', message: res.data.value.msg })
+                    navigateTo({ name: newRouteName })
+                }
+
+                requestStatus.requestInterrupt = true
             }
         } else if (requestConfigData.config.showSuccessMessage && res.data.value?.code == 1) {
             ElNotification({
