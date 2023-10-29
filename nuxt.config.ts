@@ -67,4 +67,7 @@ export default defineNuxtConfig({
         server: true,
         client: false,
     },
+    build: {
+        transpile: ['@popperjs'],
+    },
 })
