@@ -42,7 +42,7 @@
                     <div
                         v-for="(menu, index) in item.children"
                         :key="index"
-                        @click="routerPush('', menu)"
+                        @click="routerPush(menu)"
                         class="user-menu-item"
                         :class="memberCenter.state.activeRoute?.name == menu.name && $route.path.startsWith('/user') ? 'active' : ''"
                     >
@@ -61,13 +61,19 @@ import type { Menus } from '~/stores/interface'
 const userInfo = useUserInfo()
 const memberCenter = useMemberCenter()
 
-const routerPush = (routeName = '', route?: Menus) => {
+/**
+ * 右栏菜单跳转
+ * @param route 字符串的路由名称，或者 Menus 类型的菜单数据
+ * @return void
+ */
+const routerPush = (route: string | Menus) => {
     if (document.body.clientWidth < 992) {
         memberCenter.toggleMenuExpand(false)
     }
-    if (routeName) {
-        navigateTo({ name: routeName })
-    } else if (route) {
+
+    if (typeof route === 'string') {
+        navigateTo({ name: route })
+    } else {
         onClickMenu(route)
     }
 }
