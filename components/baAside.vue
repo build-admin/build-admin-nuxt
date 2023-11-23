@@ -44,7 +44,7 @@
                         :key="index"
                         @click="routerPush(menu)"
                         class="user-menu-item"
-                        :class="memberCenter.state.activeRoute?.name == menu.name && $route.path.startsWith('/user') ? 'active' : ''"
+                        :class="getMenuClass(menu)"
                     >
                         <Icon v-if="menu.icon" :name="menu.icon" size="16" color="var(--el-text-color-secondary)" />
                         <span>{{ menu.title }}</span>
@@ -76,6 +76,17 @@ const routerPush = (route: string | Menus) => {
     } else {
         onClickMenu(route)
     }
+}
+
+/**
+ * 获取菜单项 class（含菜单是否激活）
+ */
+const getMenuClass = (menu: Menus) => {
+    const activeRouteName = memberCenter.state.activeRoute?.name as string
+    if (activeRouteName && (activeRouteName == menu.name || activeRouteName.startsWith(menu.name))) {
+        return 'active'
+    }
+    return ''
 }
 </script>
 
