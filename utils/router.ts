@@ -84,7 +84,7 @@ export const registerMenus = (rules: any, menus: any) => {
         memberCenter.mergeAuthNode(handleAuthNode(menus, menuMemberCenterBaseRoute))
 
         memberCenter.mergeNavUserMenus(handleMenus(menus, '/', ['nav_user_menu']))
-        memberCenter.setShowHeadline(menus.length > 1 ? true : false)
+        memberCenter.setShowHeadline(menus.length > 1)
         memberCenter.setUserMenus(handleMenus(menus, menuMemberCenterBaseRoute, ['menu', 'menu_dir']))
     }
 }
