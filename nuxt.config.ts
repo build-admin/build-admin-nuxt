@@ -53,7 +53,6 @@ export default defineNuxtConfig({
         icon: false,
     },
     pinia: {
-        autoImports: ['defineStore', 'acceptHMRUpdate'],
         disableVuex: true,
     },
     piniaPersistedstate: {
