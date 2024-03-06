@@ -134,6 +134,11 @@ definePageMeta({
         width: 300px !important;
     }
 }
+@media screen and (max-height: 650px) {
+    .main-right img {
+        display: none;
+    }
+}
 @at-root html.dark {
     .index-container {
         background: url(~/assets/images/bg-dark.jpg) repeat;
