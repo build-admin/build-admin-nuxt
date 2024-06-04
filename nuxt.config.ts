@@ -1,21 +1,15 @@
-import { loadEnv } from 'vite'
 import { buildLocalIconNames } from './assets/script/buildIcons'
 
-let envScript = 'development'
-if (['build', 'generate'].includes(process.env.npm_lifecycle_event ?? '')) {
-    envScript = 'production'
-}
-const envData = loadEnv(envScript, '')
-if (!envData.VITE_API_BASE_URL) {
-    throw new Error('请先于 .env.production 文件内,配置生产环境的 VITE_API_BASE_URL')
+if (process.env.VITE_ENV && !process.env.VITE_API_BASE_URL) {
+    throw new Error('请先于 .env.production 文件内，配置生产环境的 VITE_API_BASE_URL')
 }
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     runtimeConfig: {
         public: {
-            env: envData.VITE_ENV,
-            apiBaseUrl: envData.VITE_API_BASE_URL,
+            env: process.env.VITE_ENV,
+            apiBaseUrl: process.env.VITE_API_BASE_URL,
         },
     },
     typescript: {
@@ -33,7 +27,7 @@ export default defineNuxtConfig({
     vite: {
         resolve: {
             alias: {
-                'vue-i18n': envData.VITE_ENV == 'production' ? 'vue-i18n/dist/vue-i18n.cjs.prod.js' : 'vue-i18n/dist/vue-i18n.cjs.js',
+                'vue-i18n': process.env.VITE_ENV == 'production' ? 'vue-i18n/dist/vue-i18n.cjs.prod.js' : 'vue-i18n/dist/vue-i18n.cjs.js',
             },
         },
     },

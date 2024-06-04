@@ -39,14 +39,6 @@ export default defineComponent({
             emit('update:modelValue', value)
         }
 
-        // nuxt 中 resolveComponent 只支持使用字面量，此处对 radio和checkbox 组件硬编码
-        const components = {
-            radio: resolveComponent('el-radio'),
-            checkbox: resolveComponent('el-checkbox'),
-            'radio-group': resolveComponent('el-radio-group'),
-            'checkbox-group': resolveComponent('el-checkbox-group'),
-        }
-
         // 子级元素属性
         let childrenAttr = props.data && props.data.childrenAttr ? props.data.childrenAttr : {}
 
@@ -65,18 +57,39 @@ export default defineComponent({
             if (!props.data || !props.data.content) {
                 console.warn('请传递 ' + props.type + '的 content')
             }
+
+            // nuxt 中 resolveComponent 只支持使用字面量，此处对 radio 和 checkbox 组件硬编码
+            const components = {
+                radio: resolveComponent('el-radio'),
+                checkbox: resolveComponent('el-checkbox'),
+                'radio-group': resolveComponent('el-radio-group'),
+                'checkbox-group': resolveComponent('el-checkbox-group'),
+                'radio-button': resolveComponent('el-radio-button'),
+                'checkbox-button': resolveComponent('el-checkbox-button'),
+            }
+
             let vNode: VNode[] = []
+            const contentIsArray = isArray(props.data.content)
+            const type = props.attr.button ? props.type + '-button' : props.type
             for (const key in props.data.content) {
-                vNode.push(
-                    createVNode(
-                        components[props.type as keyof typeof components],
-                        {
-                            label: key,
-                            ...childrenAttr,
-                        },
-                        () => props.data.content[key]
-                    )
-                )
+                let nodeProps = {}
+                if (contentIsArray) {
+                    if (typeof props.data.content[key].value == 'number') {
+                        console.warn(props.type + ' 的 content.value 不能是数字')
+                    }
+
+                    nodeProps = {
+                        ...props.data.content[key],
+                        ...childrenAttr,
+                    }
+                } else {
+                    nodeProps = {
+                        value: key,
+                        label: props.data.content[key],
+                        ...childrenAttr,
+                    }
+                }
+                vNode.push(createVNode(components[type as keyof typeof components], nodeProps))
             }
             return () => {
                 const valueComputed = computed(() => {

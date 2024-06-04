@@ -7,6 +7,5 @@
         "removeComments": true,
         "verbatimModuleSyntax": false
     },
-    "extends": "./.nuxt/tsconfig.json",
-    "exclude": ["node_modules"]
+    "extends": "./.nuxt/tsconfig.json"
 }
