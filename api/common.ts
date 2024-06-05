@@ -2,8 +2,6 @@ import { i18n } from '~/plugins/i18n'
 import type { UploadRawFile } from 'element-plus'
 import { useSiteConfig } from '~/stores/siteConfig'
 import { state as uploadExpandState, fileUpload as uploadExpand } from '~/composables/mixins/baUpload'
-import type { FetchError } from 'ofetch'
-import type { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
 import { isEmpty } from 'lodash-es'
 
 // 公共
@@ -63,11 +61,7 @@ export async function initialize(requiredLogin?: boolean) {
  * @param params 请求额外参数
  * @param forceLocal 上传到本地，而不使用云存储
  */
-export function fileUpload<DataT = anyObj>(
-    fd: FormData,
-    params: anyObj = {},
-    forceLocal = false
-): Promise<_AsyncData<ApiResponse<DataT> | null, FetchError<any> | null>> {
+export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, forceLocal = false): HttpFetchResponse<DataT> {
     let errorMsg = ''
     const file = fd.get('file') as UploadRawFile
     const siteConfig = useSiteConfig()

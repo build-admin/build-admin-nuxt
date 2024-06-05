@@ -1,11 +1,9 @@
-import type { UseFetchOptions } from 'nuxt/dist/app/composables/fetch'
 import { ElLoading, ElNotification } from 'element-plus'
 import type { LoadingOptions } from 'element-plus'
 import { getLanguage } from '~/lang'
 import { i18n } from '~/plugins/i18n'
 import { USER_TOKEN_KEY } from '~/stores/constant/keys'
-import type { FetchError } from 'ofetch'
-import type { _AsyncData } from 'nuxt/dist/app/composables/asyncData'
+import type { UseFetchOptions } from '#app'
 import { isArray } from 'lodash-es'
 
 interface FetchOptions<DataT = any> extends UseFetchOptions<ApiResponse<DataT>> {
@@ -31,7 +29,7 @@ export class Http {
         options: FetchOptions<DataT>,
         config: Partial<FetchConfig> = {},
         loading: LoadingOptions = {}
-    ): Promise<_AsyncData<ApiResponse<DataT> | null, FetchError<any> | null>> {
+    ): HttpFetchResponse<DataT> {
         const requestConfigData = requestConfig(options, config, loading)
         if (requestConfigData.config.reductDataFormat && !requestConfigData.options.pick) {
             requestConfigData.options.pick = ['data']
