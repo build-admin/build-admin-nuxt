@@ -4,11 +4,13 @@ import { getLanguage } from '~/lang'
 import { i18n } from '~/plugins/i18n'
 import { USER_TOKEN_KEY } from '~/stores/constant/keys'
 import type { UseFetchOptions } from '#app'
+import type { NitroFetchOptions as UseNitroFetchOptions, NitroFetchRequest } from 'nitropack'
 import { isArray } from 'lodash-es'
 
-interface FetchOptions<DataT = any> extends UseFetchOptions<ApiResponse<DataT>> {
-    url?: string
-}
+type AddUrl = { url?: string }
+type NitroFetchOptions = UseNitroFetchOptions<NitroFetchRequest> & AddUrl
+type FetchOptions<DataT = any> = UseFetchOptions<ApiResponse<DataT>> & AddUrl
+
 const requestStatus: RequestStatus = {
     loading: {
         target: null,
@@ -19,7 +21,7 @@ const requestStatus: RequestStatus = {
 
 export class Http {
     /**
-     * 网络请求（配置好了请求参数的 useFetch）
+     * 网络请求（使用 useFetch 实现，并配置了请求参数）
      * @param options 请求参数（url、method 等），请参考 useFetch 文档
      * @param config 请求配置（简洁响应、开启成功提示等），请看类型定义
      * @param loading ElLoading 的参数，config.loading 开启时有效
@@ -44,42 +46,27 @@ export class Http {
         }
 
         // 响应拦截，useFetch 的 onResponse 无法使用 navigateTo
-        requestConfigData.config.loading && closeLoading(requestConfigData.config) // 关闭loading
-        if (res.data.value?.code != 1) {
-            // 排除303和409防止多个错误消息弹出
-            if (requestConfigData.config.showCodeMessage && res.data.value?.msg && ![303, 409].includes(res.data.value.code)) {
-                ElNotification({ type: 'error', message: res.data.value.msg })
-            }
-
-            // 多个请求并发的发送时，会触发多次 navigateTo 导致报错，使用 requestInterrupt 做唯一限制
-            if (process.client && !requestStatus.requestInterrupt && res.data.value && [303, 409].includes(res.data.value.code)) {
-                const route = useRoute()
-                let newRouteName = 'user'
-                const resData = res.data.value.data as anyObj
-
-                if ((resData.type && resData.type == 'need login') || res.data.value.code == 409) {
-                    // 需要重新登录
-                    const userInfo = useUserInfo()
-                    userInfo.removeToken()
-
-                    newRouteName += 'Login'
-                }
-
-                if (route.name != newRouteName) {
-                    ElNotification({ type: 'error', message: res.data.value.msg })
-                    navigateTo({ name: newRouteName })
-                }
-
-                requestStatus.requestInterrupt = true
-            }
-        } else if (requestConfigData.config.showSuccessMessage && res.data.value?.code == 1) {
-            ElNotification({
-                message: res.data.value.msg ? res.data.value.msg : i18n.global.t('request.Operation successful'),
-                type: 'success',
-            })
+        if (res.data.value) {
+            onResponseInterceptor(res.data.value, requestConfigData)
         }
 
         return Promise.resolve(res)
+    }
+
+    /**
+     * 网络请求（使用 $fetch 实现，并配置了请求参数）
+     */
+    static $fetch<DataT = any>(options: NitroFetchOptions, config: Partial<FetchConfig> = {}, loading: LoadingOptions = {}) {
+        const requestConfigData = requestConfig(options, config, loading)
+
+        // 响应拦截
+        requestConfigData.options.onResponse = ({ response }) => {
+            if (response._data) {
+                onResponseInterceptor(response._data, requestConfigData)
+            }
+        }
+
+        return $fetch<ApiResponse<DataT>>(requestConfigData.options.url ? requestConfigData.options.url : '', requestConfigData.options)
     }
 }
 
@@ -90,7 +77,11 @@ export class Http {
  * @param config 请求配置，请看类型定义
  * @param loading loading 配置，config 内开启 loading 有效
  */
-export const requestConfig = <DataT = any>(options: FetchOptions<DataT> = {}, config: Partial<FetchConfig> = {}, loading: LoadingOptions = {}) => {
+export const requestConfig = <OptionsType extends NitroFetchOptions | FetchOptions>(
+    options: OptionsType,
+    config: Partial<FetchConfig> = {},
+    loading: LoadingOptions = {}
+) => {
     const userInfo = useUserInfo()
     const runtimeConfig = useRuntimeConfig()
     config = Object.assign(
@@ -148,6 +139,45 @@ export const requestConfig = <DataT = any>(options: FetchOptions<DataT> = {}, co
     }
 
     return { options, config, loading }
+}
+
+const onResponseInterceptor = (
+    data: ApiResponse,
+    requestConfigData: { options: NitroFetchOptions | FetchOptions; config: Partial<FetchConfig>; loading: LoadingOptions }
+) => {
+    requestConfigData.config.loading && closeLoading(requestConfigData.config) // 关闭loading
+    if (data.code != 1) {
+        // 排除 303 和 409，防止多个错误消息弹出
+        if (requestConfigData.config.showCodeMessage && data.msg && ![303, 409].includes(data.code)) {
+            ElNotification({ type: 'error', message: data.msg })
+        }
+
+        // 多个请求并发的发送时，会触发多次 navigateTo 导致报错，使用 requestInterrupt 做唯一限制
+        if (process.client && !requestStatus.requestInterrupt && data.data && [303, 409].includes(data.code)) {
+            const route = useRoute()
+            let newRouteName = 'user'
+
+            if ((data.data.type && data.data.type == 'need login') || data.code == 409) {
+                // 需要重新登录
+                const userInfo = useUserInfo()
+                userInfo.removeToken()
+
+                newRouteName += 'Login'
+            }
+
+            if (route.name != newRouteName) {
+                ElNotification({ type: 'error', message: data.msg })
+                navigateTo({ name: newRouteName })
+            }
+
+            requestStatus.requestInterrupt = true
+        }
+    } else if (requestConfigData.config.showSuccessMessage && data.code == 1) {
+        ElNotification({
+            message: data.msg ? data.msg : i18n.global.t('request.Operation successful'),
+            type: 'success',
+        })
+    }
 }
 
 /**
