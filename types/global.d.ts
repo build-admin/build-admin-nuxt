@@ -34,4 +34,9 @@ declare global {
      * Http.fetch 的返回值类型
      */
     type HttpFetchResponse<DataT> = Promise<AsyncData<ApiResponse<DataT> | null, FetchError | null>>
+
+    /**
+     * Http.$fetch 的返回值类型
+     */
+    type HttpOFetchResponse<DataT> = Promise<ApiResponse<DataT>>
 }

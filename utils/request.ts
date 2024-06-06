@@ -56,7 +56,11 @@ export class Http {
     /**
      * 网络请求（使用 $fetch 实现，并配置了请求参数）
      */
-    static $fetch<DataT = any>(options: NitroFetchOptions, config: Partial<FetchConfig> = {}, loading: LoadingOptions = {}) {
+    static $fetch<DataT = any>(
+        options: NitroFetchOptions,
+        config: Partial<FetchConfig> = {},
+        loading: LoadingOptions = {}
+    ): HttpOFetchResponse<DataT> {
         const requestConfigData = requestConfig(options, config, loading)
 
         // 响应拦截
