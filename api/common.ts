@@ -61,7 +61,7 @@ export async function initialize(requiredLogin?: boolean) {
  * @param params 请求额外参数
  * @param forceLocal 上传到本地，而不使用云存储
  */
-export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, forceLocal = false): HttpFetchResponse<DataT> {
+export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, forceLocal = false): HttpOFetchResponse<DataT> {
     let errorMsg = ''
     const file = fd.get('file') as UploadRawFile
     const siteConfig = useSiteConfig()
@@ -87,7 +87,7 @@ export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, force
         return uploadExpand(fd, params)
     }
 
-    return Http.fetch({
+    return Http.$fetch({
         url: apiUploadUrl,
         method: 'POST',
         body: fd,
@@ -99,7 +99,7 @@ export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, force
  * 发送短信
  */
 export function sendSms(mobile: string, templateCode: string, extend: anyObj = {}) {
-    return Http.fetch(
+    return Http.$fetch(
         {
             url: apiSendSms,
             method: 'POST',
@@ -119,7 +119,7 @@ export function sendSms(mobile: string, templateCode: string, extend: anyObj = {
  * 发送邮件
  */
 export function sendEms(email: string, event: string, extend: anyObj = {}) {
-    return Http.fetch(
+    return Http.$fetch(
         {
             url: apiSendEms,
             method: 'POST',
@@ -147,7 +147,7 @@ export function buildCaptchaUrl() {
  * @param id 验证码ID
  */
 export function getCaptchaData(id: string) {
-    return Http.fetch({
+    return Http.$fetch({
         url: clickCaptchaUrl,
         method: 'get',
         params: {
@@ -163,7 +163,7 @@ export function getCaptchaData(id: string) {
  * @param unset 验证完成清理验证码数据
  */
 export function checkClickCaptcha(id: string, info: string, unset: boolean) {
-    return Http.fetch(
+    return Http.$fetch(
         {
             url: checkClickCaptchaUrl,
             method: 'post',
@@ -184,7 +184,7 @@ export function checkClickCaptcha(id: string, info: string, unset: boolean) {
  */
 export function userLogout() {
     const userInfo = useUserInfo()
-    return Http.fetch({
+    return Http.$fetch({
         url: '/api/user/logout',
         method: 'POST',
         body: {
@@ -215,7 +215,7 @@ export function getArea(values: number[]) {
     if (values[1]) {
         params.city = values[1]
     }
-    return Http.fetch({
+    return Http.$fetch({
         url: apiAreaUrl,
         method: 'GET',
         params: params,
@@ -226,7 +226,7 @@ export function getArea(values: number[]) {
  * 远程下拉框数据获取
  */
 export function getSelectData(remoteUrl: string, q: string, params: {}) {
-    return Http.fetch({
+    return Http.$fetch({
         url: remoteUrl,
         method: 'get',
         params: Object.assign(params, {

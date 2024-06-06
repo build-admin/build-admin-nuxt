@@ -86,12 +86,12 @@ const state: {
 
 const load = () => {
     state.loading = true
-    getCaptchaData(props.uuid).then(({ data }) => {
-        if (data.value?.code != 1) return
+    getCaptchaData(props.uuid).then((res) => {
+        if (res.code != 1) return
         state.xy = []
         state.tip = ''
         state.loading = false
-        state.captcha = data.value.data
+        state.captcha = res.data
     })
 }
 
@@ -100,8 +100,8 @@ const onRecord = (event: MouseEvent) => {
         state.xy.push(event.offsetX + ',' + event.offsetY)
         if (state.xy.length == state.captcha.text.length) {
             const captchaInfo = [state.xy.join('-'), (event.target as HTMLImageElement).width, (event.target as HTMLImageElement).height].join(';')
-            checkClickCaptcha(props.uuid, captchaInfo, props.unset).then(({ data }) => {
-                if (data.value?.code == 1) {
+            checkClickCaptcha(props.uuid, captchaInfo, props.unset).then((res) => {
+                if (res.code == 1) {
                     state.tip = props.success ? props.success : i18n.global.t('validate.Verification is successful!')
                     setTimeout(() => {
                         props.callback?.(captchaInfo)

@@ -124,16 +124,16 @@ const onElChange = (file: UploadFileExt, files: UploadFiles) => {
     fd = formDataAppend(fd)
     state.uploading++
     fileUpload(fd, { uuid: uuid() }, props.forceLocal)
-        .then(({ data }) => {
-            if (data.value?.code == 1) {
-                file.serverUrl = data.value?.data.file.url
+        .then((res) => {
+            if (res.code == 1) {
+                file.serverUrl = res.data.file.url
                 file.status = 'success'
                 emits('update:modelValue', getAllUrls())
-                typeof state.events['onSuccess'] == 'function' && state.events['onSuccess'](data.value, file, files)
+                typeof state.events['onSuccess'] == 'function' && state.events['onSuccess'](res.data, file, files)
             } else {
                 file.status = 'fail'
                 files.splice(fileIndex, 1)
-                typeof state.events['onError'] == 'function' && state.events['onError'](data.value, file, files)
+                typeof state.events['onError'] == 'function' && state.events['onError'](res.data, file, files)
             }
         })
         .catch((res) => {

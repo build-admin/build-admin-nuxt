@@ -436,11 +436,11 @@ const onLoginSubmit = (captchaInfo: string) => {
     state.loading.login = true
     state.login.captchaInfo = captchaInfo
     checkIn('post', { ...state.login, tab: state.tab.toLocaleLowerCase() })
-        .then(({ data }) => {
-            if (data.value?.code != 1) return
-            userInfo.dataFill(data.value?.data.userInfo)
+        .then((res) => {
+            if (res.code != 1) return
+            userInfo.dataFill(res.data.userInfo)
             if (state.to) return (location.href = state.to)
-            navigateTo({ path: data.value?.data.routePath })
+            navigateTo({ path: res.data.routePath })
         })
         .finally(() => {
             state.loading.login = false
@@ -472,8 +472,8 @@ const sendRegisterCaptcha = (captchaInfo: string) => {
         captchaInfo,
         captchaId: state.login.captchaId,
     })
-        .then(({ data }) => {
-            if (data.value?.code == 1) startTiming(60)
+        .then((res) => {
+            if (res.code == 1) startTiming(60)
         })
         .finally(() => {
             state.sendCaptchaLoading = false
@@ -494,8 +494,8 @@ const sendRetrieveCaptcha = (captchaInfo: string) => {
         captchaInfo,
         captchaId: state.login.captchaId,
     })
-        .then(({ data }) => {
-            if (data.value?.code == 1) startTiming(60)
+        .then((res) => {
+            if (res.code == 1) startTiming(60)
         })
         .finally(() => {
             state.sendCaptchaLoading = false
@@ -508,10 +508,10 @@ const onRegisterSubmit = (registerRef: FormInstance | undefined = undefined) => 
         if (!valid) return
         state.loading.register = true
         checkIn('post', { ...state.register, tab: state.tab.toLocaleLowerCase() })
-            .then(({ data }) => {
-                if (data.value?.code != 1) return
-                userInfo.dataFill(data.value?.data.userInfo)
-                navigateTo({ path: data.value?.data.routePath })
+            .then((res) => {
+                if (res.code != 1) return
+                userInfo.dataFill(res.data.userInfo)
+                navigateTo({ path: res.data.routePath })
             })
             .finally(() => {
                 state.loading.register = false
@@ -525,8 +525,8 @@ const onSubmitRetrieve = (retrieveRef: FormInstance | undefined = undefined) => 
         if (valid) {
             state.loading.retrievePassword = true
             retrievePassword({ ...state.retrievePasswordForm })
-                .then(({ data }) => {
-                    if (data.value?.code == 1) {
+                .then((res) => {
+                    if (res.code == 1) {
                         state.showRetrievePasswordDialog = false
                         endTiming()
                         onResetForm(retrieveRef)
@@ -567,10 +567,10 @@ const dialogSize = () => {
     state.retrieveDialogWidth = width
 }
 
-checkIn('get').then(({ data }) => {
-    if (data.value?.code != 1) return
-    state.accountVerificationType = data.value?.data.accountVerificationType
-    state.retrievePasswordForm.type = data.value?.data.accountVerificationType.length > 0 ? data.value?.data.accountVerificationType[0] : ''
+checkIn('get').then((res) => {
+    if (res.code != 1) return
+    state.accountVerificationType = res.data.accountVerificationType
+    state.retrievePasswordForm.type = res.data.accountVerificationType.length > 0 ? res.data.accountVerificationType[0] : ''
 })
 
 onMounted(() => {

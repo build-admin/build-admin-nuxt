@@ -51,8 +51,8 @@ export const useUserInfo = defineStore('userInfo', {
             return icon
         },
         logout() {
-            userLogout().then(({ data }) => {
-                if (data.value?.code == 1) {
+            userLogout().then((res) => {
+                if (res.code == 1) {
                     this.removeToken()
                     const router = useRouter()
                     router.go(0)

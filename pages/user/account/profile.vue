@@ -391,8 +391,8 @@ const sendVerificationCaptcha = (captchaInfo: string) => {
         captchaId: state.dialog.captchaId,
         captchaInfo,
     })
-        .then(({ data }) => {
-            if (data.value?.code == 1) startTiming(60)
+        .then((res) => {
+            if (res.code == 1) startTiming(60)
         })
         .finally(() => {
             state.dialog.sendCaptchaLoading = false
@@ -413,8 +413,8 @@ const sendBindCaptcha = (captchaInfo: string) => {
         captchaId: state.dialog.captchaId,
         captchaInfo,
     })
-        .then(({ data }) => {
-            if (data.value?.code == 1) startTiming(60)
+        .then((res) => {
+            if (res.code == 1) startTiming(60)
         })
         .finally(() => {
             state.dialog.sendCaptchaLoading = false
@@ -430,13 +430,13 @@ const onSubmitVerification = (formEl: FormInstance | undefined) => {
                 type: state.dialog.type,
                 captcha: state.dialog.verification.form.captcha,
             })
-                .then(({ data }) => {
-                    if (data.value?.code != 1) return
+                .then((res) => {
+                    if (res.code != 1) return
                     endTiming()
                     state.dialog.bind.show = true
-                    state.dialog.type = data.value?.data.type
+                    state.dialog.type = res.data.type
                     state.dialog.verification.show = false
-                    state.dialog.verification.accountVerificationToken = data.value?.data.accountVerificationToken
+                    state.dialog.verification.accountVerificationToken = res.data.accountVerificationToken
                 })
                 .finally(() => {
                     state.dialog.submitLoading = false
@@ -455,8 +455,8 @@ const onSubmitBind = (formEl: FormInstance | undefined) => {
                 accountVerificationToken: state.dialog.verification.accountVerificationToken,
                 ...state.dialog.bind.form,
             })
-                .then(({ data }) => {
-                    if (data.value?.code == 1) {
+                .then((res) => {
+                    if (res.code == 1) {
                         endTiming()
                         state.dialog.bind.show = false
                         userInfo[state.dialog.type] = state.dialog.bind.form[state.dialog.type]

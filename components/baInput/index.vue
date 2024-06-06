@@ -334,17 +334,17 @@ export default defineComponent({
                     // 初始化请求-s
                     let key = isArray(props.modelValue) ? props.modelValue.join(',') : ''
                     lastLazyValue.key = key ? key : 'init'
-                    await getArea([]).then(({ data }) => {
-                        if (data.value?.code != 1) return
+                    await getArea([]).then((res) => {
+                        if (res.code != 1) return
                         let toStr = false
                         if (props.modelValue && typeof (props.modelValue as anyObj)[0] === 'string') {
                             toStr = true
                         }
-                        for (const key in data.value?.data) {
+                        for (const key in res.data) {
                             if (toStr) {
-                                data.value!.data[key].value = data.value!.data[key].value.toString()
+                                res.data[key].value = res.data[key].value.toString()
                             }
-                            lastLazyValue.nodes.push(data.value!.data[key])
+                            lastLazyValue.nodes.push(res.data[key])
                         }
                         setNodes(0, lastLazyValue.key, lastLazyValue.nodes)
                     })
@@ -379,18 +379,18 @@ export default defineComponent({
 
                                         let nodes: Node[] = []
                                         lastLazyValue.key = key
-                                        lastLazyValue.currentRequest = getArea(pathValues).then(({ data }) => {
-                                            if (data.value?.code != 1) return
+                                        lastLazyValue.currentRequest = getArea(pathValues).then((res) => {
+                                            if (res.code != 1) return
                                             let toStr = false
                                             if (props.modelValue && typeof (props.modelValue as anyObj)[0] === 'string') {
                                                 toStr = true
                                             }
-                                            for (const key in data.value?.data) {
+                                            for (const key in res.data) {
                                                 if (toStr) {
-                                                    data.value!.data[key].value = data.value!.data[key].value.toString()
+                                                    res.data[key].value = res.data[key].value.toString()
                                                 }
-                                                data.value!.data[key].leaf = level >= maxLevel
-                                                nodes.push(data.value!.data[key])
+                                                res.data[key].leaf = level >= maxLevel
+                                                nodes.push(res.data[key])
                                             }
                                             lastLazyValue.nodes = nodes
                                             lastLazyValue.currentRequest = null

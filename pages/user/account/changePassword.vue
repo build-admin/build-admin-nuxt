@@ -94,8 +94,8 @@ const onSubmit = (formEl: FormInstance | undefined) => {
         if (valid) {
             state.formSubmitLoading = true
             changePassword({ ...state.form })
-                .then(({ data }) => {
-                    if (data.value?.code == 1) {
+                .then((res) => {
+                    if (res.code == 1) {
                         userInfo.logout()
                     }
                 })
