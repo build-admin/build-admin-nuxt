@@ -33,6 +33,7 @@
         "vue-i18n": "9.13.1"
     },
     "devDependencies": {
+        "@opentelemetry/api": "1.8.0",
         "@types/node": "20.14.1",
         "@types/nprogress": "0.2.3",
         "@typescript-eslint/eslint-plugin": "7.12.0",
