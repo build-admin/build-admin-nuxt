@@ -75,7 +75,7 @@ export function isExternal(path: string): boolean {
  */
 export const isMobile = () => {
     const event = useRequestEvent()
-    const userAgent = process.client ? navigator.userAgent : event.node.req.headers['user-agent']
+    const userAgent = process.client ? navigator.userAgent : event?.node.req.headers['user-agent']
     if (!userAgent) return false
     return !!userAgent.match(
         /android|webos|ip(hone|ad|od)|opera (mini|mobi|tablet)|iemobile|windows.+(phone|touch)|mobile|fennec|kindle (Fire)|Silk|maemo|blackberry|playbook|bb10\; (touch|kbd)|Symbian(OS)|Ubuntu Touch/i
