@@ -31,4 +31,5 @@ export default {
     Number: '数字',
     Integer: '整数',
     Float: '浮点数',
+    'No data': '无数据',
 }

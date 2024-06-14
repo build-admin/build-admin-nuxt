@@ -31,4 +31,5 @@ export default {
     Number: 'Number',
     Integer: 'Integer',
     Float: 'Float',
+    'No data': 'No data',
 }

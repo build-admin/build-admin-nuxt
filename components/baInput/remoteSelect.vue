@@ -1,64 +1,90 @@
 <template>
-    <el-select
-        ref="selectRef"
-        @focus="onFocus"
-        class="remote-select"
-        :loading="state.loading || state.accidentBlur"
-        :filterable="true"
-        :remote="true"
-        clearable
-        remote-show-suffix
-        :remote-method="onLogKeyword"
-        v-model="state.value"
-        @change="onChangeSelect"
-        :multiple="multiple"
-        :key="state.selectKey"
-        @clear="onClear"
-        @visible-change="onVisibleChange"
-    >
-        <el-option
-            class="remote-select-option"
-            v-for="item in state.options"
-            :label="item[field]"
-            :value="item[state.primaryKey].toString()"
-            :key="item[state.primaryKey]"
+    <div class="w100">
+        <!-- el-select 的远程下拉只在有搜索词时，才会加载数据（显示出 option 列表） -->
+        <!-- 使用 el-popover 在无数据/无搜索词时，显示一个无数据的提醒 -->
+        <el-popover
+            width="100%"
+            placement="bottom"
+            popper-class="remote-select-popper"
+            :visible="state.focusStatus && !state.loading && !state.keyword && !state.options.length"
+            :teleported="false"
+            :content="$t('utils.No data')"
+            :hide-after="0"
         >
-            <el-tooltip placement="right" effect="light" v-if="!isEmpty(tooltipParams)">
-                <template #content>
-                    <p v-for="(tooltipParam, key) in tooltipParams" :key="key">{{ key }}: {{ item[tooltipParam] }}</p>
-                </template>
-                <div>{{ item[field] }}</div>
-            </el-tooltip>
-        </el-option>
-        <el-pagination
-            v-if="state.total"
-            :currentPage="state.currentPage"
-            :page-size="state.pageSize"
-            class="select-pagination"
-            layout="->, prev, next"
-            :total="state.total"
-            @current-change="onSelectCurrentPageChange"
-        />
-    </el-select>
+            <template #reference>
+                <el-select
+                    ref="selectRef"
+                    class="w100"
+                    remote
+                    clearable
+                    filterable
+                    automatic-dropdown
+                    remote-show-suffix
+                    v-model="state.value"
+                    :loading="state.loading"
+                    :disabled="props.disabled || !state.initializeFlag"
+                    @blur="onBlur"
+                    @focus="onFocus"
+                    @clear="onClear"
+                    @change="onChangeSelect"
+                    @keydown.esc.capture="onKeyDownEsc"
+                    :remote-method="onRemoteMethod"
+                    v-bind="$attrs"
+                >
+                    <el-option
+                        class="remote-select-option"
+                        v-for="item in state.options"
+                        :label="item[field]"
+                        :value="item[state.primaryKey].toString()"
+                        :key="item[state.primaryKey]"
+                    >
+                        <el-tooltip placement="right" effect="light" v-if="!isEmpty(tooltipParams)">
+                            <template #content>
+                                <p v-for="(tooltipParam, key) in tooltipParams" :key="key">{{ key }}: {{ item[tooltipParam] }}</p>
+                            </template>
+                            <div>{{ item[field] }}</div>
+                        </el-tooltip>
+                    </el-option>
+                    <template v-if="state.total && props.pagination" #footer>
+                        <el-pagination
+                            :currentPage="state.currentPage"
+                            :page-size="state.pageSize"
+                            :pager-count="5"
+                            class="select-pagination"
+                            :layout="props.paginationLayout"
+                            :total="state.total"
+                            @current-change="onSelectCurrentPageChange"
+                            :small="memberCenter.state.shrink"
+                        />
+                    </template>
+                </el-select>
+            </template>
+        </el-popover>
+    </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { ElSelect } from 'element-plus'
+import { debounce, isEmpty } from 'lodash-es'
 import { getSelectData } from '~/api/common'
-import { isEmpty } from 'lodash-es'
 
+const memberCenter = useMemberCenter()
 const selectRef = ref<InstanceType<typeof ElSelect> | undefined>()
-type valType = string | number | string[] | number[]
+type ElSelectProps = Partial<InstanceType<typeof ElSelect>['$props']>
+type valueTypes = string | number | string[] | number[]
 
-interface Props {
+interface Props extends /* @vue-ignore */ ElSelectProps {
     pk?: string
     field?: string
     params?: anyObj
-    multiple?: boolean
     remoteUrl: string
-    modelValue: valType
-    labelFormatter?: (optionData: anyObj, optionKey: string) => string
+    modelValue: valueTypes
+    pagination?: boolean
     tooltipParams?: anyObj
+    paginationLayout?: string
+    labelFormatter?: (optionData: anyObj, optionKey: string) => string
+    // 按下 ESC 键时直接使下拉框脱焦（默认是清理搜索词或关闭下拉面板，并且不会脱焦，造成 dialog 的按下 ESC 关闭失效）
+    escBlur?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
     pk: 'id',
@@ -68,14 +94,14 @@ const props = withDefaults(defineProps<Props>(), {
     },
     remoteUrl: '',
     modelValue: '',
-    multiple: false,
     tooltipParams: () => {
         return {}
     },
+    pagination: true,
+    paginationLayout: 'total, ->, prev, pager, next',
+    disabled: false,
+    escBlur: true,
 })
-
-let io: null | IntersectionObserver = null
-const instance = getCurrentInstance()
 
 const state: {
     // 主表字段名(不带表别名)
@@ -87,10 +113,10 @@ const state: {
     pageSize: number
     params: anyObj
     keyword: string
-    value: valType
-    selectKey: string
-    initializeData: boolean
-    accidentBlur: boolean
+    value: valueTypes
+    initializeFlag: boolean
+    optionValidityFlag: boolean
+    focusStatus: boolean
 } = reactive({
     primaryKey: props.pk,
     options: [],
@@ -101,26 +127,32 @@ const state: {
     params: props.params,
     keyword: '',
     value: props.modelValue ? props.modelValue : '',
-    selectKey: uuid(),
-    initializeData: false,
-    accidentBlur: false,
+    initializeFlag: false,
+    optionValidityFlag: false,
+    focusStatus: false,
 })
 
+let io: IntersectionObserver | null = null
+const instance = getCurrentInstance()
+
 const emits = defineEmits<{
-    (e: 'update:modelValue', value: valType): void
+    (e: 'update:modelValue', value: valueTypes): void
     (e: 'row', value: any): void
 }>()
 
-const onChangeSelect = (val: valType) => {
+const onChangeSelect = (val: valueTypes) => {
+    if (!val) {
+        state.value = val = props.multiple ? [] : ''
+    }
     emits('update:modelValue', val)
     if (typeof instance?.vnode.props?.onRow == 'function') {
         if (typeof val == 'number' || typeof val == 'string') {
-            const dataKey = getArrayKey(state.options, state.primaryKey, val.toString())
+            const dataKey = getArrayKey(state.options, state.primaryKey, '' + val)
             emits('row', dataKey ? toRaw(state.options[dataKey]) : {})
         } else {
             const valueArr = []
             for (const key in val) {
-                let dataKey = getArrayKey(state.options, state.primaryKey, val[key].toString())
+                let dataKey = getArrayKey(state.options, state.primaryKey, '' + val[key])
                 if (dataKey) valueArr.push(toRaw(state.options[dataKey]))
             }
             emits('row', valueArr)
@@ -128,72 +160,66 @@ const onChangeSelect = (val: valType) => {
     }
 }
 
-const onVisibleChange = (val: boolean) => {
-    // 保持面板状态和焦点状态一致
-    if (!val) {
-        nextTick(() => {
-            selectRef.value?.blur()
-        })
+const onKeyDownEsc = (e: KeyboardEvent) => {
+    if (props.escBlur) {
+        e.stopPropagation()
+        selectRef.value?.blur()
+
+        // 以上的 blur 与预期不符，额外找到内部的 input 再执行一次（element-plus 2.7.4）
+        selectRef.value?.inputRef?.blur()
     }
 }
 
 const onFocus = () => {
-    if (selectRef.value?.query != state.keyword) {
-        state.keyword = ''
-        state.initializeData = false
-        // el-select 自动清理搜索词会产生意外的脱焦
-        state.accidentBlur = true
-    }
-    if (!state.initializeData) {
+    state.focusStatus = true
+    if (!state.optionValidityFlag) {
         getData()
     }
 }
 
 const onClear = () => {
-    state.keyword = ''
-    state.initializeData = false
+    // 点击清理按钮后，内部 input 呈聚焦状态，但选项面板不会展开，特此处理（element-plus 2.7.4）
+    nextTick(() => {
+        selectRef.value?.focus()
+
+        // 以上的 focus 任然与预期不符，直接触发一次点击事件
+        selectRef.value?.$el.click()
+    })
 }
 
-const onLogKeyword = (q: string) => {
+const onBlur = () => {
+    state.keyword = ''
+    state.focusStatus = false
+}
+
+const onRemoteMethod = debounce((q: string) => {
     if (state.keyword != q) {
         state.keyword = q
-        debounce(getData, 500)()
+        state.currentPage = 1
+        getData()
     }
-}
+}, 300)
 
-const getData = (initValue: valType = '') => {
+const getData = (initValue: valueTypes = '') => {
     state.loading = true
     state.params.page = state.currentPage
     state.params.initKey = props.pk
     state.params.initValue = initValue
     getSelectData(props.remoteUrl, state.keyword, { ...state.params })
         .then((res) => {
-            if (res.code != 1) return
-            let initializeData = true
             let opts = res.data.options ? res.data.options : res.data.list
-            if (typeof props.labelFormatter == 'function') {
+            if (typeof props.labelFormatter === 'function') {
                 for (const key in opts) {
                     opts[key][props.field] = props.labelFormatter(opts[key], key)
                 }
             }
             state.options = opts
             state.total = res.data.total ?? 0
-            if (initValue) {
-                // 重新渲染组件,确保在赋值前,opts已加载到-兼容 modelValue 更新
-                state.selectKey = uuid()
-                initializeData = false
-            }
-            state.initializeData = initializeData
-            if (state.accidentBlur) {
-                nextTick(() => {
-                    const inputEl = selectRef.value?.$el.querySelector('.el-select__tags .el-select__input')
-                    inputEl && inputEl.focus()
-                    state.accidentBlur = false
-                })
-            }
+            state.optionValidityFlag = state.keyword || (typeof initValue === 'object' ? !isEmpty(initValue) : initValue) ? false : true
         })
         .finally(() => {
             state.loading = false
+            state.initializeFlag = true
         })
 }
 
@@ -202,26 +228,31 @@ const onSelectCurrentPageChange = (val: number) => {
     getData()
 }
 
+/**
+ * 初始化默认值
+ */
 const initDefaultValue = () => {
     if (state.value) {
-        // number[]转string[]确保默认值能够选中
+        // number[] 转 string[] 确保默认值能够选中
         if (typeof state.value === 'object') {
-            for (const key in state.value as string[]) {
-                state.value[key] = state.value[key].toString()
+            for (const key in state.value) {
+                state.value[key] = '' + state.value[key]
             }
         } else if (typeof state.value === 'number') {
-            state.value = state.value.toString()
+            state.value = '' + state.value
         }
-        getData(state.value)
     }
+
+    getData(state.value)
 }
 
-onMounted(async () => {
-    if (props.pk.indexOf('.') > 0) {
-        let pk = props.pk.split('.')
-        state.primaryKey = pk[pk.length - 1]
-    }
-    await nextTick()
+onMounted(() => {
+    // 避免两个远程下拉组件共存时，可能带来的重复请求自动取消
+    state.params.uuid = shortUuid()
+
+    // 去除主键中的表名
+    let pkArr = props.pk.split('.')
+    state.primaryKey = pkArr[pkArr.length - 1]
     initDefaultValue()
 
     if (process.client) {
@@ -232,7 +263,9 @@ onMounted(async () => {
                         if (!entries[key].isIntersecting) selectRef.value?.blur()
                     }
                 })
-                io.observe(selectRef.value?.$el)
+                if (selectRef.value?.$el instanceof Element) {
+                    io.observe(selectRef.value.$el)
+                }
             }
         }, 500)
     }
@@ -245,6 +278,10 @@ onUnmounted(() => {
 watch(
     () => props.modelValue,
     (newVal) => {
+        /**
+         * 1. 防止 number 到 string 的类型转换触发默认值多次初始化
+         * 2. 排除默认值的 null、undefined 等假值
+         */
         if (String(state.value) != String(newVal)) {
             state.value = newVal ? newVal : ''
             initDefaultValue()
@@ -252,7 +289,7 @@ watch(
     }
 )
 
-const getSelectRef = () => {
+const getRef = () => {
     return selectRef.value
 }
 
@@ -267,13 +304,15 @@ const blur = () => {
 defineExpose({
     blur,
     focus,
-    getSelectRef,
+    getRef,
 })
 </script>
 
 <style scoped lang="scss">
-.remote-select {
-    width: 100%;
+:deep(.remote-select-popper) {
+    color: var(--el-text-color-secondary);
+    font-size: 12px;
+    text-align: center;
 }
 .remote-select-option {
     white-space: pre;
