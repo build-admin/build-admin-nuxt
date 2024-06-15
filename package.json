@@ -29,6 +29,7 @@
         "nuxt": "3.12.1",
         "nuxt-icons": "3.2.1",
         "pinia": "2.1.7",
+        "sortablejs": "1.15.2",
         "vue": "3.4.29",
         "vue-i18n": "9.13.1"
     },
@@ -36,6 +37,7 @@
         "@opentelemetry/api": "1.8.0",
         "@types/node": "20.14.2",
         "@types/nprogress": "0.2.3",
+        "@types/sortablejs": "1.15.8",
         "@typescript-eslint/eslint-plugin": "7.13.0",
         "@typescript-eslint/parser": "7.13.0",
         "eslint": "8.56.0",

@@ -142,6 +142,7 @@ export interface InputAttr {
     autoUpload?: boolean
     limit?: number
     returnFullUrl?: boolean
+    hideImagePlusOnOverLimit?: boolean
     // editor属性
     height?: string
     mode?: string

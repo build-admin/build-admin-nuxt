@@ -184,12 +184,9 @@ export default defineComponent({
             return () =>
                 createVNode(resolveComponent('BaInputUpload'), {
                     type: props.type,
-                    data: props.attr ? props.attr.data : {},
                     modelValue: props.modelValue,
                     'onUpdate:modelValue': onValueUpdate,
-                    returnFullUrl: props.attr ? props.attr.returnFullUrl || props.attr['return-full-url'] : false,
-                    attr: props.attr,
-                    forceLocal: props.attr ? props.attr.forceLocal || props.attr['force-local'] : false,
+                    ...props.attr,
                 })
         }
 
