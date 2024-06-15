@@ -25,7 +25,7 @@ const state = reactive({
 
 const mixins: Record<string, Component> = {}
 const getComponents = async () => {
-    if (process.server) return
+    if (import.meta.server) return
     const mixinComponents = import.meta.glob('~/composables/mixins/editor/**.vue')
     for (const key in mixinComponents) {
         const res: any = await mixinComponents[key]()

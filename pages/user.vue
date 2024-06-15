@@ -43,7 +43,7 @@ const jumpFirstMenu = () => {
 /**
  * 在中间件中处理时，jumpFirstMenu 后将导致部分元素水合失败
  */
-if (userInfo.isLogin() && process.client && route.name == 'user') {
+if (userInfo.isLogin() && import.meta.client && route.name == 'user') {
     jumpFirstMenu()
 }
 

@@ -157,7 +157,7 @@ const onResponseInterceptor = (
         }
 
         // 多个请求并发的发送时，会触发多次 navigateTo 导致报错，使用 requestInterrupt 做唯一限制
-        if (process.client && !requestStatus.requestInterrupt && data.data && [303, 409].includes(data.code)) {
+        if (import.meta.client && !requestStatus.requestInterrupt && data.data && [303, 409].includes(data.code)) {
             const route = useRoute()
             let newRouteName = 'user'
 

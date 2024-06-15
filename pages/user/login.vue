@@ -554,7 +554,7 @@ const endTiming = () => {
 }
 
 const dialogSize = () => {
-    if (process.server) return
+    if (import.meta.server) return
     let clientWidth = document.documentElement.clientWidth
     let width = 36
     if (clientWidth <= 790) {

@@ -255,7 +255,7 @@ onMounted(() => {
     state.primaryKey = pkArr[pkArr.length - 1]
     initDefaultValue()
 
-    if (process.client) {
+    if (import.meta.client) {
         setTimeout(() => {
             if (window?.IntersectionObserver) {
                 io = new IntersectionObserver((entries) => {

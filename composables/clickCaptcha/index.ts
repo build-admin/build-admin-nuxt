@@ -19,7 +19,7 @@ interface ClickCaptchaOptions {
  * @param options
  */
 const clickCaptcha = (uuid: string, callback?: (captchaInfo: string) => void, options: ClickCaptchaOptions = {}) => {
-    if (!process.client) return
+    if (!import.meta.client) return
     let vnode: VNode | null = createVNode(clickCaptchaConstructor, {
         uuid,
         callback,

@@ -24,7 +24,7 @@ export function setLanguage(locale: Locales) {
      * 1、element plus的语言包不能动态切换
      * 2、哪怕在语言切换时做了切换前加载新语言的翻译，浏览器控制台依然可能报警告
      */
-    if (process.client) {
+    if (import.meta.client) {
         location.reload()
     }
 }

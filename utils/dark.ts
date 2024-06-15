@@ -12,7 +12,7 @@ export function setDark(val: boolean) {
 }
 
 export function updateHtmlDarkClass(val: boolean) {
-    if (process.server) return
+    if (import.meta.server) return
     const htmlEl = document.getElementsByTagName('html')[0]
     htmlEl.setAttribute('class', val ? 'dark' : '')
 }
@@ -21,4 +21,4 @@ export function initDark() {
     updateHtmlDarkClass(getDark())
 }
 
-if (process.client) initDark()
+if (import.meta.client) initDark()
