@@ -42,7 +42,9 @@ export async function initialize(requiredLogin?: boolean) {
         memberCenter.setStatus(data.value.data.openMemberCenter)
         registerMenus(data.value.data.rules, data.value.data.menus)
 
-        if (!isEmpty(data.value.data.userInfo)) {
+        if (isEmpty(data.value.data.userInfo)) {
+            userInfo.removeToken()
+        } else {
             data.value.data.userInfo.refresh_token = userInfo.getToken('refresh')
             userInfo.dataFill(data.value.data.userInfo)
 
