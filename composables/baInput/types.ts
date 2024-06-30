@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'vue'
-import type { FormItemRule } from 'element-plus'
+import type { ElTooltipProps, FormItemProps } from 'element-plus'
 
 // 支持的输入框类型
 export const inputTypes = [
@@ -180,17 +180,12 @@ export interface InputAttr {
     [key: string]: any
 }
 
-export interface FormItemAttr {
+export interface FormItemAttr extends Partial<Writeable<FormItemProps>> {
     id?: string
     class?: string
-    prop?: string | string[]
-    labelWidth?: string | number
-    required?: boolean
-    rules?: FormItemRule | FormItemRule[]
-    error?: string
-    showMessage?: boolean
-    inlineMessage?: boolean
-    size?: 'large' | 'default' | 'small'
     style?: CSSProperties
+    // 块级输入帮助信息
     blockHelp?: string
+    // 输入提示信息（使用 el-tooltip 渲染）
+    tip?: string | Partial<ElTooltipProps>
 }

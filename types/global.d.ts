@@ -39,4 +39,9 @@ declare global {
      * Http.$fetch 的返回值类型
      */
     type HttpOFetchResponse<DataT> = Promise<ApiResponse<DataT>>
+
+    /**
+     * 只读转可写
+     */
+    type Writeable<T> = { -readonly [P in keyof T]: T[P] }
 }
