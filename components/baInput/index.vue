@@ -207,11 +207,13 @@ export default defineComponent({
         // remoteSelect remoteSelects
         const remoteSelect = () => {
             return () =>
-                createVNode(resolveComponent('BaInputRemoteSelect'), {
-                    modelValue: props.modelValue,
-                    'onUpdate:modelValue': onValueUpdate,
-                    multiple: props.type == 'remoteSelect' ? false : true,
-                    ...attrs.value,
+                createVNode(resolveComponent('client-only'), {}, () => {
+                    return createVNode(resolveComponent('BaInputRemoteSelect'), {
+                        modelValue: props.modelValue,
+                        'onUpdate:modelValue': onValueUpdate,
+                        multiple: props.type == 'remoteSelect' ? false : true,
+                        ...attrs.value,
+                    })
                 })
         }
 
