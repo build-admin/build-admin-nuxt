@@ -31,12 +31,8 @@ export const inputTypes = [
 export type ModelValueTypes = string | number | boolean | object
 
 export interface InputData {
-    // 标题
-    title?: string
     // 内容,比如radio的选项列表数据,格式为对象或者数组：{ a: '选项1', b: '选项2' } or [{value: 1, label: 2, disabled: false}, {...}]
     content?: any
-    // 提示信息
-    tip?: string
     // 需要生成子级元素时,子级元素属性(比如radio)
     childrenAttr?: anyObj
     // 城市选择器等级,1=省,2=市,3=区
@@ -47,7 +43,7 @@ export interface InputData {
  * input可用属性,用于代码提示,渲染不同输入组件时,需要的属性是不一样的
  * https://element-plus.org/zh-CN/component/input.html#input-属性
  */
-export interface InputAttr {
+export interface InputAttr extends InputData {
     id?: string
     name?: string
     type?: string
@@ -76,6 +72,8 @@ export interface InputAttr {
     tabindex?: string | number
     validateEvent?: boolean
     inputStyle?: anyObj
+    activeValue?: string | number | boolean
+    inactiveValue?: string | number | boolean
     // DateTimePicker属性
     editable?: boolean
     startPlaceholder?: string
@@ -121,6 +119,7 @@ export interface InputAttr {
     field?: string
     remoteUrl?: string
     tooltipParams?: anyObj
+    escBlur?: boolean
     // 图标选择器属性
     showIconName?: boolean
     placement?: string
@@ -142,6 +141,7 @@ export interface InputAttr {
     autoUpload?: boolean
     limit?: number
     returnFullUrl?: boolean
+    forceLocal?: boolean
     hideImagePlusOnOverLimit?: boolean
     // editor属性
     height?: string
@@ -156,8 +156,13 @@ export interface InputAttr {
     theme?: 'light' | 'dark'
     toolbarsExclude?: string[]
     fileForceLocal?: boolean
+    // array组件属性
+    keyTitle?: string
+    valueTitle?: string
     // 返回数据类型
     dataType?: string
+    // 是否渲染为 button（radio 和 checkbox）
+    button?: boolean
     // 事件
     onPreview?: Function
     onRemove?: Function
@@ -177,6 +182,7 @@ export interface InputAttr {
     onCalendarChange?: Function
     onPanelChange?: Function
     onActiveChange?: Function
+    onRow?: Function
     [key: string]: any
 }
 

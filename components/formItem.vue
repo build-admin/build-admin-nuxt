@@ -1,15 +1,13 @@
 <script lang="ts">
-import { createVNode, resolveComponent } from 'vue'
+import { formItemProps } from 'element-plus'
+import type { PropType, VNode } from 'vue'
+import { createVNode } from 'vue'
+import type { FormItemAttr, InputAttr, InputData, ModelValueTypes } from '~/composables/baInput/types'
 import { inputTypes } from '~/composables/baInput/types'
-import type { modelValueTypes, InputAttr, InputData, FormItemAttr } from '~/composables/baInput/types'
 
 export default defineComponent({
     name: 'formItem',
     props: {
-        // el-form-item 的 label
-        label: {
-            type: String,
-        },
         // 输入框类型,支持的输入框见 inputTypes
         type: {
             type: String,
@@ -27,46 +25,60 @@ export default defineComponent({
             type: Object as PropType<InputAttr>,
             default: () => {},
         },
-        // el-form-item的附加属性
+        blockHelp: {
+            type: String,
+            default: '',
+        },
+        tip: [String, Object],
+        // el-form-item 的附加属性（还可以直接通过当前组件的 props 传递）
         attr: {
             type: Object as PropType<FormItemAttr>,
             default: () => {},
         },
-        // 额外数据,radio、checkbox的选项等数据
+        // 额外数据（已和 props.inputAttr 合并，还可以通过它进行传递）
         data: {
             type: Object as PropType<InputData>,
             default: () => {},
         },
-        prop: {
-            type: String,
-            default: '',
-        },
+        // 内部输入框的 placeholder（相当于 props.inputAttr.placeholder 的别名）
         placeholder: {
             type: String,
             default: '',
         },
+        ...formItemProps,
     },
     emits: ['update:modelValue'],
     setup(props, { emit }) {
-        const onValueUpdate = (value: modelValueTypes) => {
+        // 通过 props 和 props.attr 两种方式传递的属性汇总为 attrs
+        const excludeProps = ['type', 'modelValue', 'inputAttr', 'attr', 'data', 'placeholder']
+        const attrs = computed(() => {
+            const newAttrs = props.attr || {}
+            for (const key in props) {
+                const propValue: any = props[key as keyof typeof props]
+                if (!excludeProps.includes(key) && (propValue || propValue === false)) {
+                    newAttrs[key as keyof typeof props.attr] = propValue
+                }
+            }
+            return newAttrs
+        })
+
+        const onValueUpdate = (value: ModelValueTypes) => {
             emit('update:modelValue', value)
         }
 
-        const blockHelp = computed(() => {
-            return props.attr && props.attr['blockHelp'] ? props.attr['blockHelp'] : ''
-        })
+        // el-form-item 的插槽
+        const slots: { [key: string]: () => VNode | VNode[] } = {}
 
-        // el-form-item 的默认插槽,生成一个baInput
-        const defaultSlot = () => {
+        // default 插槽
+        slots.default = () => {
             let inputNode = createVNode(resolveComponent('BaInput'), {
                 type: props.type,
-                attr: { placeholder: props.placeholder, ...props.inputAttr },
-                data: props.data,
+                attr: { placeholder: props.placeholder, ...props.inputAttr, ...props.data },
                 modelValue: props.modelValue,
                 'onUpdate:modelValue': onValueUpdate,
             })
 
-            if (blockHelp.value) {
+            if (attrs.value.blockHelp) {
                 return [
                     inputNode,
                     createVNode(
@@ -74,98 +86,67 @@ export default defineComponent({
                         {
                             class: 'block-help',
                         },
-                        blockHelp.value
+                        attrs.value.blockHelp
                     ),
                 ]
             }
             return inputNode
         }
 
-        // 不带独立label输入框
-        const noNeedLabelSlot = [
-            'string',
-            'password',
-            'number',
-            'textarea',
-            'datetime',
-            'year',
-            'date',
-            'time',
-            'select',
-            'selects',
-            'remoteSelect',
-            'remoteSelects',
-            'city',
-            'icon',
-            'color',
-        ]
-
-        // 需要独立label的输入框
-        const needLabelSlot = ['radio', 'checkbox', 'switch', 'array', 'image', 'images', 'file', 'files', 'editor']
-
-        if (noNeedLabelSlot.includes(props.type)) {
-            return () =>
-                createVNode(
-                    resolveComponent('el-form-item'),
-                    {
-                        prop: props.prop,
-                        ...props.attr,
-                        label: props.label,
-                    },
-                    {
-                        default: defaultSlot,
-                    }
-                )
-        } else if (needLabelSlot.includes(props.type)) {
-            // 带独立label的输入框
-            let title = props.data && props.data.title ? props.data.title : props.label
-            const labelSlot = () => {
-                return [
-                    createVNode(
-                        'div',
-                        {
-                            class: 'ba-form-item-label',
-                        },
-                        [
-                            createVNode('div', null, title),
-                            createVNode(
-                                'div',
-                                {
-                                    class: 'ba-form-item-label-tip',
-                                },
-                                props.data && props.data.tip ? props.data.tip : ''
-                            ),
-                        ]
-                    ),
-                ]
+        if (attrs.value.tip) {
+            const createTipNode = () => {
+                const tipProps = typeof attrs.value.tip === 'string' ? { content: attrs.value.tip, placement: 'top' } : attrs.value.tip
+                return createVNode(resolveComponent('el-tooltip'), tipProps, {
+                    default: () => [
+                        createVNode('i', {
+                            class: 'fa fal fa-question-circle',
+                        }),
+                    ],
+                })
             }
 
-            return () =>
-                createVNode(
-                    resolveComponent('el-form-item'),
+            // label 插槽
+            slots.label = () => {
+                return createVNode(
+                    'span',
                     {
-                        class: 'ba-input-item-' + props.type,
-                        prop: props.prop,
-                        ...props.attr,
-                        label: props.label,
+                        class: 'ba-form-item-label',
                     },
-                    {
-                        label: labelSlot,
-                        default: defaultSlot,
-                    }
+                    [
+                        createVNode('span', null, attrs.value.label),
+                        createVNode(
+                            'span',
+                            {
+                                class: 'ba-form-item-label-tip',
+                            },
+                            [createTipNode()]
+                        ),
+                    ]
                 )
+            }
         }
+
+        return () =>
+            createVNode(
+                resolveComponent('el-form-item'),
+                {
+                    class: 'ba-input-item-' + props.type,
+                    ...attrs.value,
+                },
+                {
+                    ...slots,
+                }
+            )
     },
 })
 </script>
 
 <style scoped lang="scss">
-.ba-form-item-label {
-    display: inline-block;
-    .ba-form-item-label-tip {
-        padding-left: 6px;
-        font-size: 12px;
-        color: var(--el-text-color-secondary);
+.ba-form-item-label-tip {
+    padding-left: 6px;
+    color: var(--el-text-color-secondary);
+    i {
+        cursor: pointer;
     }
 }
 .ba-form-item-not-support {
