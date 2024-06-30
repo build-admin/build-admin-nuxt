@@ -1,8 +1,8 @@
 <template>
     <div>
         <el-row :gutter="10">
-            <el-col :span="10" class="ba-array-key">{{ $t('utils.Key name') }}</el-col>
-            <el-col :span="10" class="ba-array-value">{{ $t('utils.Key value') }}</el-col>
+            <el-col :span="10" class="ba-array-key">{{ state.keyTitle }}</el-col>
+            <el-col :span="10" class="ba-array-value">{{ state.valueTitle }}</el-col>
         </el-row>
         <el-row class="ba-array-item" v-for="(item, idx) in state.value" :gutter="10" :key="idx">
             <el-col :span="10">
@@ -17,24 +17,34 @@
         </el-row>
         <el-row :gutter="10">
             <el-col :span="10" :offset="10">
-                <el-button v-blur class="ba-add-array-item" @click="onAddArrayItem" icon="el-icon-Plus">{{ $t('Add') }}</el-button>
+                <el-button v-blur class="ba-add-array-item" @click="onAddArrayItem" icon="el-icon-Plus">{{ t('Add') }}</el-button>
             </el-col>
         </el-row>
     </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
 type baInputArray = { key: string; value: string }
 interface Props {
     modelValue: baInputArray[]
+    keyTitle?: string
+    valueTitle?: string
 }
+
+const { t } = useI18n()
 
 const props = withDefaults(defineProps<Props>(), {
     modelValue: () => [],
+    keyTitle: '',
+    valueTitle: '',
 })
 
 const state = reactive({
     value: props.modelValue,
+    keyTitle: props.keyTitle ? props.keyTitle : t('utils.Key name'),
+    valueTitle: props.valueTitle ? props.valueTitle : t('utils.Key value'),
 })
 
 const onAddArrayItem = () => {
