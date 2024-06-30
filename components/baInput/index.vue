@@ -432,6 +432,7 @@ export default defineComponent({
                 () => {
                     return () =>
                         createVNode(resolveComponent('BaInputEditor'), {
+                            class: 'w100',
                             modelValue: props.modelValue,
                             'onUpdate:modelValue': onValueUpdate,
                             ...props.attr,
