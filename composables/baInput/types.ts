@@ -28,7 +28,7 @@ export const inputTypes = [
     'icon',
     'color',
 ]
-export type modelValueTypes = string | number | boolean | object
+export type ModelValueTypes = string | number | boolean | object
 
 export interface InputData {
     // 标题

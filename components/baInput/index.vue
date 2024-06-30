@@ -1,10 +1,10 @@
 <script lang="ts">
-import { createVNode, defineComponent } from 'vue'
-import { inputTypes } from '~/composables/baInput/types'
-import type { PropType, VNode } from 'vue'
-import type { modelValueTypes, InputAttr, InputData } from '~/composables/baInput/types'
-import { getArea } from '~/api/common'
 import { isArray } from 'lodash-es'
+import type { PropType, VNode } from 'vue'
+import { createVNode } from 'vue'
+import { getArea } from '~/api/common'
+import type { InputAttr, InputData, ModelValueTypes } from '~/composables/baInput/types'
+import { inputTypes } from '~/composables/baInput/types'
 
 export default defineComponent({
     name: 'baInput',
@@ -35,7 +35,7 @@ export default defineComponent({
     },
     emits: ['update:modelValue'],
     setup(props, { emit }) {
-        const onValueUpdate = (value: modelValueTypes) => {
+        const onValueUpdate = (value: ModelValueTypes) => {
             emit('update:modelValue', value)
         }
 
