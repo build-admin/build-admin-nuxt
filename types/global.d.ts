@@ -26,8 +26,6 @@ declare global {
             target: any
             count: number
         }
-        // 因303、409中断了请求
-        requestInterrupt: boolean
     }
 
     /**

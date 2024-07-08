@@ -16,7 +16,6 @@ const requestStatus: RequestStatus = {
         target: null,
         count: 0,
     },
-    requestInterrupt: false,
 }
 
 export class Http {
@@ -156,8 +155,7 @@ const onResponseInterceptor = (
             ElNotification({ type: 'error', message: data.msg })
         }
 
-        // 多个请求并发的发送时，会触发多次 navigateTo 导致报错，使用 requestInterrupt 做唯一限制
-        if (import.meta.client && !requestStatus.requestInterrupt && data.data && [303, 409].includes(data.code)) {
+        if (import.meta.client && data.data && [303, 409].includes(data.code)) {
             const route = useRoute()
             let newRouteName = 'user'
 
@@ -173,8 +171,6 @@ const onResponseInterceptor = (
                 ElNotification({ type: 'error', message: data.msg })
                 navigateTo({ name: newRouteName })
             }
-
-            requestStatus.requestInterrupt = true
         }
     } else if (requestConfigData.config.showSuccessMessage && data.code == 1) {
         ElNotification({
