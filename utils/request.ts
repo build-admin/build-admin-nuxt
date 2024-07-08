@@ -41,6 +41,7 @@ export class Http {
             ElNotification({
                 type: 'error',
                 message: res.error.value?.message,
+                zIndex: 9999,
             })
         }
 
@@ -152,7 +153,7 @@ const onResponseInterceptor = (
     if (data.code != 1) {
         // 排除 303 和 409，防止多个错误消息弹出
         if (requestConfigData.config.showCodeMessage && data.msg && ![303, 409].includes(data.code)) {
-            ElNotification({ type: 'error', message: data.msg })
+            ElNotification({ type: 'error', message: data.msg, zIndex: 9999 })
         }
 
         if (import.meta.client && data.data && [303, 409].includes(data.code)) {
@@ -168,7 +169,7 @@ const onResponseInterceptor = (
             }
 
             if (route.name != newRouteName) {
-                ElNotification({ type: 'error', message: data.msg })
+                ElNotification({ type: 'error', message: data.msg, zIndex: 9999 })
                 navigateTo({ name: newRouteName })
             }
         }
@@ -176,6 +177,7 @@ const onResponseInterceptor = (
         ElNotification({
             message: data.msg ? data.msg : i18n.global.t('request.Operation successful'),
             type: 'success',
+            zIndex: 9999,
         })
     }
 }
@@ -251,5 +253,6 @@ function httpErrorStatusHandle(response: any) {
     ElNotification({
         type: 'error',
         message,
+        zIndex: 9999,
     })
 }

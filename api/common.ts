@@ -80,6 +80,7 @@ export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, force
             ElNotification({
                 type: 'error',
                 message: errorMsg,
+                zIndex: 9999,
             })
             reject(errorMsg)
         })

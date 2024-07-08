@@ -9,6 +9,7 @@ export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}): Http
         ElNotification({
             type: 'error',
             message: '上传扩展未定义！',
+            zIndex: 9999,
         })
         reject('未定义')
 
