@@ -7,7 +7,10 @@
                     <span class="right-title">{{ $t('user.account.integral.Current points') + ' ' + userInfo.score }}</span>
                 </div>
             </template>
-            <div v-loading="state.pageLoading" class="logs">
+            <div class="logs">
+                <div v-if="state.pageLoading" class="ba-center page-loading">
+                    <Loading />
+                </div>
                 <div class="log-item" v-for="(item, idx) in state.logs" :key="idx">
                     <div class="log-title">{{ item.memo }}</div>
                     <div v-if="item.score > 0" class="log-change-amount increase">
@@ -30,7 +33,7 @@
                     @current-change="onTableCurrentChange"
                 ></el-pagination>
             </div>
-            <el-empty v-else />
+            <el-empty v-if="state.total <= 0 && !state.pageLoading" />
         </el-card>
     </div>
 </template>
@@ -77,17 +80,24 @@ const onTableCurrentChange = (val: number) => {
     loadData()
 }
 
-const loadData = async () => {
-    const { data } = await getIntegralLog(state.currentPage, state.pageSize)
-    if (data.value?.code == 1) {
-        state.pageLoading = false
-        state.logs = data.value?.data.list
-        state.total = data.value?.data.total
-        mainScrollbarRef?.value?.scrollTo(0, 0)
-    }
+const loadData = () => {
+    state.pageLoading = true
+    getIntegralLog(state.currentPage, state.pageSize)
+        .then((res) => {
+            if (res.code == 1) {
+                state.logs = res.data.list
+                state.total = res.data.total
+                mainScrollbarRef?.value?.scrollTo(0, 0)
+            }
+        })
+        .finally(() => {
+            state.pageLoading = false
+        })
 }
 
-loadData()
+onMounted(() => {
+    loadData()
+})
 </script>
 
 <style scoped lang="scss">
@@ -101,6 +111,9 @@ loadData()
 }
 .right-title {
     color: var(--el-text-color-secondary);
+}
+.page-loading {
+    margin-top: 20px;
 }
 .log-item {
     border-bottom: 1px solid var(--ba-bg-color);

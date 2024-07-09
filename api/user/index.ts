@@ -16,7 +16,7 @@ export function getProfile() {
 }
 
 export function getIntegralLog(page: number, pageSize: number) {
-    return Http.fetch({
+    return Http.$fetch({
         url: accountUrl + 'integral',
         method: 'GET',
         params: {
@@ -27,7 +27,7 @@ export function getIntegralLog(page: number, pageSize: number) {
 }
 
 export function getBalanceLog(page: number, pageSize: number) {
-    return Http.fetch({
+    return Http.$fetch({
         url: accountUrl + 'balance',
         method: 'GET',
         params: {
