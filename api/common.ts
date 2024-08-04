@@ -2,7 +2,7 @@ import { i18n } from '~/plugins/i18n'
 import type { UploadRawFile } from 'element-plus'
 import { useSiteConfig } from '~/stores/siteConfig'
 import { state as uploadExpandState, fileUpload as uploadExpand } from '~/composables/mixins/baUpload'
-import { isEmpty } from 'lodash-es'
+import { isArray, isEmpty } from 'lodash-es'
 
 // 公共
 export const captchaUrl = '/api/common/captcha'
@@ -72,7 +72,7 @@ export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, force
         errorMsg = i18n.global.t('utils.The data of the uploaded file is incomplete!')
     } else if (!checkFileMimetype(file.name, file.type)) {
         errorMsg = i18n.global.t('utils.The type of uploaded file is not allowed!')
-    } else if (file.size > siteConfig.upload.maxsize) {
+    } else if (file.size > siteConfig.upload.maxSize) {
         errorMsg = i18n.global.t('utils.The size of the uploaded file exceeds the allowed range!')
     }
     if (errorMsg) {
@@ -86,8 +86,13 @@ export function fileUpload<DataT = any>(fd: FormData, params: anyObj = {}, force
         })
     }
 
-    if (!forceLocal && uploadExpandState() == 'enable') {
-        return uploadExpand(fd, params)
+    if (!forceLocal) {
+        if (uploadExpandState() == 'enable') {
+            return uploadExpand(fd, params)
+        }
+
+        // 设置上传驱动
+        params.driver = siteConfig.upload.mode
     }
 
     return Http.$fetch({
@@ -240,25 +245,28 @@ export function getSelectData(remoteUrl: string, q: string, params: {}) {
 }
 
 /**
- * 文件类型效验，主要用于云存储
- * 服务端并不能单纯此函数来限制文件上传
+ * 文件类型效验，前端根据服务端配置进行初步检查
  * @param fileName 文件名
- * @param fileType 文件mimetype，不一定存在
+ * @param fileType 文件 mimeType，不一定存在
  */
 export const checkFileMimetype = (fileName: string, fileType: string) => {
     if (!fileName) return false
     const siteConfig = useSiteConfig()
-    const mimetype = siteConfig.upload.mimetype.toLowerCase().split(',')
+
+    const allowedSuffixes = isArray(siteConfig.upload.allowedSuffixes)
+        ? siteConfig.upload.allowedSuffixes
+        : siteConfig.upload.allowedSuffixes.toLowerCase().split(',')
+
+    const allowedMimeTypes = isArray(siteConfig.upload.allowedMimeTypes)
+        ? siteConfig.upload.allowedMimeTypes
+        : siteConfig.upload.allowedMimeTypes.toLowerCase().split(',')
 
     const fileSuffix = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase()
-    if (siteConfig.upload.mimetype === '*' || mimetype.includes(fileSuffix) || mimetype.includes('.' + fileSuffix)) {
+    if (allowedSuffixes.includes(fileSuffix) || allowedSuffixes.includes('.' + fileSuffix)) {
         return true
     }
-    if (fileType) {
-        const fileTypeTemp = fileType.toLowerCase().split('/')
-        if (mimetype.includes(fileTypeTemp[0] + '/*') || mimetype.includes(fileType)) {
-            return true
-        }
+    if (fileType && allowedMimeTypes.includes(fileType)) {
+        return true
     }
     return false
 }
