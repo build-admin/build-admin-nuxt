@@ -116,10 +116,9 @@ export const requestConfig = <OptionsType extends NitroFetchOptions | FetchOptio
             }
 
             // 自动携带token
-            options.headers = options.headers || {}
-            if (!(options.headers as anyObj)[USER_TOKEN_KEY]) {
+            if (!options.headers.has(USER_TOKEN_KEY)) {
                 const userToken = userInfo.getToken('auth')
-                if (userToken) (options.headers as anyObj)[USER_TOKEN_KEY] = userToken
+                if (userToken) options.headers.set(USER_TOKEN_KEY, userToken)
             }
         },
         onResponseError: ({ response }) => {
