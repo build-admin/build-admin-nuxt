@@ -63,4 +63,5 @@ export default defineNuxtConfig({
     build: {
         transpile: ['@popperjs'],
     },
+    compatibilityDate: '2024-09-24',
 })
