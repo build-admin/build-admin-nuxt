@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     typescript: {
         shim: false,
     },
-    modules: ['@vueuse/nuxt', '@unocss/nuxt', '@element-plus/nuxt', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', 'nuxt-icons'],
+    modules: ['@vueuse/nuxt', '@unocss/nuxt', '@element-plus/nuxt', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', 'nuxt-icons'],
     imports: {
         dirs: ['stores'],
     },
@@ -46,10 +46,7 @@ export default defineNuxtConfig({
     elementPlus: {
         icon: false,
     },
-    pinia: {
-        disableVuex: true,
-    },
-    piniaPersistedstate: {
+    piniaPluginPersistedstate: {
         cookieOptions: {
             sameSite: 'strict',
             maxAge: 2592000,

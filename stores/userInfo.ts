@@ -65,6 +65,6 @@ export const useUserInfo = defineStore('userInfo', {
     },
     persist: {
         key: USER_INFO,
-        paths: ['id', 'token', 'refresh_token'],
+        pick: ['id', 'token', 'refresh_token'],
     },
 })

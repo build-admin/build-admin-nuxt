@@ -25,6 +25,7 @@ export const indexUrl = '/api/index/index'
 export async function initialize(requiredLogin?: boolean) {
     const userInfo = useUserInfo()
     const siteConfig = useSiteConfig()
+    const memberCenter = useMemberCenter()
 
     if (!userInfo.isLogin() && siteConfig.initialize) return
     if (userInfo.isLogin() && siteConfig.userInitialize) return
@@ -37,7 +38,6 @@ export async function initialize(requiredLogin?: boolean) {
         },
     })
     if (data.value?.code == 1) {
-        const memberCenter = useMemberCenter()
         siteConfig.dataFill(data.value.data.site)
         memberCenter.setStatus(data.value.data.openMemberCenter)
         registerMenus(data.value.data.rules, data.value.data.menus)
