@@ -15,7 +15,7 @@ export const __ = (key: string, named?: Record<string, unknown>, options?: Trans
     const route = useRoute()
     let langPath = trim(route.path, '/').replace(/\//g, '.')
     langPath = langPath ? langPath + '.' + key : key
-    return i18n.global.te(langPath) ? i18n.global.t(langPath, named ?? {}, options) : i18n.global.t(key, named ?? {}, options)
+    return i18n.global.te(langPath) ? i18n.global.t(langPath, named ?? {}, options ?? {}) : i18n.global.t(key, named ?? {}, options ?? {})
 }
 
 /**
