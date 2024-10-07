@@ -1,7 +1,5 @@
 <template>
-    <!-- globals.menu.show 解决切换路由时菜单内部的 el-popper 报警告的问题 -->
-    <!-- Slot "default" invoked outside of the render function -->
-    <el-menu v-if="globals.menu.show" :default-active="state.activeMenu" @select="onSelect">
+    <el-menu :default-active="state.activeMenu" @select="onSelect">
         <el-menu-item @click="navigateTo({ name: '/' })" v-blur index="index">
             <Icon v-if="props.showIcon" name="fa fa-home" color="var(--el-text-color-primary)" />
             <template #title>{{ $t('Home') }}</template>

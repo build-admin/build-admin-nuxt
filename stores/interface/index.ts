@@ -3,13 +3,9 @@ import type { RouteRecordRaw, RouteLocationNormalized } from 'vue-router'
 export interface Globals {
     // 防抖计时器
     lazy: NodeJS.Timeout | null
-    // 修复切换路由时顶栏菜单内部的 el-popper 报警告的问题
-    // Slot "default" invoked outside of the render function
-    menu: {
-        show: boolean
-    }
     // 随机数生成时的唯一性自增种子
     unique: Ref<number>
+    // 语言包懒加载句柄
     loadLangHandle: Record<string, any>
 }
 

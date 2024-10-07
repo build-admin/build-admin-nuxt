@@ -15,8 +15,6 @@
                         <Icon name="fa fa-indent" color="var(--el-color-primary)" size="20" />
                     </div>
 
-                    <!-- globals.menu.show 解决切换路由时菜单内部的 el-popper 报警告的问题 -->
-                    <!-- Slot "default" invoked outside of the render function -->
                     <el-scrollbar class="hidden-sm-and-down">
                         <Menu class="frontend-header-menu" :ellipsis="false" mode="horizontal" />
                     </el-scrollbar>
