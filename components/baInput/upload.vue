@@ -13,9 +13,7 @@
             v-bind="state.attrs"
             :key="state.key"
         >
-            <!-- 插槽支持，不加 if 时 el-upload 样式会错乱 -->
-            <template v-if="$slots.default" #default><slot name="default"></slot></template>
-            <template v-else #default>
+            <template v-if="!$slots.default" #default>
                 <template v-if="type == 'image' || type == 'images'">
                     <Icon class="ba-upload-icon" name="el-icon-Plus" size="30" color="#c0c4cc" />
                 </template>
@@ -26,9 +24,9 @@
                     </el-button>
                 </template>
             </template>
-            <template v-if="$slots.trigger" #trigger><slot name="trigger"></slot></template>
-            <template v-if="$slots.tip" #tip><slot name="tip"></slot></template>
-            <template v-if="$slots.file" #file><slot name="file"></slot></template>
+            <template v-for="(slot, name) in $slots" #[name]="scopedData">
+                <slot :name="name" v-bind="scopedData"></slot>
+            </template>
         </el-upload>
         <client-only>
             <el-dialog v-model="state.preview.show" class="ba-upload-preview">
