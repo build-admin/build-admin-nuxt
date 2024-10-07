@@ -233,7 +233,7 @@ export function getArea(values: number[]) {
 /**
  * 远程下拉框数据获取
  */
-export function getSelectData(remoteUrl: string, q: string, params: {}) {
+export function getSelectData(remoteUrl: string, q: string, params: anyObj = {}) {
     return Http.$fetch({
         url: remoteUrl,
         method: 'get',
