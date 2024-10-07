@@ -48,7 +48,7 @@ export default defineComponent({
         ...formItemProps,
     },
     emits: ['update:modelValue'],
-    setup(props, { emit }) {
+    setup(props, { emit, slots }) {
         // 通过 props 和 props.attr 两种方式传递的属性汇总为 attrs
         const excludeProps = ['type', 'modelValue', 'inputAttr', 'attr', 'data', 'placeholder']
         const attrs = computed(() => {
@@ -67,16 +67,20 @@ export default defineComponent({
         }
 
         // el-form-item 的插槽
-        const slots: { [key: string]: () => VNode | VNode[] } = {}
+        const formItemSlots: { [key: string]: () => VNode | VNode[] } = {}
 
         // default 插槽
-        slots.default = () => {
-            let inputNode = createVNode(resolveComponent('BaInput'), {
-                type: props.type,
-                attr: { placeholder: props.placeholder, ...props.inputAttr, ...props.data },
-                modelValue: props.modelValue,
-                'onUpdate:modelValue': onValueUpdate,
-            })
+        formItemSlots.default = () => {
+            let inputNode = createVNode(
+                resolveComponent('BaInput'),
+                {
+                    type: props.type,
+                    attr: { placeholder: props.placeholder, ...props.inputAttr, ...props.data },
+                    modelValue: props.modelValue,
+                    'onUpdate:modelValue': onValueUpdate,
+                },
+                slots
+            )
 
             if (attrs.value.blockHelp) {
                 return [
@@ -106,7 +110,7 @@ export default defineComponent({
             }
 
             // label 插槽
-            slots.label = () => {
+            formItemSlots.label = () => {
                 return createVNode(
                     'span',
                     {
@@ -126,17 +130,27 @@ export default defineComponent({
             }
         }
 
-        return () =>
-            createVNode(
+        // el-form-item
+        const elFormItemVnode = () => {
+            return createVNode(
                 resolveComponent('el-form-item'),
                 {
                     class: 'ba-input-item-' + props.type,
                     ...attrs.value,
                 },
-                {
-                    ...slots,
-                }
+                formItemSlots
             )
+        }
+
+        /**
+         * 需要使用 client-only 包裹的
+         * datetime,year,date,time 不使用 client-only 包裹本身不报警告，但和其他输入组件配合时报 Hydration attribute mismatch 警告
+         */
+        if (['datetime', 'year', 'date', 'time', 'icon'].includes(props.type)) {
+            return () => createVNode(resolveComponent('client-only'), {}, elFormItemVnode)
+        } else {
+            return elFormItemVnode
+        }
     },
 })
 </script>

@@ -34,7 +34,7 @@ export default defineComponent({
         },
     },
     emits: ['update:modelValue'],
-    setup(props, { emit }) {
+    setup(props, { emit, slots }) {
         // 合并 props.attr 和 props.data
         const attrs = computed(() => {
             return { ...props.attr, ...props.data }
@@ -48,12 +48,16 @@ export default defineComponent({
         // string number textarea password
         const sntp = () => {
             return () =>
-                createVNode(resolveComponent('el-input'), {
-                    type: props.type == 'string' ? 'text' : props.type,
-                    ...attrs.value,
-                    modelValue: props.modelValue,
-                    'onUpdate:modelValue': onValueUpdate,
-                })
+                createVNode(
+                    resolveComponent('el-input'),
+                    {
+                        type: props.type == 'string' ? 'text' : props.type,
+                        ...attrs.value,
+                        modelValue: props.modelValue,
+                        'onUpdate:modelValue': onValueUpdate,
+                    },
+                    slots
+                )
         }
         // radio checkbox
         const rc = () => {
@@ -95,7 +99,7 @@ export default defineComponent({
                             ...(attrs.value.childrenAttr || {}),
                         }
                     }
-                    vNode.push(createVNode(components[type as keyof typeof components], nodeProps))
+                    vNode.push(createVNode(components[type as keyof typeof components], nodeProps, slots))
                 }
                 return vNode
             })
@@ -134,12 +138,16 @@ export default defineComponent({
                 const vNode: VNode[] = []
                 for (const key in attrs.value.content) {
                     vNode.push(
-                        createVNode(resolveComponent('el-option'), {
-                            key: key,
-                            label: attrs.value.content[key],
-                            value: key,
-                            ...(attrs.value.childrenAttr || {}),
-                        })
+                        createVNode(
+                            resolveComponent('el-option'),
+                            {
+                                key: key,
+                                label: attrs.value.content[key],
+                                value: key,
+                                ...(attrs.value.childrenAttr || {}),
+                            },
+                            slots
+                        )
                     )
                 }
                 return vNode
@@ -158,17 +166,19 @@ export default defineComponent({
                         return modelValueArr
                     }
                 })
-                return createVNode(
-                    resolveComponent('el-select'),
-                    {
-                        class: 'w100',
-                        multiple: props.type == 'select' ? false : true,
-                        clearable: true,
-                        ...attrs.value,
-                        modelValue: valueComputed.value,
-                        'onUpdate:modelValue': onValueUpdate,
-                    },
-                    () => vNodes.value
+                return createVNode(resolveComponent('client-only'), {}, () =>
+                    createVNode(
+                        resolveComponent('el-select'),
+                        {
+                            class: 'w100',
+                            multiple: props.type == 'select' ? false : true,
+                            clearable: true,
+                            ...attrs.value,
+                            modelValue: valueComputed.value,
+                            'onUpdate:modelValue': onValueUpdate,
+                        },
+                        () => vNodes.value
+                    )
                 )
             }
         }
@@ -184,36 +194,48 @@ export default defineComponent({
                     break
             }
             return () =>
-                createVNode(resolveComponent('el-date-picker'), {
-                    class: 'w100',
-                    type: props.type,
-                    'value-format': valueFormat,
-                    ...attrs.value,
-                    modelValue: props.modelValue,
-                    'onUpdate:modelValue': onValueUpdate,
-                })
+                createVNode(
+                    resolveComponent('el-date-picker'),
+                    {
+                        class: 'w100',
+                        type: props.type,
+                        'value-format': valueFormat,
+                        ...attrs.value,
+                        modelValue: props.modelValue,
+                        'onUpdate:modelValue': onValueUpdate,
+                    },
+                    slots
+                )
         }
         // upload
         const upload = () => {
             return () =>
-                createVNode(resolveComponent('BaInputUpload'), {
-                    type: props.type,
-                    modelValue: props.modelValue,
-                    'onUpdate:modelValue': onValueUpdate,
-                    ...attrs.value,
-                })
+                createVNode(
+                    resolveComponent('BaInputUpload'),
+                    {
+                        type: props.type,
+                        modelValue: props.modelValue,
+                        'onUpdate:modelValue': onValueUpdate,
+                        ...attrs.value,
+                    },
+                    slots
+                )
         }
 
         // remoteSelect remoteSelects
         const remoteSelect = () => {
             return () =>
                 createVNode(resolveComponent('client-only'), {}, () => {
-                    return createVNode(resolveComponent('BaInputRemoteSelect'), {
-                        modelValue: props.modelValue,
-                        'onUpdate:modelValue': onValueUpdate,
-                        multiple: props.type == 'remoteSelect' ? false : true,
-                        ...attrs.value,
-                    })
+                    return createVNode(
+                        resolveComponent('BaInputRemoteSelect'),
+                        {
+                            modelValue: props.modelValue,
+                            'onUpdate:modelValue': onValueUpdate,
+                            multiple: props.type == 'remoteSelect' ? false : true,
+                            ...attrs.value,
+                        },
+                        slots
+                    )
                 })
         }
 
@@ -245,21 +267,25 @@ export default defineComponent({
                         }
                     })
                     return () =>
-                        createVNode(resolveComponent('el-switch'), {
-                            ...attrs.value,
-                            modelValue: valueComputed.value,
-                            'onUpdate:modelValue': (value: boolean) => {
-                                let newValue: boolean | string | number = value
-                                switch (valueType.value) {
-                                    case 'string':
-                                        newValue = value ? '1' : '0'
-                                        break
-                                    case 'number':
-                                        newValue = value ? 1 : 0
-                                }
-                                emit('update:modelValue', newValue)
+                        createVNode(
+                            resolveComponent('el-switch'),
+                            {
+                                ...attrs.value,
+                                modelValue: valueComputed.value,
+                                'onUpdate:modelValue': (value: boolean) => {
+                                    let newValue: boolean | string | number = value
+                                    switch (valueType.value) {
+                                        case 'string':
+                                            newValue = value ? '1' : '0'
+                                            break
+                                        case 'number':
+                                            newValue = value ? 1 : 0
+                                    }
+                                    emit('update:modelValue', newValue)
+                                },
                             },
-                        })
+                            slots
+                        )
                 },
             ],
             ['datetime', datetime],
@@ -268,14 +294,18 @@ export default defineComponent({
                 () => {
                     return () => {
                         const valueComputed = computed(() => (!props.modelValue ? null : '' + props.modelValue))
-                        return createVNode(resolveComponent('el-date-picker'), {
-                            class: 'w100',
-                            type: props.type,
-                            'value-format': 'YYYY',
-                            ...attrs.value,
-                            modelValue: valueComputed.value,
-                            'onUpdate:modelValue': onValueUpdate,
-                        })
+                        return createVNode(
+                            resolveComponent('el-date-picker'),
+                            {
+                                class: 'w100',
+                                type: props.type,
+                                'value-format': 'YYYY',
+                                ...attrs.value,
+                                modelValue: valueComputed.value,
+                                'onUpdate:modelValue': onValueUpdate,
+                            },
+                            slots
+                        )
                     }
                 },
             ],
@@ -294,14 +324,18 @@ export default defineComponent({
                         }
                     })
                     return () =>
-                        createVNode(resolveComponent('el-time-picker'), {
-                            class: 'w100',
-                            clearable: true,
-                            format: 'HH:mm:ss',
-                            ...attrs.value,
-                            modelValue: valueComputed.value,
-                            'onUpdate:modelValue': onValueUpdate,
-                        })
+                        createVNode(
+                            resolveComponent('el-time-picker'),
+                            {
+                                class: 'w100',
+                                clearable: true,
+                                format: 'HH:mm:ss',
+                                ...attrs.value,
+                                modelValue: valueComputed.value,
+                                'onUpdate:modelValue': onValueUpdate,
+                            },
+                            slots
+                        )
                 },
             ],
             ['select', select],
@@ -310,11 +344,15 @@ export default defineComponent({
                 'array',
                 () => {
                     return () =>
-                        createVNode(resolveComponent('BaInputArray'), {
-                            modelValue: props.modelValue,
-                            'onUpdate:modelValue': onValueUpdate,
-                            ...attrs.value,
-                        })
+                        createVNode(
+                            resolveComponent('BaInputArray'),
+                            {
+                                modelValue: props.modelValue,
+                                'onUpdate:modelValue': onValueUpdate,
+                                ...attrs.value,
+                            },
+                            slots
+                        )
                 },
             ],
             ['remoteSelect', remoteSelect],
@@ -373,55 +411,59 @@ export default defineComponent({
 
                     return () =>
                         createVNode(resolveComponent('client-only'), {}, () => {
-                            return createVNode(resolveComponent('el-cascader'), {
-                                modelValue: props.modelValue,
-                                'onUpdate:modelValue': onValueUpdate,
-                                class: 'w100',
-                                clearable: true,
-                                props: {
-                                    lazy: true,
-                                    lazyLoad(node: any, resolve: any) {
-                                        // lazyLoad会频繁触发,在本地存储请求结果,供重复触发时直接读取
-                                        const { level, pathValues } = node
-                                        let key = pathValues.join(',')
-                                        key = key ? key : 'init'
+                            return createVNode(
+                                resolveComponent('el-cascader'),
+                                {
+                                    modelValue: props.modelValue,
+                                    'onUpdate:modelValue': onValueUpdate,
+                                    class: 'w100',
+                                    clearable: true,
+                                    props: {
+                                        lazy: true,
+                                        lazyLoad(node: any, resolve: any) {
+                                            // lazyLoad会频繁触发,在本地存储请求结果,供重复触发时直接读取
+                                            const { level, pathValues } = node
+                                            let key = pathValues.join(',')
+                                            key = key ? key : 'init'
 
-                                        let locaNode = getNodes(level, key)
-                                        if (locaNode) {
-                                            return resolve(locaNode)
-                                        }
-
-                                        if (lastLazyValue.key == key && lastLazyValue.value == props.modelValue) {
-                                            if (lastLazyValue.currentRequest) {
-                                                return lastLazyValue.currentRequest
+                                            let locaNode = getNodes(level, key)
+                                            if (locaNode) {
+                                                return resolve(locaNode)
                                             }
-                                            return resolve(lastLazyValue.nodes)
-                                        }
 
-                                        let nodes: Node[] = []
-                                        lastLazyValue.key = key
-                                        lastLazyValue.currentRequest = getArea(pathValues).then((res) => {
-                                            if (res.code != 1) return
-                                            let toStr = false
-                                            if (props.modelValue && typeof (props.modelValue as anyObj)[0] === 'string') {
-                                                toStr = true
-                                            }
-                                            for (const key in res.data) {
-                                                if (toStr) {
-                                                    res.data[key].value = res.data[key].value.toString()
+                                            if (lastLazyValue.key == key && lastLazyValue.value == props.modelValue) {
+                                                if (lastLazyValue.currentRequest) {
+                                                    return lastLazyValue.currentRequest
                                                 }
-                                                res.data[key].leaf = level >= maxLevel
-                                                nodes.push(res.data[key])
+                                                return resolve(lastLazyValue.nodes)
                                             }
-                                            lastLazyValue.nodes = nodes
-                                            lastLazyValue.currentRequest = null
-                                            setNodes(level, key, nodes)
-                                            resolve(nodes)
-                                        })
+
+                                            let nodes: Node[] = []
+                                            lastLazyValue.key = key
+                                            lastLazyValue.currentRequest = getArea(pathValues).then((res) => {
+                                                if (res.code != 1) return
+                                                let toStr = false
+                                                if (props.modelValue && typeof (props.modelValue as anyObj)[0] === 'string') {
+                                                    toStr = true
+                                                }
+                                                for (const key in res.data) {
+                                                    if (toStr) {
+                                                        res.data[key].value = res.data[key].value.toString()
+                                                    }
+                                                    res.data[key].leaf = level >= maxLevel
+                                                    nodes.push(res.data[key])
+                                                }
+                                                lastLazyValue.nodes = nodes
+                                                lastLazyValue.currentRequest = null
+                                                setNodes(level, key, nodes)
+                                                resolve(nodes)
+                                            })
+                                        },
                                     },
+                                    ...attrs.value,
                                 },
-                                ...attrs.value,
-                            })
+                                slots
+                            )
                         })
                 },
             ],
@@ -433,34 +475,46 @@ export default defineComponent({
                 'icon',
                 () => {
                     return () =>
-                        createVNode(resolveComponent('BaInputIconSelector'), {
-                            modelValue: props.modelValue,
-                            'onUpdate:modelValue': onValueUpdate,
-                            ...attrs.value,
-                        })
+                        createVNode(
+                            resolveComponent('BaInputIconSelector'),
+                            {
+                                modelValue: props.modelValue,
+                                'onUpdate:modelValue': onValueUpdate,
+                                ...attrs.value,
+                            },
+                            slots
+                        )
                 },
             ],
             [
                 'color',
                 () => {
                     return () =>
-                        createVNode(resolveComponent('el-color-picker'), {
-                            modelValue: props.modelValue,
-                            'onUpdate:modelValue': onValueUpdate,
-                            ...attrs.value,
-                        })
+                        createVNode(
+                            resolveComponent('el-color-picker'),
+                            {
+                                modelValue: props.modelValue,
+                                'onUpdate:modelValue': onValueUpdate,
+                                ...attrs.value,
+                            },
+                            slots
+                        )
                 },
             ],
             [
                 'editor',
                 () => {
                     return () =>
-                        createVNode(resolveComponent('BaInputEditor'), {
-                            class: 'w100',
-                            modelValue: props.modelValue,
-                            'onUpdate:modelValue': onValueUpdate,
-                            ...attrs.value,
-                        })
+                        createVNode(
+                            resolveComponent('BaInputEditor'),
+                            {
+                                class: 'w100',
+                                modelValue: props.modelValue,
+                                'onUpdate:modelValue': onValueUpdate,
+                                ...attrs.value,
+                            },
+                            slots
+                        )
                 },
             ],
             [
