@@ -346,6 +346,7 @@ interface State {
         captcha: string
     }
     retrieveDialogWidth: number
+    userLoginCaptchaSwitch: boolean
     showRetrievePasswordDialog: boolean
     accountVerificationType: string[]
     retrievePasswordForm: {
@@ -389,6 +390,7 @@ const state: State = reactive({
         captcha: '',
     },
     retrieveDialogWidth: 36,
+    userLoginCaptchaSwitch: true,
     showRetrievePasswordDialog: false,
     accountVerificationType: [],
     retrievePasswordForm: {
@@ -429,10 +431,14 @@ const retrieveRules: Partial<Record<string, FormItemRule[]>> = reactive({
 const onLoginSubmitPre = () => {
     loginRef.value?.validate((valid) => {
         if (!valid) return
-        clickCaptcha(state.login.captchaId, (captchaInfo: string) => onLoginSubmit(captchaInfo))
+        if (state.userLoginCaptchaSwitch) {
+            clickCaptcha(state.login.captchaId, (captchaInfo: string) => onLoginSubmit(captchaInfo))
+        } else {
+            onLoginSubmit()
+        }
     })
 }
-const onLoginSubmit = (captchaInfo: string) => {
+const onLoginSubmit = (captchaInfo = '') => {
     state.loading.login = true
     state.login.captchaInfo = captchaInfo
     checkIn('post', { ...state.login, tab: state.tab.toLocaleLowerCase() })
@@ -569,6 +575,7 @@ const dialogSize = () => {
 
 checkIn('get').then((res) => {
     if (res.code != 1) return
+    state.userLoginCaptchaSwitch = res.data.userLoginCaptchaSwitch
     state.accountVerificationType = res.data.accountVerificationType
     state.retrievePasswordForm.type = res.data.accountVerificationType.length > 0 ? res.data.accountVerificationType[0] : ''
 })
