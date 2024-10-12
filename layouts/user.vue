@@ -20,8 +20,20 @@
 <script setup lang="ts">
 import type { ScrollbarInstance } from 'element-plus'
 
+const route = useRoute()
 const mainScrollbarRef = ref<ScrollbarInstance>()
 
+// 路由切换时滚动条滚动至顶部
+watch(
+    () => route.fullPath,
+    () => {
+        if (!route.meta.disableScrollTo) {
+            mainScrollbarRef?.value?.scrollTo(0, 0)
+        }
+    }
+)
+
+// 将滚动条的 ref provide 给子级组件
 provide('mainScrollbarRef', mainScrollbarRef)
 </script>
 
