@@ -51,9 +51,12 @@ if (userInfo.isLogin() && import.meta.client && route.name == 'user') {
  * onBeforeRouteUpdate 中不能跳转，直接监听
  */
 watch(
-    () => route.name,
-    (val) => {
-        if (val == 'user') jumpFirstMenu()
+    () => route.fullPath,
+    () => {
+        if (route.name == 'user') {
+            jumpFirstMenu()
+        }
+        memberCenter.toggleMenuExpand(false)
     }
 )
 

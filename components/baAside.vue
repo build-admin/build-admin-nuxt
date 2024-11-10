@@ -68,10 +68,6 @@ const memberCenter = useMemberCenter()
  * @return void
  */
 const routerPush = (route: string | Menus) => {
-    if (document.body.clientWidth < 992) {
-        memberCenter.toggleMenuExpand(false)
-    }
-
     if (typeof route === 'string') {
         navigateTo({ name: route })
     } else {

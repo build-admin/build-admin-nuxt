@@ -28,7 +28,7 @@
                 v-model="memberCenter.state.menuExpand"
                 :with-header="false"
                 direction="ltr"
-                size="40%"
+                :size="memberCenter.state.shrink ? '70%' : '40%'"
             >
                 <div class="ba-header-row">
                     <div @click="navigateTo({ name: '/' })" class="header-logo">
