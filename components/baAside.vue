@@ -44,7 +44,7 @@
                         :key="index"
                         @click="routerPush(menu)"
                         class="user-menu-item"
-                        :class="getMenuClass(menu)"
+                        :class="route.fullPath == menu.path ? 'active' : ''"
                     >
                         <Icon v-if="menu.icon" :name="menu.icon" size="16" color="var(--el-text-color-secondary)" />
                         <span>{{ menu.title }}</span>
@@ -58,6 +58,7 @@
 <script setup lang="ts">
 import type { Menus } from '~/stores/interface'
 
+const route = useRoute()
 const userInfo = useUserInfo()
 const memberCenter = useMemberCenter()
 
@@ -76,17 +77,6 @@ const routerPush = (route: string | Menus) => {
     } else {
         onClickMenu(route)
     }
-}
-
-/**
- * 获取菜单项 class（含菜单是否激活）
- */
-const getMenuClass = (menu: Menus) => {
-    const activeRouteName = memberCenter.state.activeRoute?.name as string
-    if (activeRouteName && (activeRouteName == menu.name || activeRouteName.startsWith(menu.name))) {
-        return 'active'
-    }
-    return ''
 }
 </script>
 

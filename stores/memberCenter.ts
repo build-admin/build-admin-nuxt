@@ -1,12 +1,9 @@
 import type { MemberCenter, Menus } from '~/stores/interface/index'
-import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 
 export const useMemberCenter = defineStore('memberCenter', () => {
     const state: MemberCenter = reactive({
         // 是否开启会员中心
         open: false,
-        // 当前激活菜单
-        activeRoute: null,
         // 从后台加载到的，会员中心菜单
         userMenus: [],
         // 是否显示一级菜单标题(当有多个一级菜单分组时显示)
@@ -45,10 +42,6 @@ export const useMemberCenter = defineStore('memberCenter', () => {
         state.showHeadline = show
     }
 
-    const setActiveRoute = (route: RouteLocationNormalized | RouteRecordRaw) => {
-        state.activeRoute = route
-    }
-
     const setShrink = (shrink: boolean) => {
         state.shrink = shrink
     }
@@ -69,7 +62,6 @@ export const useMemberCenter = defineStore('memberCenter', () => {
         mergeAuthNode,
         setUserMenus,
         setShowHeadline,
-        setActiveRoute,
         setShrink,
         setStatus,
         toggleMenuExpand,

@@ -54,13 +54,11 @@ watch(
     () => route.name,
     (val) => {
         if (val == 'user') jumpFirstMenu()
-        memberCenter.setActiveRoute(route)
     }
 )
 
 onMounted(() => {
     memberCenter.setShrink(document.body.clientWidth < 992)
-    memberCenter.setActiveRoute(route)
 })
 </script>
 

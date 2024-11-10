@@ -1,5 +1,3 @@
-import type { RouteRecordRaw, RouteLocationNormalized } from 'vue-router'
-
 export interface Globals {
     // 防抖计时器
     lazy: NodeJS.Timeout | null
@@ -59,7 +57,6 @@ export interface UserInfo {
 
 export interface MemberCenter {
     open: boolean
-    activeRoute: RouteRecordRaw | RouteLocationNormalized | null
     userMenus: Menus[]
     showHeadline: boolean
     authNode: Map<string, string[]>
