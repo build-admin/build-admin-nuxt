@@ -32,7 +32,7 @@ export const onClickMenu = (menu: RouteRecordRaw) => {
     switch (menu.meta?.menu_type) {
         case 'iframe':
         case 'tab':
-            navigateTo({ path: menu.path })
+            navigateTo(menu.path)
             break
         case 'link':
             window.open(menu.path, '_blank')
