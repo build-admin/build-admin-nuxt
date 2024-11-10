@@ -29,7 +29,7 @@ export const getFirstRoute = (routes: RouteRecordRaw[]): false | RouteRecordRaw 
  * @param menu 菜单数据
  */
 export const onClickMenu = (menu: RouteRecordRaw) => {
-    switch (menu.meta?.type) {
+    switch (menu.meta?.menu_type) {
         case 'iframe':
         case 'tab':
             navigateTo({ path: menu.path })
@@ -113,7 +113,13 @@ export const handleMenus = (rules: anyObj, prefix = '/', type = ['nav']) => {
             menus.push({
                 ...rules[key],
                 meta: {
-                    type: rules[key].menu_type,
+                    /**
+                     * 在 meta 中存储多个可能用到的属性
+                     * 兼容 RouteRecordRaw 和 RouteLocationNormalizedLoaded 类型
+                     */
+                    id: rules[key].id,
+                    type: rules[key].type,
+                    menu_type: rules[key].menu_type,
                 },
                 path: path,
                 children: children,

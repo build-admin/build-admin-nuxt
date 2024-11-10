@@ -16,7 +16,13 @@ export interface Menus {
     url: string
     icon: string
     meta: {
-        type: 'tab' | 'link' | 'iframe'
+        /**
+         * 在 meta 中存储多个可能用到的属性
+         * 兼容 RouteRecordRaw 和 RouteLocationNormalizedLoaded 类型
+         */
+        id: number
+        type: string
+        menu_type: 'tab' | 'link' | 'iframe'
     }
     children: Menus[]
 }

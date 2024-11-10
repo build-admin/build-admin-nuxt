@@ -68,8 +68,8 @@
 </template>
 
 <script setup lang="ts">
-import { type Locales, languageList, setLanguage } from '~/lang/index'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import { type Locales, languageList, setLanguage } from '~/lang/index'
 import type { Menus } from '~/stores/interface'
 
 const route = useRoute()
@@ -89,38 +89,30 @@ const state = reactive({
     activeMenu: '',
 })
 
-const findMenu = (route: RouteLocationNormalizedLoaded) => {
-    for (const key in memberCenter.state.navUserMenus) {
-        if (memberCenter.state.navUserMenus[key].path == route.path || memberCenter.state.navUserMenus[key].name == route.name) {
-            return memberCenter.state.navUserMenus[key].id
-        }
-    }
-    for (const key in siteConfig.headNav) {
-        if (siteConfig.headNav[key].path == route.path || siteConfig.headNav[key].name == route.name) {
-            return siteConfig.headNav[key].id
-        }
-    }
-}
-
+/**
+ * 设置激活菜单
+ */
 const setActiveMenu = (route: RouteLocationNormalizedLoaded) => {
     if (route.path == '/') return (state.activeMenu = 'index')
 
-    // 动态菜单
-    const menuId = findMenu(route)
+    const menuId = findMenus(route)
     if (menuId) {
         state.activeMenu = 'column-' + menuId
     } else if (route.path.startsWith('/user')) {
         state.activeMenu = 'user'
     }
 }
-setActiveMenu(route)
 
+/**
+ * 菜单被点击时额外对无需激活的菜单处理（外链、暗黑模式开关、语言切换等）
+ * 检查菜单是否需要激活，如果否，还原 state.activeMenu
+ */
 const onSelect = (index: string) => {
-    /**
-     * 当动态菜单被点击时
-     * 检查该菜单是否需要激活，如果否，还原 state.activeMenu
-     */
-    if (noNeedActive(siteConfig.headNav, index) || noNeedActive(memberCenter.state.navUserMenus, index)) {
+    if (
+        noNeedActive(siteConfig.headNav, index) ||
+        noNeedActive(memberCenter.state.navUserMenus, index) ||
+        noNeedActive(memberCenter.state.userMenus, index)
+    ) {
         const oldActiveMenu = state.activeMenu
         state.activeMenu = ''
         nextTick(() => {
@@ -150,7 +142,7 @@ const isExternalLink = (menus: Menus[], index: string): boolean => {
     for (const key in menus) {
         const columnIndex = `column-${menus[key].id}`
         if (columnIndex == index) {
-            return menus[key].meta.type == 'link'
+            return menus[key].meta.menu_type == 'link'
         }
         if (menus[key].children.length) {
             return isExternalLink(menus[key].children, index)
@@ -159,8 +151,42 @@ const isExternalLink = (menus: Menus[], index: string): boolean => {
     return false
 }
 
+/**
+ * 递归的搜索菜单 Index
+ */
+const searchMenuIndex = (menus: Menus[], route: RouteLocationNormalizedLoaded): number | false => {
+    let find: boolean | number = false
+    for (const key in menus) {
+        if (menus[key].id && menus[key].path == route.fullPath) {
+            return menus[key].id
+        }
+        if (menus[key].children && menus[key].children?.length) {
+            find = searchMenuIndex(menus[key].children, route)
+            if (find !== false) return find
+        }
+    }
+    return find
+}
+
+/**
+ * 从动态菜单（顶栏、会员中心下拉、会员中心菜单）中搜索一个菜单
+ */
+const findMenus = (route: RouteLocationNormalizedLoaded) => {
+    // 顶栏菜单
+    const headNavIndex = searchMenuIndex(siteConfig.headNav, route)
+    if (headNavIndex !== false) return headNavIndex
+
+    // 会员中心下拉菜单
+    const navUserMenuIndex = searchMenuIndex(memberCenter.state.navUserMenus, route)
+    if (navUserMenuIndex !== false) return navUserMenuIndex
+
+    // 会员中心菜单
+    return searchMenuIndex(memberCenter.state.userMenus, route)
+}
+
+setActiveMenu(route)
 watch(
-    () => route.path,
+    () => route.fullPath,
     () => {
         setActiveMenu(route)
     }
