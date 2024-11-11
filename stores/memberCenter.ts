@@ -2,19 +2,12 @@ import type { MemberCenter, Menus } from '~/stores/interface/index'
 
 export const useMemberCenter = defineStore('memberCenter', () => {
     const state: MemberCenter = reactive({
-        // 是否开启会员中心
         open: false,
-        // 从后台加载到的，会员中心菜单
         userMenus: [],
-        // 是否显示一级菜单标题(当有多个一级菜单分组时显示)
         showHeadline: false,
-        // 权限节点
         authNode: new Map(),
-        // 收缩布局
         shrink: false,
-        // 菜单展开（小屏设备）
         menuExpand: false,
-        // 顶栏会员菜单下拉项
         navUserMenus: [],
     })
 

@@ -62,11 +62,18 @@ export interface UserInfo {
 }
 
 export interface MemberCenter {
+    // 是否开启会员中心
     open: boolean
+    // 从后台加载到的会员中心菜单数据
     userMenus: Menus[]
+    // 是否显示一级菜单标题（当有多个一级菜单分组时显示）
     showHeadline: boolean
+    // 权限节点
     authNode: Map<string, string[]>
+    // 收缩布局（小屏设备）
     shrink: boolean
+    // 菜单展开状态（小屏设备）
     menuExpand: boolean
+    // 顶栏会员菜单下拉项
     navUserMenus: Menus[]
 }
