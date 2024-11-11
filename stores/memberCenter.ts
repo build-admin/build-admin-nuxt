@@ -2,7 +2,7 @@ import type { MemberCenter, Menus } from '~/stores/interface/index'
 
 export const useMemberCenter = defineStore('memberCenter', () => {
     const state: MemberCenter = reactive({
-        open: false,
+        open: true,
         userMenus: [],
         showHeadline: false,
         authNode: new Map(),
