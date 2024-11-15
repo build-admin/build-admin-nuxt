@@ -44,7 +44,7 @@
                         :key="index"
                         @click="routerPush(menu)"
                         class="user-menu-item"
-                        :class="route.fullPath == menu.path ? 'active' : ''"
+                        :class="isActiveMenu(menu) ? 'active' : ''"
                     >
                         <Icon v-if="menu.icon" :name="menu.icon" size="16" color="var(--el-text-color-secondary)" />
                         <span>{{ menu.title }}</span>
@@ -73,6 +73,10 @@ const routerPush = (route: string | Menus) => {
     } else {
         onClickMenu(route)
     }
+}
+
+const isActiveMenu = (menu: Menus) => {
+    return route.fullPath === menu.path || (route.meta.activeMenuPaths && (route.meta.activeMenuPaths as string[]).includes(menu.path))
 }
 </script>
 
