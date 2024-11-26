@@ -84,6 +84,10 @@ const state: {
     },
 })
 
+const emits = defineEmits<{
+    (e: 'destroy'): void
+}>()
+
 const load = () => {
     state.loading = true
     getCaptchaData(props.uuid).then((res) => {
@@ -123,7 +127,7 @@ const onCancelRecord = (index: number) => {
 }
 
 const onClose = () => {
-    document.getElementById(props.uuid)?.remove()
+    emits('destroy')
 }
 
 const captchaBoxTop = computed(() => (state.captcha.height + 200) / 2 + 'px')

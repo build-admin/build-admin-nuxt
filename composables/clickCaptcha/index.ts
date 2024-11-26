@@ -20,14 +20,18 @@ interface ClickCaptchaOptions {
  */
 const clickCaptcha = (uuid: string, callback?: (captchaInfo: string) => void, options: ClickCaptchaOptions = {}) => {
     if (!import.meta.client) return
-    let vnode: VNode | null = createVNode(clickCaptchaConstructor, {
+    const container = document.createElement('div')
+    const vnode = createVNode(clickCaptchaConstructor, {
         uuid,
         callback,
         ...options,
         key: shortUuid(),
+        onDestroy: () => {
+            render(null, container)
+        },
     })
-    render(vnode, document.body)
-    vnode = null
+    render(vnode, container)
+    document.body.appendChild(container.firstElementChild!)
 }
 
 export default clickCaptcha
