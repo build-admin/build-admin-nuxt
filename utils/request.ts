@@ -87,6 +87,7 @@ export const requestConfig = <OptionsType extends NitroFetchOptions | FetchOptio
     loading: LoadingOptions = {}
 ) => {
     const userInfo = useUserInfo()
+    const requestEvent = useRequestEvent()
     const runtimeConfig = useRuntimeConfig()
     config = Object.assign(
         {
@@ -121,8 +122,7 @@ export const requestConfig = <OptionsType extends NitroFetchOptions | FetchOptio
                 if (userToken) options.headers.set(USER_TOKEN_KEY, userToken)
             }
 
-            const event = useRequestEvent()
-            if (import.meta.server && event) {
+            if (import.meta.server && requestEvent) {
                 /**
                  * 本工程所属的 node 服务端收到了 x-real-ip 等 header，则继续转发至 PHP 服务端
                  * 1. 通常可由本工程上层的代理服务传递，比如 Nginx
@@ -130,8 +130,8 @@ export const requestConfig = <OptionsType extends NitroFetchOptions | FetchOptio
                  */
                 const serverIpHeaders = ['x-real-ip', 'x-forwarded-for', 'client-ip', 'x-client-ip']
                 for (const key in serverIpHeaders) {
-                    if (event.headers.has(serverIpHeaders[key])) {
-                        options.headers.set(serverIpHeaders[key], event.headers.get(serverIpHeaders[key])!)
+                    if (requestEvent.headers.has(serverIpHeaders[key])) {
+                        options.headers.set(serverIpHeaders[key], requestEvent.headers.get(serverIpHeaders[key])!)
                     }
                 }
             }
