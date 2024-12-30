@@ -45,8 +45,8 @@ export default defineComponent({
             emit('update:modelValue', value)
         }
 
-        // string number textarea password
-        const sntp = () => {
+        // 基础用法 string textarea password
+        const bases = () => {
             return () =>
                 createVNode(
                     resolveComponent('el-input'),
@@ -240,10 +240,26 @@ export default defineComponent({
         }
 
         const buildFun = new Map([
-            ['string', sntp],
-            ['number', sntp],
-            ['textarea', sntp],
-            ['password', sntp],
+            ['string', bases],
+            [
+                'number',
+                () => {
+                    return () =>
+                        createVNode(
+                            resolveComponent('el-input-number'),
+                            {
+                                class: 'w100',
+                                'controls-position': 'right',
+                                ...attrs.value,
+                                modelValue: Number(props.modelValue),
+                                'onUpdate:modelValue': onValueUpdate,
+                            },
+                            slots
+                        )
+                },
+            ],
+            ['textarea', bases],
+            ['password', bases],
             ['radio', rc],
             ['checkbox', rc],
             [
