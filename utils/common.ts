@@ -102,7 +102,7 @@ export const debounce = (fn: Function, ms: number) => {
  * 表单重置
  * @param formEl
  */
-export const onResetForm = (formEl: FormInstance | undefined) => {
+export function onResetForm(formEl: FormInstance | undefined) {
     if (!formEl) return
     formEl.resetFields && formEl.resetFields()
 }

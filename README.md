@@ -13,22 +13,22 @@
 <br />
 <p align="center">
     <a href="https://nuxt.com/" target="_blank">
-        <img src="https://img.shields.io/badge/Nuxt-%3E3.13.2-brightgreen?color=91aac3&labelColor=439EFD" alt="vue">
+        <img src="https://img.shields.io/badge/Nuxt-%3E3.15.0-brightgreen?color=91aac3&labelColor=439EFD" alt="vue">
     </a>
     <a href="https://v3.vuejs.org/" target="_blank">
         <img src="https://img.shields.io/badge/Vue-%3E3.5-brightgreen?color=91aac3&labelColor=439EFD" alt="vue">
     </a>
     <a href="https://element-plus.gitee.io/#/zh-CN/component/changelog" target="_blank">
-        <img src="https://img.shields.io/badge/Element--Plus-%3E2.7-brightgreen?color=91aac3&labelColor=439EFD" alt="element plus">
+        <img src="https://img.shields.io/badge/Element--Plus-%3E2.9-brightgreen?color=91aac3&labelColor=439EFD" alt="element plus">
     </a>
     <a href="https://www.tslang.cn/" target="_blank">
-        <img src="https://img.shields.io/badge/TypeScript-%3E5.4-blue?color=91aac3&labelColor=439EFD" alt="typescript">
+        <img src="https://img.shields.io/badge/TypeScript-%3E5.7-blue?color=91aac3&labelColor=439EFD" alt="typescript">
     </a>
     <a href="https://vitejs.dev/" target="_blank">
-        <img src="https://img.shields.io/badge/Vite-%3E5.4-blue?color=91aac3&labelColor=439EFD" alt="vite">
+        <img src="https://img.shields.io/badge/Vite-%3E6.0-blue?color=91aac3&labelColor=439EFD" alt="vite">
     </a>
     <a href="https://pinia.vuejs.org/" target="_blank">
-        <img src="https://img.shields.io/badge/Pinia-%3E2.2-blue?color=91aac3&labelColor=439EFD" alt="vite">
+        <img src="https://img.shields.io/badge/Pinia-%3E2.3-blue?color=91aac3&labelColor=439EFD" alt="vite">
     </a>
     <a href="https://gitee.com/wonderful-code/buildadmin/blob/master/LICENSE" target="_blank">
         <img src="https://img.shields.io/badge/Apache2.0-license-blue?color=91aac3&labelColor=439EFD" alt="license">
