@@ -67,10 +67,12 @@
 import type { ElSelect } from 'element-plus'
 import { debounce, isEmpty } from 'lodash-es'
 import { getSelectData } from '~/api/common'
+import { InputAttr } from '~/composables/baInput/types'
 
+const attrs = useAttrs()
 const memberCenter = useMemberCenter()
 const selectRef = ref<InstanceType<typeof ElSelect> | undefined>()
-type ElSelectProps = Partial<InstanceType<typeof ElSelect>['$props']>
+type ElSelectProps = Omit<Partial<InstanceType<typeof ElSelect>['$props']>, 'modelValue'>
 type valueTypes = string | number | string[] | number[]
 
 interface Props extends /* @vue-ignore */ ElSelectProps {
@@ -78,7 +80,7 @@ interface Props extends /* @vue-ignore */ ElSelectProps {
     field?: string
     params?: anyObj
     remoteUrl: string
-    modelValue: valueTypes
+    modelValue: valueTypes | null
     pagination?: boolean
     tooltipParams?: anyObj
     paginationLayout?: string
@@ -103,6 +105,22 @@ const props = withDefaults(defineProps<Props>(), {
     escBlur: true,
 })
 
+/**
+ * 点击清空按钮后的值，同时也是缺省值‌
+ */
+const valueOnClear = computed(() => {
+    let valueOnClear = attrs.valueOnClear as InputAttr['valueOnClear']
+    if (valueOnClear === undefined) {
+        valueOnClear = attrs.multiple ? () => [] : () => null
+    }
+    return typeof valueOnClear == 'function' ? valueOnClear() : valueOnClear
+})
+
+/**
+ * 被认为是空值的值列表
+ */
+const emptyValues = computed(() => (attrs.emptyValues as InputAttr['emptyValues']) || [null, undefined, ''])
+
 const state: {
     // 主表字段名(不带表别名)
     primaryKey: string
@@ -126,7 +144,7 @@ const state: {
     pageSize: 10,
     params: props.params,
     keyword: '',
-    value: props.modelValue ? props.modelValue : '',
+    value: valueOnClear.value,
     initializeFlag: false,
     optionValidityFlag: false,
     focusStatus: false,
@@ -141,10 +159,7 @@ const emits = defineEmits<{
 }>()
 
 const onChangeSelect = (val: valueTypes) => {
-    if (!val) {
-        state.value = val = props.multiple ? [] : ''
-    }
-    emits('update:modelValue', val)
+    val = updateValue(val)
     if (typeof instance?.vnode.props?.onRow == 'function') {
         if (typeof val == 'number' || typeof val == 'string') {
             const dataKey = getArrayKey(state.options, state.primaryKey, '' + val)
@@ -152,7 +167,7 @@ const onChangeSelect = (val: valueTypes) => {
         } else {
             const valueArr = []
             for (const key in val) {
-                let dataKey = getArrayKey(state.options, state.primaryKey, '' + val[key])
+                const dataKey = getArrayKey(state.options, state.primaryKey, '' + val[key])
                 if (dataKey !== false) {
                     valueArr.push(toRaw(state.options[dataKey]))
                 }
@@ -166,9 +181,6 @@ const onKeyDownEsc = (e: KeyboardEvent) => {
     if (props.escBlur) {
         e.stopPropagation()
         selectRef.value?.blur()
-
-        // 以上的 blur 与预期不符，额外找到内部的 input 再执行一次（element-plus 2.7.4）
-        selectRef.value?.inputRef?.blur()
     }
 }
 
@@ -180,12 +192,10 @@ const onFocus = () => {
 }
 
 const onClear = () => {
-    // 点击清理按钮后，内部 input 呈聚焦状态，但选项面板不会展开，特此处理（element-plus 2.7.4）
+    // 点击清理按钮后，内部 input 呈聚焦状态，但选项面板不会展开，特此处理（element-plus@2.9.1）
     nextTick(() => {
+        selectRef.value?.blur()
         selectRef.value?.focus()
-
-        // 以上的 focus 任然与预期不符，直接触发一次点击事件
-        selectRef.value?.$el.click()
     })
 }
 
@@ -194,15 +204,15 @@ const onBlur = () => {
     state.focusStatus = false
 }
 
-const onRemoteMethod = debounce((q: string) => {
+const onRemoteMethod = (q: string) => {
     if (state.keyword != q) {
         state.keyword = q
         state.currentPage = 1
         getData()
     }
-}, 300)
+}
 
-const getData = (initValue: valueTypes = '') => {
+const getData = debounce((initValue: valueTypes = '') => {
     state.loading = true
     state.params.page = state.currentPage
     state.params.initKey = props.pk
@@ -223,18 +233,19 @@ const getData = (initValue: valueTypes = '') => {
             state.loading = false
             state.initializeFlag = true
         })
-}
+}, 100)
 
 const onSelectCurrentPageChange = (val: number) => {
     state.currentPage = val
     getData()
 }
 
-/**
- * 初始化默认值
- */
-const initDefaultValue = () => {
-    if (state.value) {
+const updateValue = (newVal: any) => {
+    if (emptyValues.value.includes(newVal)) {
+        state.value = valueOnClear.value
+    } else {
+        state.value = newVal
+
         // number[] 转 string[] 确保默认值能够选中
         if (typeof state.value === 'object') {
             for (const key in state.value) {
@@ -244,8 +255,8 @@ const initDefaultValue = () => {
             state.value = '' + state.value
         }
     }
-
-    getData(state.value)
+    emits('update:modelValue', state.value)
+    return state.value
 }
 
 onMounted(() => {
@@ -255,7 +266,10 @@ onMounted(() => {
     // 去除主键中的表名
     let pkArr = props.pk.split('.')
     state.primaryKey = pkArr[pkArr.length - 1]
-    initDefaultValue()
+
+    // 初始化值
+    updateValue(props.modelValue)
+    getData(state.value)
 
     if (import.meta.client) {
         setTimeout(() => {
@@ -281,15 +295,20 @@ watch(
     () => props.modelValue,
     (newVal) => {
         /**
-         * 1. 防止 number 到 string 的类型转换触发默认值多次初始化
-         * 2. 排除默认值的 null、undefined 等假值
+         * 防止 number 到 string 的类型转换触发默认值多次初始化
+         * 相当于忽略数据类型进行比较 [1, 2] == ['1', '2']
          */
-        if (String(state.value) != String(newVal)) {
-            state.value = newVal ? newVal : ''
-            initDefaultValue()
+        if (getString(state.value) != getString(newVal)) {
+            updateValue(newVal)
+            getData(state.value)
         }
     }
 )
+
+const getString = (val: valueTypes | null) => {
+    // 确保 [] 和 '' 的返回值不一样
+    return `${typeof val}:${String(val)}`
+}
 
 const getRef = () => {
     return selectRef.value

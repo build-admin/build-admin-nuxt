@@ -237,10 +237,11 @@ export function getSelectData(remoteUrl: string, q: string, params: anyObj = {})
     return Http.$fetch({
         url: remoteUrl,
         method: 'get',
-        params: Object.assign(params, {
+        params: {
             select: true,
             quickSearch: q,
-        }),
+            ...params,
+        },
     })
 }
 
