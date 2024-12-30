@@ -13,10 +13,10 @@
 <br />
 <p align="center">
     <a href="https://nuxt.com/" target="_blank">
-        <img src="https://img.shields.io/badge/Nuxt-%3E3.11.2-brightgreen?color=91aac3&labelColor=439EFD" alt="vue">
+        <img src="https://img.shields.io/badge/Nuxt-%3E3.13.2-brightgreen?color=91aac3&labelColor=439EFD" alt="vue">
     </a>
     <a href="https://v3.vuejs.org/" target="_blank">
-        <img src="https://img.shields.io/badge/Vue-%3E3.4-brightgreen?color=91aac3&labelColor=439EFD" alt="vue">
+        <img src="https://img.shields.io/badge/Vue-%3E3.5-brightgreen?color=91aac3&labelColor=439EFD" alt="vue">
     </a>
     <a href="https://element-plus.gitee.io/#/zh-CN/component/changelog" target="_blank">
         <img src="https://img.shields.io/badge/Element--Plus-%3E2.7-brightgreen?color=91aac3&labelColor=439EFD" alt="element plus">
@@ -25,10 +25,10 @@
         <img src="https://img.shields.io/badge/TypeScript-%3E5.4-blue?color=91aac3&labelColor=439EFD" alt="typescript">
     </a>
     <a href="https://vitejs.dev/" target="_blank">
-        <img src="https://img.shields.io/badge/Vite-%3E5.0-blue?color=91aac3&labelColor=439EFD" alt="vite">
+        <img src="https://img.shields.io/badge/Vite-%3E5.4-blue?color=91aac3&labelColor=439EFD" alt="vite">
     </a>
     <a href="https://pinia.vuejs.org/" target="_blank">
-        <img src="https://img.shields.io/badge/Pinia-%3E2.0-blue?color=91aac3&labelColor=439EFD" alt="vite">
+        <img src="https://img.shields.io/badge/Pinia-%3E2.2-blue?color=91aac3&labelColor=439EFD" alt="vite">
     </a>
     <a href="https://gitee.com/wonderful-code/buildadmin/blob/master/LICENSE" target="_blank">
         <img src="https://img.shields.io/badge/Apache2.0-license-blue?color=91aac3&labelColor=439EFD" alt="license">
@@ -42,23 +42,23 @@
 <br>
 
 ### 介绍
-🌈 [BuildAdmin](https://gitee.com/wonderful-code/buildadmin) 的`Nuxt`工程（不含后台，只有会员前台的`BuildAdmin-Nuxt`版本，以满足完整的`SEO`需求），[BuildAdmin](https://gitee.com/wonderful-code/buildadmin) 是基于 Vue3.x setup + ThinkPHP6 + TypeScript + Vite + Pinia + Element Plus等流行技术栈的后台管理系统，自适应多端、可视化CRUD代码生成、自带WEB终端、同时提供Web和Server端、内置全局数据回收站和字段级数据修改保护、自动注册路由、无限子级权限管理等，无需授权即可免费商用，希望能帮助大家实现快速开发。
+🌈 [BuildAdmin](https://gitee.com/wonderful-code/buildadmin) 的 `Nuxt` 工程（不含后台，只有会员前台的 `BuildAdmin-Nuxt` 版本，以满足完整的 `SEO` 需求），[BuildAdmin](https://gitee.com/wonderful-code/buildadmin) 是基于 Vue3.x setup + ThinkPHP6 + TypeScript + Vite + Pinia + Element Plus 等流行技术栈的后台管理系统，自适应多端、可视化CRUD代码生成、自带WEB终端、同时提供Web和Server端、内置全局数据回收站和字段级数据修改保护、自动注册路由、无限子级权限管理等，无需授权即可免费商用，希望能帮助大家实现快速开发。
 
 ### 主要特性
 **🚀 CRUD代码生成：**
 图形化拖拽生成后台增删改查代码，自动创建数据表；大气且实用的表格，多达22种表单组件支持，行拖拽排序，受权限控制的编辑和删除等等，并支持关联表，可为您节省大量开发时间。
 
 **💥 内置WEB终端：**
-我们内置了一个WEB终端以实现一些理想中的功能，比如：虽然是基于vue3的系统，但你在安装本系统时，并不需要手动执行`npm install`和`npm build`命令。且后续本终端将为您提供更多方便、快捷的服务。
+我们内置了一个WEB终端以实现一些理想中的功能，比如：虽然是基于 `Vue3` 的系统，但你在安装本系统时，并不需要手动执行 `npm install` 和 `npm build` 命令。且后续本终端将为您提供更多方便、快捷的服务。
 
 **👍 流行且稳定的技术栈：**
-除了基于`ThinkPHP6`前后端分离架构外，我们的`Vue3`使用了`Setup`、状态管理使用`Pinia`、并使用了`TypeScript`、`Vite`等可以为你的知识面添砖加瓦的技术栈。
+除了基于 `ThinkPHP8` 前后端分离架构外，我们的 `Vue3` 使用了 `Setup`、状态管理使用 `Pinia`、并使用了 `TypeScript`、`Vite` 等可以为你的知识面添砖加瓦的技术栈。
 
 **🎨 模块市场：**
-一键安装数据导出、短信发送、云存储、单页或是纯前端技术栈的学习案例项目等等，随时随地为系统添砖加瓦，系统能够自动维护`package.json`和`composer.json`并通过内置终端自动完成模块所需依赖的安装，若您愿意成为模块开发者，模块可以：覆盖系统任何文件或为系统新增文件，您的模块经由官方审核即可上架。
+一键安装数据导出、短信发送、云存储、单页或是纯前端技术栈的学习案例项目等等，随时随地为系统添砖加瓦，系统能够自动维护 `package.json` 和 `composer.json` 并通过内置终端自动完成模块所需依赖的安装，若您愿意成为模块开发者，模块可以：覆盖系统任何文件或为系统新增文件，您的模块经由官方审核即可上架。
 
 **🔀 前后端分离：**
-`web`文件夹内包含：`干净`(不含后端代码)、`完整`(所有前端代码文件均在此内) 的前端代码文件，对前端开发者友好，作为纯前端开发者，您可以将BAdmin当做学习与资源的社群，本系统可为您准备好案例和模板等所需要的环境，而您只需专注于学习或工作，不需要会任何后端代码！（邀您：[和我们一起](https://jq.qq.com/?_wv=1027&k=c8a7iSk8) ）
+`web` 文件夹内包含：`干净`（不含后端代码）、`完整`（所有前端代码文件均在此内） 的前端代码文件，对前端开发者友好，作为纯前端开发者，您可以将BAdmin当做学习与资源的社群，本系统可为您准备好案例和模板等所需要的环境，而您只需专注于学习或工作，不需要会任何后端代码！（邀您：[和我们一起](https://jq.qq.com/?_wv=1027&k=c8a7iSk8) ）
 
 **🌴 数据回收与反悔：**
 内置全局数据回收站，并且提供字段级数据修改记录和修改对比，随时回滚和还原，安全且无感。
@@ -119,19 +119,17 @@
 - [screenfull](https://github.com/sindresorhus/screenfull.js)
 - [mitt](https://github.com/developit/mitt)
 - [sass](https://github.com/sass/sass)
-- [wangEditor](https://github.com/wangeditor-team/wangEditor)
 - [echarts](https://github.com/apache/echarts)
 - [vueuse](https://github.com/vueuse/vueuse)
 - [lodash](https://github.com/lodash/lodash)
 - [eslint](https://github.com/eslint/eslint)
 - [prettier](https://github.com/prettier/prettier)
 - [vuepress](https://github.com/vuejs/vuepress)
-- [countUp](https://github.com/inorganik/countUp.js)
 - [Sortable](https://github.com/SortableJS/Sortable)
 - [v-code-diff](https://github.com/Shimada666/v-code-diff)
 
 ### 版权信息
-🔐 BuildAdmin 遵循`Apache2.0`开源协议发布，提供无需授权的免费使用。\
+🔐 BuildAdmin 遵循 `Apache2.0` 开源协议发布，提供无需授权的免费使用。\
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
 ### 支持项目
