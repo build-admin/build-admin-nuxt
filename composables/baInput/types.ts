@@ -74,6 +74,8 @@ export interface InputAttr extends InputData {
     inputStyle?: anyObj
     activeValue?: string | number | boolean
     inactiveValue?: string | number | boolean
+    emptyValues?: any[]
+    valueOnClear?: string | number | boolean | Function
     // DateTimePicker属性
     editable?: boolean
     startPlaceholder?: string
