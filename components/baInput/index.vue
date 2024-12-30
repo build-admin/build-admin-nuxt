@@ -434,6 +434,8 @@ export default defineComponent({
                                     'onUpdate:modelValue': onValueUpdate,
                                     class: 'w100',
                                     clearable: true,
+                                    // city 数据使用 varchar 存储，所以清空时使用 empty string 而不是 null
+                                    valueOnClear: '',
                                     props: {
                                         lazy: true,
                                         lazyLoad(node: any, resolve: any) {
