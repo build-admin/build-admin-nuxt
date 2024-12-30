@@ -329,16 +329,6 @@ export default defineComponent({
             [
                 'time',
                 () => {
-                    const valueComputed = computed(() => {
-                        if (props.modelValue instanceof Date) {
-                            return props.modelValue
-                        } else if (!props.modelValue) {
-                            return ''
-                        } else {
-                            let date = new Date()
-                            return new Date(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + props.modelValue)
-                        }
-                    })
                     return () =>
                         createVNode(
                             resolveComponent('el-time-picker'),
@@ -346,8 +336,9 @@ export default defineComponent({
                                 class: 'w100',
                                 clearable: true,
                                 format: 'HH:mm:ss',
+                                valueFormat: 'HH:mm:ss',
                                 ...attrs.value,
-                                modelValue: valueComputed.value,
+                                modelValue: props.modelValue,
                                 'onUpdate:modelValue': onValueUpdate,
                             },
                             slots
