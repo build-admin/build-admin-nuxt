@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-config-provider :locale="messages">
+        <el-config-provider :value-on-clear="() => null" :locale="messages">
             <NuxtLayout>
                 <NuxtPage />
             </NuxtLayout>
