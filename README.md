@@ -42,7 +42,7 @@
 <br>
 
 ### 介绍
-🌈 [BuildAdmin](https://gitee.com/wonderful-code/buildadmin) 的 `Nuxt` 工程（不含后台，只有会员前台的 `BuildAdmin-Nuxt` 版本，以满足完整的 `SEO` 需求），[BuildAdmin](https://gitee.com/wonderful-code/buildadmin) 是基于 Vue3.x setup + ThinkPHP6 + TypeScript + Vite + Pinia + Element Plus 等流行技术栈的后台管理系统，自适应多端、可视化CRUD代码生成、自带WEB终端、同时提供Web和Server端、内置全局数据回收站和字段级数据修改保护、自动注册路由、无限子级权限管理等，无需授权即可免费商用，希望能帮助大家实现快速开发。
+🌈 [BuildAdmin](https://gitee.com/wonderful-code/buildadmin) 的 `Nuxt` 工程（不含后台，只有会员前台的版本，用于满足完整的 `SEO` 需求），[BuildAdmin](https://gitee.com/wonderful-code/buildadmin) 是基于 Vue3.x + ThinkPHP8 + TypeScript + Vite + Pinia + Element Plus 等流行技术栈的后台管理系统，自适应多端、可视化CRUD代码生成、自带WEB终端、同时提供Web和Server端、内置全局数据回收站和字段级数据修改保护、自动注册路由、无限子级权限管理等，无需授权即可免费商用，希望能帮助大家实现快速开发。
 
 ### 主要特性
 **🚀 CRUD代码生成：**
