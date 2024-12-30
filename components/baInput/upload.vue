@@ -138,7 +138,8 @@ const eventNameMap = {
 const onElChange = (file: UploadFileExt, files: UploadFiles) => {
     // 将 file 换为 files 中的对象，以便修改属性等操作
     const fileIndex = getArrayKey(files, 'uid', file.uid!)
-    if (!fileIndex) return
+    if (fileIndex === false) return
+
     file = files[fileIndex] as UploadFileExt
     if (!file || !file.raw) return
     if (triggerEvent('beforeUpload', [file]) === false) return

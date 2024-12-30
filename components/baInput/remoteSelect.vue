@@ -148,12 +148,14 @@ const onChangeSelect = (val: valueTypes) => {
     if (typeof instance?.vnode.props?.onRow == 'function') {
         if (typeof val == 'number' || typeof val == 'string') {
             const dataKey = getArrayKey(state.options, state.primaryKey, '' + val)
-            emits('row', dataKey ? toRaw(state.options[dataKey]) : {})
+            emits('row', dataKey !== false ? toRaw(state.options[dataKey]) : {})
         } else {
             const valueArr = []
             for (const key in val) {
                 let dataKey = getArrayKey(state.options, state.primaryKey, '' + val[key])
-                if (dataKey) valueArr.push(toRaw(state.options[dataKey]))
+                if (dataKey !== false) {
+                    valueArr.push(toRaw(state.options[dataKey]))
+                }
             }
             emits('row', valueArr)
         }
