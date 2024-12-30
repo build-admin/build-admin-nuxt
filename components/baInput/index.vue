@@ -503,7 +503,10 @@ export default defineComponent({
                             resolveComponent('el-color-picker'),
                             {
                                 modelValue: props.modelValue,
-                                'onUpdate:modelValue': onValueUpdate,
+                                'onUpdate:modelValue': (newValue: string | null) => {
+                                    // color 数据使用 varchar 存储，点击清空时的 null 值使用 empty string 代替
+                                    emit('update:modelValue', newValue === null ? '' : newValue)
+                                },
                                 ...attrs.value,
                             },
                             slots
