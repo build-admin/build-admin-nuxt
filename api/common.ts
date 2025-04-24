@@ -1,8 +1,8 @@
-import { i18n } from '~/plugins/i18n'
 import type { UploadRawFile } from 'element-plus'
-import { useSiteConfig } from '~/stores/siteConfig'
-import { state as uploadExpandState, fileUpload as uploadExpand } from '~/composables/mixins/baUpload'
 import { isArray, isEmpty } from 'lodash-es'
+import { fileUpload as uploadExpand, state as uploadExpandState } from '~/composables/mixins/baUpload'
+import { i18n } from '~/plugins/i18n'
+import { useSiteConfig } from '~/stores/siteConfig'
 
 // 公共
 export const captchaUrl = '/api/common/captcha'
@@ -42,10 +42,7 @@ export async function initialize(requiredLogin?: boolean) {
         memberCenter.setStatus(data.value.data.openMemberCenter)
         registerMenus(data.value.data.rules, data.value.data.menus)
 
-        if (isEmpty(data.value.data.userInfo)) {
-            userInfo.removeToken()
-        } else {
-            data.value.data.userInfo.refresh_token = userInfo.getToken('refresh')
+        if (!isEmpty(data.value.data.userInfo)) {
             userInfo.dataFill(data.value.data.userInfo)
 
             // 请求到会员信息才设置会员中心初始化是成功的
