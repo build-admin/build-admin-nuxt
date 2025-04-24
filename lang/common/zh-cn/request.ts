@@ -1,6 +1,5 @@
 export default {
     'Operation successful': '操作成功',
-    'Automatic cancellation due to duplicate request:': '因为请求重复被自动取消：',
     'Interface redirected!': '接口重定向了！',
     'Incorrect parameter!': '参数不正确！',
     'You do not have permission to operate!': '您没有权限操作！',

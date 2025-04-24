@@ -1,6 +1,5 @@
 export default {
     'Operation successful': 'Operate successful',
-    'Automatic cancellation due to duplicate request:': 'Automatic cancellation due to duplicate requests:',
     'Interface redirected!': 'Interface redirected!',
     'Incorrect parameter!': 'Incorrect parameter!',
     'You do not have permission to operate!': 'You have no permission to operate!',
