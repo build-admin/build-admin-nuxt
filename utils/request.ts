@@ -1,15 +1,9 @@
-import { ElLoading, ElNotification } from 'element-plus'
 import type { LoadingOptions } from 'element-plus'
+import { ElLoading, ElNotification } from 'element-plus'
+import { isArray } from 'lodash-es'
 import { getLanguage } from '~/lang'
 import { i18n } from '~/plugins/i18n'
 import { USER_TOKEN_KEY } from '~/stores/constant/keys'
-import type { UseFetchOptions } from '#app'
-import type { NitroFetchOptions as UseNitroFetchOptions, NitroFetchRequest } from 'nitropack'
-import { isArray } from 'lodash-es'
-
-type AddUrl = { url?: string }
-type NitroFetchOptions = UseNitroFetchOptions<NitroFetchRequest> & AddUrl
-type FetchOptions<DataT = any> = UseFetchOptions<ApiResponse<DataT>> & AddUrl
 
 const requestStatus: RequestStatus = {
     loading: {

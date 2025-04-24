@@ -1,4 +1,5 @@
-import type { AsyncData } from '#app'
+import type { AsyncData, UseFetchOptions } from '#app'
+import type { NitroFetchRequest, NitroFetchOptions as UseNitroFetchOptions } from 'nitropack'
 import type { FetchError } from 'ofetch'
 
 declare global {
@@ -37,6 +38,13 @@ declare global {
      * Http.$fetch 的返回值类型
      */
     type HttpOFetchResponse<DataT> = Promise<ApiResponse<DataT>>
+
+    /**
+     * FetchOptions
+     */
+    type FetchOptionExtend = { url?: string }
+    type NitroFetchOptions = UseNitroFetchOptions<NitroFetchRequest> & FetchOptionExtend
+    type FetchOptions<DataT = any> = UseFetchOptions<ApiResponse<DataT>> & FetchOptionExtend
 
     /**
      * 只读转可写
