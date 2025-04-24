@@ -442,7 +442,7 @@ const onLoginSubmit = (captchaInfo = '') => {
     checkIn('post', { ...state.login, tab: state.tab.toLocaleLowerCase() })
         .then((res) => {
             if (res.code != 1) return
-            userInfo.dataFill(res.data.userInfo)
+            userInfo.dataFill(res.data.userInfo, false)
             if (state.to) return (location.href = state.to)
             navigateTo({ path: res.data.routePath })
         })
@@ -514,7 +514,7 @@ const onRegisterSubmit = (registerRef: FormInstance | undefined = undefined) => 
         checkIn('post', { ...state.register, tab: state.tab.toLocaleLowerCase() })
             .then((res) => {
                 if (res.code != 1) return
-                userInfo.dataFill(res.data.userInfo)
+                userInfo.dataFill(res.data.userInfo, false)
                 navigateTo({ path: res.data.routePath })
             })
             .finally(() => {
