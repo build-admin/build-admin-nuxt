@@ -151,9 +151,9 @@ export function buildCaptchaUrl() {
  * 获取文字点击验证码数据
  * @param id 验证码ID
  */
-export function getCaptchaData(id: string) {
+export function getCaptchaData(id: string, apiBaseURL: string) {
     return Http.$fetch({
-        url: clickCaptchaUrl,
+        url: apiBaseURL + clickCaptchaUrl,
         method: 'get',
         params: {
             id,
@@ -167,10 +167,10 @@ export function getCaptchaData(id: string) {
  * @param info 点选的文字信息
  * @param unset 验证完成清理验证码数据
  */
-export function checkClickCaptcha(id: string, info: string, unset: boolean) {
+export function checkClickCaptcha(id: string, info: string, unset: boolean, apiBaseURL: string) {
     return Http.$fetch(
         {
-            url: checkClickCaptchaUrl,
+            url: apiBaseURL + checkClickCaptchaUrl,
             method: 'post',
             body: {
                 id,

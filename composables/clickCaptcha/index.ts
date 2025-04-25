@@ -10,6 +10,8 @@ interface ClickCaptchaOptions {
     error?: string
     // 验证成功的提示信息
     success?: string
+    // 验证码 API 的基础 URL，默认为当前服务端 URL（VITE_API_BASE_URL）
+    apiBaseURL?: string
 }
 
 /**
@@ -32,6 +34,14 @@ const clickCaptcha = (uuid: string, callback?: (captchaInfo: string) => void, op
     })
     render(vnode, container)
     document.body.appendChild(container.firstElementChild!)
+}
+
+/**
+ * 组件的 props 类型定义
+ */
+export interface Props extends ClickCaptchaOptions {
+    uuid: string
+    callback?: (captchaInfo: string) => void
 }
 
 export default clickCaptcha

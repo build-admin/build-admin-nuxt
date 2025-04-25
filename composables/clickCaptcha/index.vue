@@ -39,17 +39,9 @@
 </template>
 
 <script setup lang="ts">
-import { getCaptchaData, checkClickCaptcha } from '~/api/common'
+import { checkClickCaptcha, getCaptchaData } from '~/api/common'
+import { Props } from '~/composables/clickCaptcha/index'
 import { i18n } from '~/plugins/i18n'
-
-interface Props {
-    uuid: string
-    callback?: (captchaInfo: string) => void
-    class?: string
-    unset?: boolean
-    error?: string
-    success?: string
-}
 
 const props = withDefaults(defineProps<Props>(), {
     uuid: '',
@@ -58,6 +50,7 @@ const props = withDefaults(defineProps<Props>(), {
     unset: false,
     error: '',
     success: '',
+    apiBaseURL: '',
 })
 
 const state: {
@@ -90,7 +83,7 @@ const emits = defineEmits<{
 
 const load = () => {
     state.loading = true
-    getCaptchaData(props.uuid).then((res) => {
+    getCaptchaData(props.uuid, props.apiBaseURL).then((res) => {
         if (res.code != 1) return
         state.xy = []
         state.tip = ''
@@ -104,7 +97,7 @@ const onRecord = (event: MouseEvent) => {
         state.xy.push(event.offsetX + ',' + event.offsetY)
         if (state.xy.length == state.captcha.text.length) {
             const captchaInfo = [state.xy.join('-'), (event.target as HTMLImageElement).width, (event.target as HTMLImageElement).height].join(';')
-            checkClickCaptcha(props.uuid, captchaInfo, props.unset).then((res) => {
+            checkClickCaptcha(props.uuid, captchaInfo, props.unset, props.apiBaseURL).then((res) => {
                 if (res.code == 1) {
                     state.tip = props.success ? props.success : i18n.global.t('validate.Verification is successful!')
                     setTimeout(() => {
