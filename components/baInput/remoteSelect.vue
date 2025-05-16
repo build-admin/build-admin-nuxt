@@ -71,7 +71,7 @@ import { InputAttr } from '~/composables/baInput/types'
 
 const attrs = useAttrs()
 const memberCenter = useMemberCenter()
-const selectRef = ref<InstanceType<typeof ElSelect> | undefined>()
+const selectRef = useTemplateRef('selectRef')
 type ElSelectProps = Omit<Partial<InstanceType<typeof ElSelect>['$props']>, 'modelValue'>
 type valueTypes = string | number | string[] | number[]
 

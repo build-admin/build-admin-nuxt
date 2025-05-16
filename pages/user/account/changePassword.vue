@@ -2,7 +2,7 @@
     <div class="user-views">
         <el-card class="user-views-card" shadow="hover" :header="t('user.account.changePassword.Change Password')">
             <div class="change-password">
-                <el-form :model="state.form" :rules="state.rules" label-position="top" ref="formRef" @keyup.enter="onSubmit(formRef)">
+                <el-form :model="state.form" :rules="state.rules" label-position="top" ref="formRef" @keyup.enter="onSubmit()">
                     <FormItem
                         :label="t('user.account.changePassword.Old password')"
                         type="password"
@@ -29,7 +29,7 @@
                     />
                     <el-form-item class="submit-buttons">
                         <el-button @click="onResetForm(formRef)">{{ $t('Reset') }}</el-button>
-                        <el-button type="primary" :loading="state.formSubmitLoading" @click="onSubmit(formRef)">{{ $t('Save') }}</el-button>
+                        <el-button type="primary" :loading="state.formSubmitLoading" @click="onSubmit()">{{ $t('Save') }}</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -38,9 +38,8 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance } from 'element-plus'
-import { changePassword } from '~/api/user/index'
 import { useI18n } from 'vue-i18n'
+import { changePassword } from '~/api/user/index'
 
 const { t } = useI18n()
 
@@ -52,7 +51,8 @@ useSeoMeta({
 })
 
 const userInfo = useUserInfo()
-const formRef = ref<FormInstance>()
+const formRef = useTemplateRef('formRef')
+
 const state = reactive({
     formSubmitLoading: false,
     form: {
@@ -86,9 +86,8 @@ const state = reactive({
     },
 })
 
-const onSubmit = (formEl: FormInstance | undefined) => {
-    if (!formEl) return
-    formEl.validate((valid) => {
+const onSubmit = () => {
+    formRef.value?.validate((valid) => {
         if (valid) {
             state.formSubmitLoading = true
             changePassword({ ...state.form })

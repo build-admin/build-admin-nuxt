@@ -99,7 +99,7 @@ useSeoMeta({
 
 const { t } = useI18n()
 const userInfo = useUserInfo()
-const accountGrowthChartRef = ref<HTMLElement>()
+const accountGrowthChartRef = useTemplateRef('accountGrowthChartRef')
 
 const state: {
     days: string[]

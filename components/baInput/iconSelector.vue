@@ -24,21 +24,19 @@
                         </span>
                     </div>
                 </div>
-                <div class="selector-body">
-                    <el-scrollbar ref="selectorScrollbarRef">
-                        <div v-if="renderFontIconNames.length > 0">
-                            <div
-                                class="icon-selector-item"
-                                :title="item"
-                                @click="onIcon(item)"
-                                v-for="(item, key) in renderFontIconNames"
-                                :key="key + item"
-                            >
-                                <Icon :name="item" />
-                            </div>
+                <el-scrollbar class="selector-body">
+                    <div v-if="renderFontIconNames.length > 0">
+                        <div
+                            class="icon-selector-item"
+                            :title="item"
+                            @click="onIcon(item)"
+                            v-for="(item, key) in renderFontIconNames"
+                            :key="key + item"
+                        >
+                            <Icon :name="item" />
                         </div>
-                    </el-scrollbar>
-                </div>
+                    </div>
+                </el-scrollbar>
             </div>
         </div>
         <template #reference>
@@ -96,8 +94,7 @@ const emits = defineEmits<{
     (e: 'change', value: string): void
 }>()
 
-const selectorInput = ref()
-const selectorScrollbarRef = ref()
+const selectorInput = useTemplateRef('selectorInput')
 const state: {
     iconType: IconType
     selectorWidth: number
@@ -161,7 +158,7 @@ const onIcon = (icon: string) => {
     emits('update:modelValue', icon)
     emits('change', icon)
     nextTick(() => {
-        selectorInput.value.blur()
+        selectorInput.value?.blur()
     })
 }
 
@@ -179,7 +176,7 @@ const renderFontIconNames = computed(() => {
 // 获取 input 的宽度
 const getInputWidth = () => {
     nextTick(() => {
-        state.selectorWidth = selectorInput.value.$el.offsetWidth < 260 ? 260 : selectorInput.value.$el.offsetWidth
+        state.selectorWidth = selectorInput.value?.$el.offsetWidth < 260 ? 260 : selectorInput.value?.$el.offsetWidth
     })
 }
 

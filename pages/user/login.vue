@@ -77,7 +77,7 @@
                             <el-form
                                 v-if="state.tab == 'Register'"
                                 ref="registerRef"
-                                @keyup.enter="onRegisterSubmit(registerRef)"
+                                @keyup.enter="onRegisterSubmit()"
                                 :rules="registerRules"
                                 :model="state.register"
                             >
@@ -185,7 +185,7 @@
                                 <el-form-item class="form-buttons">
                                     <el-button
                                         class="form-btn"
-                                        @click="onRegisterSubmit(registerRef)"
+                                        @click="onRegisterSubmit()"
                                         :loading="state.loading.register"
                                         round
                                         type="primary"
@@ -219,7 +219,7 @@
                 <div class="retrieve-password-form">
                     <el-form
                         ref="retrieveRef"
-                        @keyup.enter="onSubmitRetrieve(retrieveRef)"
+                        @keyup.enter="onSubmitRetrieve()"
                         :rules="retrieveRules"
                         :model="state.retrievePasswordForm"
                         :label-width="100"
@@ -290,7 +290,7 @@
                         </el-form-item>
                         <el-form-item>
                             <el-button @click="state.showRetrievePasswordDialog = false">{{ t('Cancel') }}</el-button>
-                            <el-button :loading="state.loading.retrievePassword" @click="onSubmitRetrieve(retrieveRef)" type="primary">
+                            <el-button :loading="state.loading.retrievePassword" @click="onSubmitRetrieve()" type="primary">
                                 {{ t('Confirm') }}
                             </el-button>
                         </el-form-item>
@@ -302,7 +302,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormItemRule, FormInstance } from 'element-plus'
+import type { FormItemRule } from 'element-plus'
 import { sendEms, sendSms } from '~/api/common'
 import { checkIn, retrievePassword } from '~/api/user/index'
 import LoginFooterMixin from '~/composables/mixins/loginFooter.vue'
@@ -362,9 +362,10 @@ const route = useRoute()
 const userInfo = useUserInfo()
 const siteConfig = useSiteConfig()
 const memberCenter = useMemberCenter()
-const loginRef = ref<FormInstance>()
-const registerRef = ref<FormInstance>()
-const retrieveRef = ref<FormInstance>()
+const loginRef = useTemplateRef('loginRef')
+const registerRef = useTemplateRef('registerRef')
+const retrieveRef = useTemplateRef('retrieveRef')
+
 const state: State = reactive({
     tab: 'Login',
     loading: {
@@ -506,9 +507,8 @@ const sendRetrieveCaptcha = (captchaInfo: string) => {
         })
 }
 
-const onRegisterSubmit = (registerRef: FormInstance | undefined = undefined) => {
-    if (!registerRef) return
-    registerRef.validate((valid) => {
+const onRegisterSubmit = () => {
+    registerRef.value?.validate((valid) => {
         if (!valid) return
         state.loading.register = true
         checkIn('post', { ...state.register, tab: state.tab.toLocaleLowerCase() })
@@ -523,9 +523,8 @@ const onRegisterSubmit = (registerRef: FormInstance | undefined = undefined) => 
     })
 }
 
-const onSubmitRetrieve = (retrieveRef: FormInstance | undefined = undefined) => {
-    if (!retrieveRef) return
-    retrieveRef.validate((valid) => {
+const onSubmitRetrieve = () => {
+    retrieveRef.value?.validate((valid) => {
         if (valid) {
             state.loading.retrievePassword = true
             retrievePassword({ ...state.retrievePasswordForm })
@@ -533,7 +532,7 @@ const onSubmitRetrieve = (retrieveRef: FormInstance | undefined = undefined) => 
                     if (res.code == 1) {
                         state.showRetrievePasswordDialog = false
                         endTiming()
-                        onResetForm(retrieveRef)
+                        onResetForm(retrieveRef.value)
                     }
                 })
                 .finally(() => {

@@ -18,17 +18,15 @@
 </template>
 
 <script setup lang="ts">
-import type { ScrollbarInstance } from 'element-plus'
-
 const route = useRoute()
-const mainScrollbarRef = ref<ScrollbarInstance>()
+const mainScrollbarRef = useTemplateRef('mainScrollbarRef')
 
 // 路由切换时滚动条滚动至顶部
 watch(
     () => route.fullPath,
     () => {
         if (!route.meta.disableScrollTo) {
-            mainScrollbarRef?.value?.scrollTo(0, 0)
+            mainScrollbarRef.value?.scrollTo(0, 0)
         }
     }
 )
