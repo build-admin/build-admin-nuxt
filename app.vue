@@ -12,6 +12,7 @@
 import { useI18n } from 'vue-i18n'
 import { initialize } from '~/api/common'
 import type { Language } from 'element-plus/es/locale'
+// modules import mark, Please do not remove.
 
 const { locale, getLocaleMessage } = useI18n()
 const messages = getLocaleMessage(locale.value) as Language
@@ -26,4 +27,6 @@ useSeoMeta({
         return titleChunk ? `${titleChunk} - ${siteConfig.siteName}` : siteConfig.siteName
     },
 })
+
+// modules start mark, Please do not remove.
 </script>
